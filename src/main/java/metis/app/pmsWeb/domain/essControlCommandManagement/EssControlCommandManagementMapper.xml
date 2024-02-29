@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.essControlCommandManagement.EssControlCommandManagementMapper">
+
+    <select id="selectEssControlCommandManagementList" resultType="Hashmap" parameterType="Hashmap" statementType="PREPARED">
+        SELECT essControlCommandManagement.CONTROL_CODE                                 AS controlCode
+             , essControlCommandManagement.DEVICE_CODE                                  AS deviceCode
+             , device.DEVICE_NAME                                                       AS deviceName
+             , essControlCommandManagement.CONTROL_TYPE                                 AS controlType
+             , GET_CODE_NM('CONTROL_TYPE',essControlCommandManagement.CONTROL_TYPE)     AS controlTypeName
+             , essControlCommandManagement.CONTROL_VALUE                                AS controlValue
+             , GET_CODE_NM('USE_YN', essControlCommandManagement.USE_FLAG)              AS useFlagName
+             , essControlCommandManagement.USE_FLAG                                     AS useFlag
+             , essControlCommandManagement.REMARKS                                      AS remarks
+             , essControlCommandManagement.UPDATED_BY                                   AS updatedBy
+             , essControlCommandManagement.UPDATED_AT                                   AS updatedAt
+        FROM base_device_control essControlCommandManagement
+           , (SELECT *
+              FROM base_device
+              WHERE ESS_CODE = #{essCode}) device
+        WHERE essControlCommandManagement.DEVICE_CODE = device.DEVICE_CODE
+        <if test="deviceCode != null and deviceCode != ''">
+            AND essControlCommandManagement.DEVICE_CODE = #{deviceCode}
+        </if>
+        <if test="controlType != null and controlType != ''">
+            AND essControlCommandManagement.CONTROL_TYPE = #{controlType}
+        </if>
+        ORDER BY controlCode, controlTypeName
+        LIMIT  #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectEssControlCommandManagementTotalList" resultType="int" parameterType="Hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM base_device_control essControlCommandManagement
+            , (SELECT *
+               FROM base_device
+               WHERE ESS_CODE = #{essCode}) device
+        WHERE essControlCommandManagement.DEVICE_CODE = device.DEVICE_CODE
+        <if test="deviceCode != null and deviceCode != ''">
+            AND essControlCommandManagement.DEVICE_CODE = #{deviceCode}
+        </if>
+        <if test="controlType != null and controlType != ''">
+            AND essControlCommandManagement.CONTROL_TYPE = #{controlType}
+        </if>
+
+    </select>
+
+    <update id="update" parameterType="essControlCommandManagementVO" statementType="PREPARED">
+
+        UPDATE base_device_control
+        SET CONTROL_VALUE = #{controlValue},
+            REMARKS = #{remarks},
+            USE_FLAG = #{useFlag},
+            UPDATED_AT = NOW(),
+            UPDATED_BY = #{updatedBy}
+        WHERE CONTROL_CODE = #{controlCode}
+        AND DEVICE_CODE = #{deviceCode}
+    </update>
+
+    <insert id="insert" parameterType="essControlCommandManagementVO" statementType="PREPARED">
+
+        INSERT INTO base_device_control (
+            CONTROL_CODE,
+            DEVICE_CODE,
+            CONTROL_TYPE,
+            CONTROL_VALUE,
+            REMARKS,
+            USE_FLAG,
+            CREATED_AT,
+            CREATED_BY,
+            UPDATED_AT,
+            UPDATED_BY
+            )
+        VALUES (
+                   '${deviceCode}${controlType}',
+                   #{deviceCode},
+                   #{controlType},
+                   #{controlValue},
+                   #{remarks},
+                   #{useFlag},
+                   NOW(),
+                   #{createdBy},
+                   NOW(),
+                   #{createdBy}
+                )
+    </insert>
+
+    <select id="selectDeviceCodes" resultType="Hashmap" parameterType="essControlCommandManagementVO" statementType="PREPARED">
+        SELECT
+            DEVICE_CODE             AS deviceCode,
+            DEVICE_NAME             AS deviceName,
+            DEVICE_CATEGORY_SUB     AS deviceCategorySub
+        FROM base_device
+        WHERE USE_FLAG = 'Y'
+            AND CONTROL_FLAG = 'Y'
+        <if test="essCode != null and essCode != ''">
+            AND ESS_CODE = #{essCode}
+            AND DEVICE_CATEGORY NOT IN (
+                (
+                    SELECT CODE
+                    FROM SYSTEM_COMMON_CODE
+                    WHERE GROUP_CD = 'DEVICE_CATEGORY'
+                    AND IF(((SELECT ESS_TYPE FROM base_ess WHERE ESS_CODE = #{essCode}) = '01'),DATA1 = '02', DATA1 = '01')
+                )
+            )
+        </if>
+    </select>
+
+    <select id="selectCommandRequestTypes" resultType="Hashmap" parameterType="essControlCommandManagementVO" statementType="PREPARED">
+        SELECT
+            SYSTEM_COMMON_CODE.CODE AS code,
+            SYSTEM_COMMON_CODE.NAME AS name,
+            SYSTEM_COMMON_CODE.DATA2 AS data2
+        FROM SYSTEM_COMMON_CODE
+        WHERE GROUP_CD = 'CONTROL_TYPE'
+            AND USE_YN = 'Y'
+    </select>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM base_device_control
+    </select>
+
+    <update id="rollBackUpdate" parameterType="essControlCommandManagementVO" statementType="PREPARED">
+
+        UPDATE base_device_control
+        SET CONTROL_VALUE = #{controlValue},
+            REMARKS = #{remarks},
+            USE_FLAG = #{useFlag},
+            UPDATED_AT = #{updatedAt},
+            UPDATED_BY = #{updatedBy}
+        WHERE CONTROL_CODE = #{controlCode}
+        AND DEVICE_CODE = #{deviceCode}
+    </update>
+
+    <select id="selectOneCode" parameterType="essControlCommandManagementVO" resultType="String" statementType="PREPARED">
+        SELECT CONTROL_CODE                                 AS controlCode
+        FROM base_device_control
+        WHERE USE_FLAG = 'Y'
+        AND DEVICE_CODE = #{deviceCode}
+        AND CONTROL_CODE = #{controlCode}
+    </select>
+
+</mapper>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.chargeDischargeContractMgnt.ChargeDischargeContractMgntMapper">
+
+    <select id="selectChargeContractInfo" resultType="chargeDischargeContractMgntVO" parameterType="hashMap"
+            statementType="PREPARED">
+        SELECT
+        GET_PMS_NAME_AT_ESS_CODE(ESS_CODE) pmsCode,
+        contractInfo.ESS_CODE,
+        targetInfo.TARGET_NAME,
+        targetInfo.CHARGE_TARGET_SEQ,
+        contractInfo.CHARGE_OPTION,
+        GET_CODE_NM('CHARGE_GBN', contractInfo.CHARGE_GBN) chargeGbnName,
+        contractInfo.CHARGE_GBN,
+        IF(contractInfo.CHARGE_AMOUNT IS NOT NULL, IF(CHARGE_OPTION = '1', CONCAT(contractInfo.CHARGE_AMOUNT, '%'),
+        CONCAT(contractInfo.CHARGE_AMOUNT, 'Kw')), '-') AS chargeAmount,
+        from_unixtime(contractInfo.CONTRACT_START_DATETIME) AS contractStartDatetime,
+        from_unixtime(contractInfo.CONTRACT_END_DATETIME) AS contractEndDatetime,
+        GET_CODE_NM('CONTRACT_REASON_CODE', contractInfo.CONTRACT_REASON_CODE) contractReasonName,
+        contractInfo.CONTRACT_REASON_CODE,
+        GET_CODE_NM('CONTRACT_COMPLETE_YN', contractInfo.CONTRACT_COMPLETE_YN) contractCompleteYnName,
+        contractInfo.CONTRACT_COMPLETE_YN,
+        contractInfo.REMARK_200 AS remark,
+        contractInfo.TARGET_ADDRESS,
+        contractInfo.CREATED_AT
+        FROM pms_plan_charge_contract_info contractInfo, pms_base_charge_target_info targetInfo
+        WHERE contractInfo.CHARGE_TARGET_SEQ = targetInfo.CHARGE_TARGET_SEQ
+        <if test="pmsCode != null and pmsCode != ''">
+            AND contractInfo.ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+        </if>
+        <if test="chargeGbn != null and chargeGbn != ''">
+            AND contractInfo.CHARGE_GBN = #{chargeGbn}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(#{startDate})
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<=]]> unix_timestamp(CONCAT(#{endDate}, ' 23:59:59'))
+        </if>
+        ORDER BY contractInfo.CREATED_AT DESC, contractInfo.CONTRACT_START_DATETIME DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectContractInfoTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM pms_plan_charge_contract_info contractInfo, pms_base_charge_target_info targetInfo
+        WHERE contractInfo.CHARGE_TARGET_SEQ = targetInfo.CHARGE_TARGET_SEQ
+        <if test="pmsCode != null and pmsCode != ''">
+            AND contractInfo.ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+        </if>
+        <if test="chargeGbn != null and chargeGbn != ''">
+            AND contractInfo.CHARGE_GBN = #{chargeGbn}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(#{startDate})
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<=]]> unix_timestamp(CONCAT(#{endDate}, ' 23:59:59'))
+        </if>
+    </select>
+
+    <insert id="insertContractInfo" parameterType="chargeDischargeContractMgntVO" statementType="PREPARED">
+        INSERT INTO PMS_PLAN_CHARGE_CONTRACT_INFO
+        (ESS_CODE,
+        CHARGE_TARGET_SEQ,
+        CHARGE_GBN,
+        CHARGE_OPTION,
+        CHARGE_AMOUNT,
+        CONTRACT_START_DATETIME,
+        CONTRACT_END_DATETIME,
+        TARGET_ADDRESS,
+        CONTRACT_REASON_CODE,
+        CONTRACT_COMPLETE_YN,
+        CREATED_AT,
+        CREATED_BY,
+        REMARK_200)
+        VALUES (#{essCode},
+        #{chargeTargetSeq},
+        #{chargeGbn},
+        #{chargeOption},
+        <choose>
+            <when test='chargeOption.equals("1")'>
+                #{chargeAmountPercent},
+            </when>
+            <when test='chargeOption.equals("2")'>
+                #{chargeAmountKw},
+            </when>
+            <otherwise>
+                null,
+            </otherwise>
+        </choose>
+        unix_timestamp(#{contractStartDatetime}),
+        unix_timestamp(#{contractEndDatetime}),
+        #{targetAddress},
+        #{contractReasonCode},
+        'N',
+        now(),
+        #{createdBy},
+        #{remark})
+    </insert>
+
+    <update id="updateContractInfo" parameterType="hashmap" statementType="PREPARED">
+        UPDATE PMS_PLAN_CHARGE_CONTRACT_INFO
+        SET CHARGE_TARGET_SEQ = #{chargeTargetSeq},
+        CHARGE_GBN = #{chargeGbn},
+        CHARGE_OPTION = #{chargeOption},
+        CHARGE_AMOUNT =
+        <choose>
+            <when test='chargeOption.equals("1")'>
+                #{chargeAmountPercent},
+            </when>
+            <when test='chargeOption.equals("2")'>
+                #{chargeAmountKw},
+            </when>
+            <otherwise>
+                null,
+            </otherwise>
+        </choose>
+        CONTRACT_START_DATETIME = unix_timestamp(#{contractStartDatetime}),
+        CONTRACT_END_DATETIME = unix_timestamp(#{contractEndDatetime}),
+        TARGET_ADDRESS = #{targetAddress},
+        CONTRACT_REASON_CODE = #{contractReasonCode},
+        CONTRACT_COMPLETE_YN = #{contractCompleteYn},
+        REMARK_200 = #{remark}
+
+        WHERE 1 = 1
+        AND ESS_CODE = #{essCode}
+        AND CREATED_AT = #{createdAt}
+    </update>
+
+    <delete id="deleteContractInfo" parameterType="hashmap" statementType="PREPARED">
+
+        DELETE
+        FROM PMS_PLAN_CHARGE_CONTRACT_INFO
+        WHERE 1 = 1
+          AND ESS_CODE = #{essCode}
+          AND CHARGE_TARGET_SEQ = #{chargeTargetSeq}
+          AND CONTRACT_START_DATETIME = unix_timestamp(#{contractStartDatetime})
+    </delete>
+
+    <select id="selectChargeTargetInfoModal" resultType="chargeDischargeContractMgntVO" parameterType="hashMap"
+            statementType="PREPARED">
+        SELECT
+        CHARGE_TARGET_SEQ,
+        TARGET_NAME,
+        TARGET_MANAGER_NAME,
+        TARGET_MANAGER_TEL,
+        ADDRESS,
+        USE_YN,
+        REMARK_200 AS remark
+        FROM PMS_BASE_CHARGE_TARGET_INFO
+        WHERE 1=1
+        <if test="targetName != null and targetName != ''">
+            AND TARGET_NAME LIKE CONCAT('%', #{targetName}, '%')
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND USE_YN = #{useYn}
+        </if>
+        ORDER BY USE_YN DESC, CHARGE_TARGET_SEQ DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectModalTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM PMS_BASE_CHARGE_TARGET_INFO
+        WHERE 1=1
+        <if test="targetName != null and targetName != ''">
+            AND TARGET_NAME LIKE CONCAT('%', #{targetName}, '%')
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND USE_YN = #{useYn}
+        </if>
+    </select>
+
+    <insert id="insertTargetInfoModal" parameterType="chargeDischargeContractMgntVO" statementType="PREPARED">
+        INSERT INTO PMS_BASE_CHARGE_TARGET_INFO
+        (TARGET_NAME,
+         TARGET_MANAGER_NAME,
+         TARGET_MANAGER_TEL,
+         ADDRESS,
+         USE_YN,
+         REMARK_200)
+        VALUES (#{targetName},
+                #{targetManagerName},
+                #{targetManagerTel},
+                #{address},
+                #{useYn},
+                #{remark})
+    </insert>
+
+    <update id="updateTargetInfoModal" parameterType="hashmap" statementType="PREPARED">
+        UPDATE PMS_BASE_CHARGE_TARGET_INFO
+        SET TARGET_NAME         = #{targetName},
+            TARGET_MANAGER_NAME = #{targetManagerName},
+            TARGET_MANAGER_TEL  = #{targetManagerTel},
+            ADDRESS             = #{address},
+            USE_YN              = #{useYn},
+            REMARK_200          = #{remark}
+
+        WHERE 1 = 1
+          AND CHARGE_TARGET_SEQ = #{chargeTargetSeq}
+    </update>
+
+    <delete id="deleteTargetInfoModal" parameterType="hashmap" statementType="PREPARED">
+
+        DELETE
+        FROM PMS_BASE_CHARGE_TARGET_INFO
+        WHERE 1 = 1
+          AND CHARGE_TARGET_SEQ = #{chargeTargetSeq}
+    </delete>
+
+    <!-- 모바일용 계약 목록 -->
+    <select id="selectChargeContractInfoForMobile" resultType="chargeDischargeContractMgntVO" parameterType="chargeDischargeContractMgntVO"
+            statementType="PREPARED">
+        SELECT
+            @rowId:= @rowId + 1 as rowId,
+            GET_PMS_NAME_AT_ESS_CODE(ESS_CODE) pmsCode,
+            contractInfo.ESS_CODE,
+            contractInfo.CONTRACT_START_DATETIME AS id,
+            targetInfo.TARGET_NAME,
+            targetInfo.CHARGE_TARGET_SEQ,
+            contractInfo.CHARGE_OPTION,
+            GET_CODE_NM('CHARGE_GBN', contractInfo.CHARGE_GBN) chargeGbnName,
+            contractInfo.CHARGE_GBN,
+            IF(contractInfo.CHARGE_AMOUNT IS NOT NULL, IF(CHARGE_OPTION = '1', CONCAT(contractInfo.CHARGE_AMOUNT, '%'),
+            CONCAT(contractInfo.CHARGE_AMOUNT, 'Kw')), '-') AS chargeAmount,
+            from_unixtime(contractInfo.CONTRACT_START_DATETIME, '%Y-%m-%d %H:%i') AS contractStartDatetime,
+            from_unixtime(contractInfo.CONTRACT_END_DATETIME, '%Y-%m-%d %H:%i') AS contractEndDatetime,
+            GET_CODE_NM('CONTRACT_REASON_CODE', contractInfo.CONTRACT_REASON_CODE) contractReasonName,
+            contractInfo.CONTRACT_REASON_CODE,
+            GET_CODE_NM('CONTRACT_COMPLETE_YN', contractInfo.CONTRACT_COMPLETE_YN) contractCompleteYnName,
+            contractInfo.CONTRACT_COMPLETE_YN,
+            contractInfo.REMARK_200 AS remark,
+            contractInfo.TARGET_ADDRESS,
+            contractInfo.CREATED_AT
+        FROM pms_plan_charge_contract_info contractInfo, pms_base_charge_target_info targetInfo
+        WHERE (@rowId:= #{startRow}) = #{startRow}
+        AND contractInfo.CHARGE_TARGET_SEQ = targetInfo.CHARGE_TARGET_SEQ
+        AND contractInfo.ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+        <if test="period != null and period != ''">
+            <choose>
+                <when test="period == 'today'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(now(), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+                <when test="period == 'week'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(date_sub(now(),INTERVAL 7 DAY), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+                <when test="period == 'month'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(date_sub(now(),INTERVAL 1 MONTH), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+                <when test="period == 'quarter'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(date_sub(now(),INTERVAL 3 MONTH), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+            </choose>
+        </if>
+        ORDER BY contractInfo.CREATED_AT DESC, contractInfo.CONTRACT_START_DATETIME DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectContractInfoTotalCountForMobile" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM pms_plan_charge_contract_info contractInfo, pms_base_charge_target_info targetInfo
+        WHERE contractInfo.CHARGE_TARGET_SEQ = targetInfo.CHARGE_TARGET_SEQ
+        AND contractInfo.ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+        <if test="period != null and period != ''">
+            <choose>
+                <when test="period == 'today'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(now(), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+                <when test="period == 'week'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(date_sub(now(),INTERVAL 7 DAY), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+                <when test="period == 'month'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(date_sub(now(),INTERVAL 1 MONTH), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+                <when test="period == 'quarter'">
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[>=]]> unix_timestamp(DATE_FORMAT(date_sub(now(),INTERVAL 3 MONTH), '%Y-%m-%d'))
+                    AND contractInfo.CONTRACT_START_DATETIME <![CDATA[<]]> unix_timestamp(DATE_FORMAT(date_add(now(),INTERVAL 1 DAY), '%Y-%m-%d'))
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 모바일용 계약 상세 -->
+    <select id="selectChargeContractDetailInfoForMobile" resultType="chargeDischargeContractMgntVO" parameterType="chargeDischargeContractMgntVO" statementType="PREPARED">
+        SELECT targetInfo.TARGET_NAME
+             , GET_CODE_NM('CHARGE_GBN', contractInfo.CHARGE_GBN) chargeGbnName
+             , GET_CODE_NM('CONTRACT_REASON_CODE', contractInfo.CONTRACT_REASON_CODE) contractReasonName
+             , contractInfo.CHARGE_OPTION
+             , IF(contractInfo.CHARGE_AMOUNT IS NOT NULL, IF(CHARGE_OPTION = '1', CONCAT(contractInfo.CHARGE_AMOUNT, '%'),CONCAT(contractInfo.CHARGE_AMOUNT, 'Kw')), '-') AS chargeAmount
+             , IF(contractInfo.CHARGE_AMOUNT IS NOT NULL, contractInfo.CHARGE_AMOUNT, 0) AS controlValue
+             , from_unixtime(contractInfo.CONTRACT_START_DATETIME, '%Y-%m-%d %H:%i') AS contractStartDatetime
+             , from_unixtime(contractInfo.CONTRACT_END_DATETIME, '%Y-%m-%d %H:%i') AS contractEndDatetime
+             , targetInfo.TARGET_MANAGER_NAME
+             , targetInfo.TARGET_MANAGER_TEL
+             , contractInfo.TARGET_ADDRESS
+             , contractInfo.CONTRACT_COMPLETE_YN
+          FROM pms_plan_charge_contract_info contractInfo, pms_base_charge_target_info targetInfo
+         WHERE contractInfo.ESS_CODE = #{essCode}
+           AND contractInfo.CHARGE_TARGET_SEQ = #{chargeTargetSeq}
+           AND contractInfo.CHARGE_TARGET_SEQ = targetInfo.CHARGE_TARGET_SEQ
+           AND contractInfo.CONTRACT_START_DATETIME = unix_timestamp(#{contractStartDatetimeId})
+    </select>
+
+    <update id="updateContractCompleteYn" parameterType="chargeDischargeContractMgntVO" statementType="PREPARED">
+        UPDATE pms_plan_charge_contract_info
+           SET CONTRACT_COMPLETE_YN = #{contractCompleteYn}
+         WHERE ESS_CODE = #{essCode}
+           AND CHARGE_TARGET_SEQ = #{chargeTargetSeq}
+           AND CONTRACT_START_DATETIME = unix_timestamp(#{contractStartDatetimeId})
+    </update>
+</mapper>

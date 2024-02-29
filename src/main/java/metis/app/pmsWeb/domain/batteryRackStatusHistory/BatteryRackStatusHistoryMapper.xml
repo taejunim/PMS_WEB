@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.batteryRackStatusHistory.BatteryRackStatusHistoryMapper">
+    
+    <select id="select" resultType="batteryRackStatusHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT FROM_UNIXTIME(REG_DATE)                                                                              regDate
+             , RACK_CODE                                                                                            rackNo
+             , GET_CODE_NM('DEVICE_STATUS',OPERATION_STATUS)                                                        operationStatus
+             , GET_CODE_NM('OPERATION_MODE',OPERATION_MODE_STATUS)                                                  operationModeStatus
+             , CONCAT(USER_SOC)                                                                                     userSoc
+             , CONCAT(REAL_SOC)                                                                                     realSoc
+             , CONCAT(SOH)                                                                                          soh
+             , CONCAT(VOLTAGE)                                                                                      voltage
+             , CONCAT(CURRENT_SENSOR1)                                                                              currentSensor1
+             , CONCAT(CURRENT_SENSOR2)                                                                              currentSensor2
+             , CONCAT(CHARGE_CURRENT_LIMIT)                                                                         chargeCurrentLimit
+             , CONCAT(CHARGE_POWER_LIMIT)                                                                           chargePowerLimit
+             , CONCAT(DISCHARGE_CURRENT_LIMIT)                                                                      dischargeCurrentLimit
+             , CONCAT(DISCHARGE_POWER_LIMIT)                                                                        dischargePowerLimit
+             , CONCAT(POSITIVE_VOLTAGE_RESISTANCE)                                                                  positiveVoltageResistance
+             , CONCAT(NEGATIVE_VOLTAGE_RESISTANCE)                                                                  negativeVoltageResistance
+             , GET_CODE_NM('DEVICE_STATUS', POSITIVE_MAIN_RELAY_ACTION)                                             positiveMainRelayAction
+             , GET_CODE_NM('DEVICE_STATUS', POSITIVE_MAIN_RELAY_CONTACT)                                            positiveMainRelayContact
+             , GET_CODE_NM('DEVICE_STATUS', NEGATIVE_MAIN_RELAY_ACTION)                                             negativeMainRelayAction
+             , GET_CODE_NM('DEVICE_STATUS', NEGATIVE_MAIN_RELAY_CONTACT)                                            negativeMainRelayContact
+             , GET_CODE_NM('DEVICE_STATUS', EMERGENCY_RELAY_ACTION)                                                 emergencyRelayAction
+             , GET_CODE_NM('DEVICE_STATUS', EMERGENCY_RELAY_CONTACT)                                                emergencyRelayContact
+             , GET_CODE_NM('DEVICE_STATUS', PRECHARGE_RELAY_ACTION)                                                 prechargeRelayAction
+             , IF(WARNING_FLAG != 'N', IF(FAULT_FLAG != 'N', '경고/결함', '경고'),IF(FAULT_FLAG != 'N', '결함', '미발생')) warningFault
+        FROM raw_battery_rack
+        WHERE 1 = 1
+        <if test="rackNo != null and rackNo != ''">
+            AND RACK_CODE = #{rackNo}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP((CONCAT(#{searchDate}, ' 23:59:59')))
+        </if>
+        <if test="operationStatus != null and operationStatus != ''">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="operationModeStatus != null and operationModeStatus != ''">
+            AND OPERATION_MODE_STATUS = #{operationModeStatus}
+        </if>
+        ORDER BY REG_DATE DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+
+        FROM raw_battery_rack
+        WHERE 1 = 1
+        <if test="rackNo != null and rackNo != ''">
+            AND RACK_CODE = #{rackNo}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP((CONCAT(#{searchDate}, ' 23:59:59')))
+        </if>
+        <if test="operationStatus != null and operationStatus != ''">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="operationModeStatus != null and operationModeStatus != ''">
+            AND OPERATION_MODE_STATUS = #{operationModeStatus}
+        </if>
+    </select>
+
+    <select id="selectModule" resultType="batteryModuleStatusHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT *
+        FROM (
+            SELECT '총 전압 (V)'          AS totalVolt
+                 , 'Cell 밸런싱 여부'      AS balanceYn
+                 , 'Cell 1. 전압 (V)'    AS cell1Volt
+                 , 'Cell 2. 전압 (V)'    AS cell2Volt
+                 , 'Cell 3. 전압 (V)'    AS cell3Volt
+                 , 'Cell 4. 전압 (V)'    AS cell4Volt
+                 , 'Cell 5. 전압 (V)'    AS cell5Volt
+                 , 'Cell 6. 전압 (V)'    AS cell6Volt
+                 , 'Cell 7. 전압 (V)'    AS cell7Volt
+                 , 'Cell 8. 전압 (V)'    AS cell8Volt
+                 , 'Cell 9. 전압 (V)'    AS cell9Volt
+                 , 'Cell 10. 전압 (V)'   AS cell10Volt
+                 , 'Cell 11. 전압 (V)'   AS cell11Volt
+                 , 'Cell 12. 전압 (V)'   AS cell12Volt
+                 , 'Cell 13. 전압 (V)'   AS cell13Volt
+                 , 'Cell 14. 전압 (V)'   AS cell14Volt
+                 , 'Cell 15. 전압 (V)'   AS cell15Volt
+                 , 'Cell 16. 전압 (V)'   AS cell16Volt
+                 , 'Cell 온도 1 (℃)'    AS temperature1
+                 , 'Cell 온도 2 (℃)'    AS temperature2
+                 , 'Cell 온도 3 (℃)'    AS temperature3
+                 , 'Cell 온도 4 (℃)'    AS temperature4
+                 , 'Cell 온도 5 (℃)'    AS temperature5
+                 , 'Cell 온도 6 (℃)'    AS temperature6
+                 , 'Cell 온도 7 (℃)'    AS temperature7
+                 , 'Cell 온도 8 (℃)'    AS temperature8
+                 , 'Cell 1. 밸런싱 여부'  AS cell1BalanceFlag
+                 , 'Cell 2. 밸런싱 여부'  AS cell2BalanceFlag
+                 , 'Cell 3. 밸런싱 여부'  AS cell3BalanceFlag
+                 , 'Cell 4. 밸런싱 여부'  AS cell4BalanceFlag
+                 , 'Cell 5. 밸런싱 여부'  AS cell5BalanceFlag
+                 , 'Cell 6. 밸런싱 여부'  AS cell6BalanceFlag
+                 , 'Cell 7. 밸런싱 여부'  AS cell7BalanceFlag
+                 , 'Cell 8. 밸런싱 여부'  AS cell8BalanceFlag
+                 , 'Cell 9. 밸런싱 여부'  AS cell9BalanceFlag
+                 , 'Cell 10. 밸런싱 여부' AS cell10BalanceFlag
+                 , 'Cell 11. 밸런싱 여부' AS cell11BalanceFlag
+                 , 'Cell 12. 밸런싱 여부' AS cell12BalanceFlag
+                 , 'Cell 13. 밸런싱 여부' AS cell13BalanceFlag
+                 , 'Cell 14. 밸런싱 여부' AS cell14BalanceFlag
+                 , 'Cell 15. 밸런싱 여부' AS cell15BalanceFlag
+                 , 'Cell 16. 밸런싱 여부' AS cell16BalanceFlag
+            ) a
+        UNION ALL
+        SELECT IFNULL(MODULE_VOLTAGE, '')
+             , IFNULL(balanceYn, '')
+             , IFNULL(CELL1_VOLTAGE, '')
+             , IFNULL(CELL2_VOLTAGE, '')
+             , IFNULL(CELL3_VOLTAGE, '')
+             , IFNULL(CELL4_VOLTAGE, '')
+             , IFNULL(CELL5_VOLTAGE, '')
+             , IFNULL(CELL6_VOLTAGE, '')
+             , IFNULL(CELL7_VOLTAGE, '')
+             , IFNULL(CELL8_VOLTAGE, '')
+             , IFNULL(CELL9_VOLTAGE, '')
+             , IFNULL(CELL10_VOLTAGE, '')
+             , IFNULL(CELL11_VOLTAGE, '')
+             , IFNULL(CELL12_VOLTAGE, '')
+             , IFNULL(CELL13_VOLTAGE, '')
+             , IFNULL(CELL14_VOLTAGE, '')
+             , IFNULL(CELL15_VOLTAGE, '')
+             , IFNULL(CELL16_VOLTAGE, '')
+             , IFNULL(CELL_TEMPERATURE1, '')
+             , IFNULL(CELL_TEMPERATURE2, '')
+             , IFNULL(CELL_TEMPERATURE3, '')
+             , IFNULL(CELL_TEMPERATURE4, '')
+             , IFNULL(CELL_TEMPERATURE5, '')
+             , IFNULL(CELL_TEMPERATURE6, '')
+             , IFNULL(CELL_TEMPERATURE7, '')
+             , IFNULL(CELL_TEMPERATURE8, '')
+             , IFNULL(cell1BalanceFlag, '')
+             , IFNULL(cell2BalanceFlag, '')
+             , IFNULL(cell3BalanceFlag, '')
+             , IFNULL(cell4BalanceFlag, '')
+             , IFNULL(cell5BalanceFlag, '')
+             , IFNULL(cell6BalanceFlag, '')
+             , IFNULL(cell7BalanceFlag, '')
+             , IFNULL(cell8BalanceFlag, '')
+             , IFNULL(cell9BalanceFlag, '')
+             , IFNULL(cell10BalanceFlag, '')
+             , IFNULL(cell11BalanceFlag, '')
+             , IFNULL(cell12BalanceFlag, '')
+             , IFNULL(cell13BalanceFlag, '')
+             , IFNULL(cell14BalanceFlag, '')
+             , IFNULL(cell15BalanceFlag, '')
+             , IFNULL(cell16BalanceFlag, '')
+        FROM
+        ( SELECT 1 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 2 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 3 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 4 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 5 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 6 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 7 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 8 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 9 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 10 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 11 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 12 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 13 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 14 MODULE_NO, #{rackNo} RACK_CODE UNION ALL
+          SELECT 15 MODULE_NO, #{rackNo} RACK_CODE
+        ) a
+        LEFT OUTER JOIN  (
+                          SELECT REG_DATE,
+                                 MODULE_NO,
+                                 MODULE_VOLTAGE,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL_BALANCING_FLAG) balanceYn,
+                                 CELL1_VOLTAGE,
+                                 CELL2_VOLTAGE,
+                                 CELL3_VOLTAGE,
+                                 CELL4_VOLTAGE,
+                                 CELL5_VOLTAGE,
+                                 CELL6_VOLTAGE,
+                                 CELL7_VOLTAGE,
+                                 CELL8_VOLTAGE,
+                                 CELL9_VOLTAGE,
+                                 CELL10_VOLTAGE,
+                                 CELL11_VOLTAGE,
+                                 CELL12_VOLTAGE,
+                                 CELL13_VOLTAGE,
+                                 CELL14_VOLTAGE,
+                                 CELL15_VOLTAGE,
+                                 CELL16_VOLTAGE,
+                                 CELL_TEMPERATURE1,
+                                 CELL_TEMPERATURE2,
+                                 CELL_TEMPERATURE3,
+                                 CELL_TEMPERATURE4,
+                                 CELL_TEMPERATURE5,
+                                 CELL_TEMPERATURE6,
+                                 CELL_TEMPERATURE7,
+                                 CELL_TEMPERATURE8,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL1_BALANCING_FLAG)  cell1BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL2_BALANCING_FLAG)  cell2BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL3_BALANCING_FLAG)  cell3BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL4_BALANCING_FLAG)  cell4BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL5_BALANCING_FLAG)  cell5BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL6_BALANCING_FLAG)  cell6BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL7_BALANCING_FLAG)  cell7BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL8_BALANCING_FLAG)  cell8BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL9_BALANCING_FLAG)  cell9BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL10_BALANCING_FLAG) cell10BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL11_BALANCING_FLAG) cell11BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL12_BALANCING_FLAG) cell12BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL13_BALANCING_FLAG) cell13BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL14_BALANCING_FLAG) cell14BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL15_BALANCING_FLAG) cell15BalanceFlag,
+                                 GET_CODE_NM('COMPLETE_FLAG',CELL16_BALANCING_FLAG) cell16BalanceFlag
+                          FROM raw_battery_module
+                          WHERE RACK_CODE  = #{rackNo}
+                            AND REG_DATE = UNIX_TIMESTAMP(#{regDate})
+                      ) b
+                ON b.MODULE_NO  = a.MODULE_NO
+                WHERE a.RACK_CODE = #{rackNo}
+
+    </select>
+
+    <select id="selectTotalCountRack" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM raw_battery_rack
+    </select>
+
+    <select id="selectTotalCountModule" resultType="int" parameterType="hashMap" statementType="PREPARED">
+        SELECT COUNT(*) FROM raw_battery_module
+        WHERE RACK_CODE  = #{rackNo}
+        AND REG_DATE = UNIX_TIMESTAMP(#{regDate})
+    </select>
+</mapper>

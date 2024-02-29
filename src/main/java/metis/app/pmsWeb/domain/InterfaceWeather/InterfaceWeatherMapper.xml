@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.InterfaceWeather.InterfaceWeatherMapper">
+
+    <select id="selectInterfaceWeatherList" resultType="hashMap" parameterType="hashMap" statementType="PREPARED">
+        SELECT
+            DATE_FORMAT(WEATHER_DATE,'%Y-%m-%d')            AS weatherDate,
+            CONCAT( LEFT(WEATHER_TIME, 2), ' 시')            AS weatherTime,
+            GET_CODE_NM('WEATHER_TYPE',WEATHER_TYPE)        AS weatherType,
+            TEMPERATURE                                     AS temperature,
+            HUMIDITY                                        AS humidity,
+            ATMOSPHERIC_PRESSURE                            AS atmosphericPressure,
+            WIND_SPEED                                      AS windSpeed,
+            WIND_DIRECTION                                  AS windDirection,
+            LATITUDE                                        AS latitude,
+            LONGITUDE                                       AS longitude,
+            CREATED_AT                                      AS createdAt,
+            CREATED_BY                                      AS createdBy
+        FROM
+            HISTORY_WEATHER
+        WHERE 1=1
+        <if test="startDate != null and startDate != ''">
+            AND WEATHER_DATE <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND WEATHER_DATE <![CDATA[<=]]> CONCAT(#{endDate}, ' 23:59:59')
+        </if>
+        ORDER BY weatherDate DESC, weatherTime DESC
+        LIMIT #{startRow}, #{pageSize}
+
+    </select>
+
+    <select id="selectInterfaceWeather" resultType="interfaceWeatherVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT
+               WEATHER_DATE                                    AS weatherDate,
+               WEATHER_TIME                                    AS weatherTime,
+               WEATHER_TYPE                                    AS weatherType,
+               TEMPERATURE                                     AS temperature,
+               HUMIDITY                                        AS humidity,
+               ATMOSPHERIC_PRESSURE                            AS atmosphericPressure,
+               WIND_SPEED                                      AS windSpeed,
+               WIND_DIRECTION                                  AS windDirection,
+               LATITUDE                                        AS latitude,
+               LONGITUDE                                       AS longitude,
+               CREATED_AT                                      AS createdAt,
+               CREATED_BY                                      AS createdBy
+        FROM HISTORY_WEATHER
+        WHERE 1=1
+            AND WEATHER_DATE = #{weatherDate}
+            AND WEATHER_TIME = #{weatherTime}
+        ORDER BY WEATHER_DATE, WEATHER_TIME DESC LIMIT 1
+    </select>
+
+    <select id="selectInterfaceWeatherTotalCount" resultType="int" parameterType="Hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM HISTORY_WEATHER
+        WHERE 1=1
+        <if test="startDate != null and startDate != ''">
+            AND WEATHER_DATE <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND WEATHER_DATE <![CDATA[<=]]> CONCAT(#{endDate}, ' 23:59:59')
+        </if>
+    </select>
+    
+    <insert id="insertInterfaceWeather" parameterType="hashMap" statementType="PREPARED">
+
+        INSERT INTO HISTORY_WEATHER (
+
+            WEATHER_DATE
+            , WEATHER_TIME
+            , WEATHER_TYPE
+            , TEMPERATURE
+            , HUMIDITY
+            , ATMOSPHERIC_PRESSURE
+            , WIND_SPEED
+            , WIND_DIRECTION
+            , LATITUDE
+            , LONGITUDE
+            , CREATED_AT
+            , CREATED_BY
+
+        ) VALUES (
+            #{weatherDate}
+            , #{weatherTime}
+            , #{weatherType}
+            , #{temperature}
+            , #{humidity}
+            , #{atmosphericPressure}
+            , #{windSpeed}
+            , #{windDirection}
+            , #{latitude}
+            , #{longitude}
+            , now()
+            , #{createdBy}
+        )
+
+    </insert>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM HISTORY_WEATHER
+    </select>
+</mapper>

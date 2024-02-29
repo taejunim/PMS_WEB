@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.essManagement.EssManagementMapper">
+
+    <select id="selectEssManagement" resultType="essManagementVO" parameterType="Hashmap" statementType="PREPARED">
+        SELECT
+                ESS_CODE                                        AS essCode
+                , ESS_NAME                                      AS essName
+                , ESS_TYPE                                      AS essType
+                <if test="essType != null and essType != '' and essType == '01'">
+                  , CONTRACT_POWER                              AS contractPower
+                </if>
+                , TOTAL_BATTERY_ENERGY                          AS totalBatteryEnergy
+                , TOTAL_CHARGE                                  AS totalCharge
+                , TOTAL_DISCHARGE                               AS totalDischarge
+                , ENERGY_UPDATED_DATE                           AS energyUpdatedDate
+                , LOCATION_ADDRESS                              AS locationAddress
+                , LATITUDE                                      AS latitude
+                , LONGITUDE                                     AS longitude
+                , AUTO_CONTROL_FLAG                             AS autoControlFlag
+        FROM BASE_ESS
+        WHERE 1 = 1
+        <if test="essCode != null and essCode != ''">
+            AND ESS_CODE = #{essCode}
+        </if>
+        LIMIT 1
+    </select>
+
+    <update id="update" parameterType="essManagementVO" statementType="PREPARED">
+        UPDATE  BASE_ESS SET
+                ESS_NAME                = #{essName}
+                <if test="essType != null and essType != '' and essType == '01'">
+                  , CONTRACT_POWER        = #{contractPower}
+                </if>
+                , TOTAL_BATTERY_ENERGY  = #{totalBatteryEnergy}
+                , LOCATION_ADDRESS      = #{locationAddress}
+                , LATITUDE              = #{latitude}
+                , LONGITUDE             = #{longitude}
+                , AUTO_CONTROL_FLAG     = #{autoControlFlag}
+                , UPDATED_AT            = now()
+                , UPDATED_BY            = #{updatedBy}
+        WHERE   ESS_CODE = #{essCode}
+    </update>
+
+    <update id="insert" parameterType="essManagementVO" statementType="PREPARED">
+        INSERT INTO BASE_ESS (
+                    ESS_CODE
+                    , ESS_NAME
+                    , ESS_TYPE
+                    <if test="essType != null and essType != '' and essType == '01'">
+                      , CONTRACT_POWER
+                    </if>
+                    , TOTAL_BATTERY_ENERGY
+                    , LOCATION_ADDRESS
+                    , LATITUDE
+                    , LONGITUDE
+                    , AUTO_CONTROL_FLAG
+                    , CREATED_AT
+                    , CREATED_BY
+                    , UPDATED_AT
+                    , UPDATED_BY
+        ) VALUES (
+                    #{essCode}
+                    , #{essName}
+                    , #{essType}
+                    <if test="essType != null and essType != '' and essType == '01'">
+                      , #{contractPower}
+                    </if>
+                    , #{totalBatteryEnergy}
+                    , #{locationAddress}
+                    , #{latitude}
+                    , #{longitude}
+                    , #{autoControlFlag}
+                    , now()
+                    , #{createdBy}
+                    , now()
+                    , #{updatedBy}
+                 )
+    </update>
+
+</mapper>

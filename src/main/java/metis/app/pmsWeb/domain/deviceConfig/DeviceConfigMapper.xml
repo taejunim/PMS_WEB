@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.deviceConfig.DeviceConfigMapper">
+    <select id="selectDeviceConfig" resultType="deviceConfigVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT
+            config.CONFIG_CODE              AS  configCode
+            , config.DEVICE_CODE            AS  deviceCode
+            , config.CONFIG_TYPE            AS  configType
+            , config.CONFIG_NAME            AS  configName
+            , config.MIN_SET_VALUE          AS  minSetValue
+            , config.MAX_SET_VALUE          AS  maxSetValue
+            , config.CONFIG_DESCRIPTION     AS  configDescription
+            , device.DEVICE_NAME            AS  deviceName
+            , device.DEVICE_CATEGORY        AS  deviceCategory
+            , device.DEVICE_CATEGORY_SUB    AS  deviceCategorySub
+            , config.UPDATED_AT             AS  updatedAt
+            , config.UPDATED_BY             AS  updatedBy
+            , GET_CODE_NM('CONFIG_TYPE', config.CONFIG_TYPE)                    AS configTypeName
+            , GET_CODE_NM('DEVICE_CATEGORY', device.DEVICE_CATEGORY)            AS deviceCategoryName
+            , GET_CODE_NM('DEVICE_CATEGORY_SUB', device.DEVICE_CATEGORY_SUB)    AS deviceCategorySubName
+        FROM OPERATION_CONFIG config
+        LEFT JOIN BASE_DEVICE device on device.DEVICE_CODE = config.DEVICE_CODE
+        WHERE 1=1
+        <if test="deviceCode != null and deviceCode != ''">
+            AND config.DEVICE_CODE = #{deviceCode}
+        </if>
+        <if test="deviceCategory != null and deviceCategory != ''">
+            AND device.DEVICE_CATEGORY = #{deviceCategory}
+        </if>
+        <if test="deviceCategorySub != null and deviceCategorySub != ''">
+            AND device.DEVICE_CATEGORY_SUB = #{deviceCategorySub}
+        </if>
+        <if test="configType != null and configType != ''">
+            AND config.CONFIG_TYPE = #{configType}
+        </if>
+        ORDER BY config.CONFIG_CODE
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM OPERATION_CONFIG config
+        LEFT JOIN BASE_DEVICE device on device.DEVICE_CODE = config.DEVICE_CODE
+        WHERE 1=1
+        <if test="deviceCode != null and deviceCode != ''">
+            AND config.DEVICE_CODE = #{deviceCode}
+        </if>
+        <if test="deviceCategory != null and deviceCategory != ''">
+            AND device.DEVICE_CATEGORY = #{deviceCategory}
+        </if>
+        <if test="deviceCategorySub != null and deviceCategorySub != ''">
+            AND device.DEVICE_CATEGORY_SUB = #{deviceCategorySub}
+        </if>
+        <if test="configType != null and configType != ''">
+            AND config.CONFIG_TYPE = #{configType}
+        </if>
+    </select>
+
+    <update id="insert" parameterType="deviceConfigVO" statementType="PREPARED">
+        INSERT
+        INTO OPERATION_CONFIG (
+                               CONFIG_CODE
+                              , DEVICE_CODE
+                              , CONFIG_TYPE
+                              , CONFIG_NAME
+                              , MIN_SET_VALUE
+                              , MAX_SET_VALUE
+                              , CONFIG_DESCRIPTION
+                              , CREATED_AT
+                              , CREATED_BY
+                              , UPDATED_AT
+                              , UPDATED_BY
+          ) VALUES (
+                   CONCAT(#{deviceCode},#{configType})
+                   , #{deviceCode}
+                   , #{configType}
+                   , #{configName}
+                   , #{minSetValue}
+                   , #{maxSetValue}
+                   , #{configDescription}
+                   , now()
+                   , #{createdBy}
+                   , now()
+                   , #{updatedBy}
+                    )
+    </update>
+
+    <update id="update" parameterType="deviceConfigVO" statementType="PREPARED">
+        UPDATE  OPERATION_CONFIG
+        SET
+            CONFIG_TYPE           = #{configType}
+            , CONFIG_NAME         = #{configName}
+            , MIN_SET_VALUE       = #{minSetValue}
+            , MAX_SET_VALUE       = #{maxSetValue}
+            , CONFIG_DESCRIPTION  = #{configDescription}
+            , UPDATED_AT          = now()
+            , UPDATED_BY          = #{updatedBy}
+        WHERE 1=1
+            AND CONFIG_CODE = #{configCode}
+            AND DEVICE_CODE = #{deviceCode}
+    </update>
+
+    <delete id="delete" parameterType="deviceConfigVO" statementType="PREPARED">
+        DELETE FROM OPERATION_CONFIG
+        WHERE 1=1
+          AND CONFIG_CODE = #{configCode}
+          AND DEVICE_CODE = #{deviceCode}
+    </delete>
+
+    <select id="selectDeviceCodes" resultType="Hashmap" parameterType="deviceConfigVO" statementType="PREPARED">
+        SELECT DEVICE_CODE as deviceCode,
+               DEVICE_NAME as deviceName,
+               DEVICE_CATEGORY_SUB as deviceCategorySub
+        FROM BASE_DEVICE
+        WHERE 1=1
+          AND USE_FLAG = 'Y'
+        <if test="essCode != null and essCode != ''">
+            AND ESS_CODE = #{essCode}
+        </if>
+    </select>
+
+    <select id="totalRowCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM OPERATION_CONFIG
+    </select>
+
+    <select id="selectConfigExist" resultType="int" parameterType="deviceConfigVO" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM   OPERATION_CONFIG
+        WHERE 1=1
+          AND DEVICE_CODE = #{deviceCode}
+          AND CONFIG_TYPE = #{configType}
+    </select>
+
+    <update id="rollBackUpdate" parameterType="deviceConfigVO" statementType="PREPARED">
+        UPDATE  OPERATION_CONFIG
+        SET
+            CONFIG_TYPE           = #{configType}
+            , CONFIG_NAME         = #{configName}
+            , MIN_SET_VALUE       = #{minSetValue}
+            , MAX_SET_VALUE       = #{maxSetValue}
+            , CONFIG_DESCRIPTION  = #{configDescription}
+            , UPDATED_AT          = #{updatedAt}
+            , UPDATED_BY          = #{updatedBy}
+        WHERE 1=1
+            AND CONFIG_CODE = #{configCode}
+            AND DEVICE_CODE = #{deviceCode}
+    </update>
+</mapper>

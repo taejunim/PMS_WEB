@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.chargeDischargeHistory.ChargeDischargeHistoryMapper">
+
+    <select id="selectChargeDischargeHistory" resultType="chargeDischargeHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT ENERGY_NO
+            , GET_CODE_NM('OPERATION_MODE', OPERATION_MODE) OPERATION_MODE
+            , GET_CODE_NM('OPERATION_HISTORY_TYPE', OPERATION_HISTORY_TYPE) OPERATION_HISTORY_TYPE
+            , DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d %H:%i:%s') OPERATION_HISTORY_DATE
+            , (SELECT c.ACCUMULATED_ENERGY FROM history_energy_detail c WHERE c.ENERGY_NO = history_energy.ENERGY_NO ORDER BY c.ENERGY_SEQ DESC LIMIT 1) as ACCUMULATED_ENERGY
+            , GET_CODE_NM('CONTROL_REQUEST_TYPE' , OPERATION_TYPE) OPERATION_TYPE
+            , IF(OPERATION_TYPE = '01',SCHEDULE_NO,NULL) as SCHEDULE_NO
+
+        FROM history_energy
+        WHERE 1 = 1
+        <if test="startDay != null and startDay != ''">
+            AND OPERATION_HISTORY_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{startDay})
+        </if>
+        <if test="endDay != null and endDay != ''">
+            AND OPERATION_HISTORY_DATE <![CDATA[<=]]> UNIX_TIMESTAMP(CONCAT(#{endDay}, '235959'))
+        </if>
+        <if test="operationMode != null and operationMode != ''">
+          AND OPERATION_MODE = #{operationMode}
+        </if>
+        <if test="operationType != null and operationType != ''">
+          AND OPERATION_TYPE = #{operationType}
+        </if>
+        ORDER BY ENERGY_NO  DESC
+        LIMIT  #{startRow}, #{pageSize}
+
+    </select>
+
+    <select id="selectChargeDischargeHistoryTotalCount" resultType="int" parameterType="hashMap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM history_energy
+        WHERE 1 = 1
+        <if test="startDay != null and startDay != ''">
+            AND OPERATION_HISTORY_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{startDay})
+        </if>
+        <if test="endDay != null and endDay != ''">
+            AND OPERATION_HISTORY_DATE <![CDATA[<=]]> UNIX_TIMESTAMP(CONCAT(#{endDay}, '235959'))
+        </if>
+        <if test="operationMode != null and operationMode != ''">
+            AND OPERATION_MODE = #{operationMode}
+        </if>
+        <if test="operationType != null and operationType != ''">
+            AND OPERATION_TYPE = #{operationType}
+        </if>
+    </select>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM history_energy
+    </select>
+
+
+    <select id="selectDetailList" resultType="chargeDischargeHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT ENERGY_NO
+            , ENERGY_SEQ
+            , ACCUMULATED_ENERGY
+            , REG_DATE
+
+        FROM history_energy_detail
+        WHERE 1 = 1
+        <if test="energyNo != null and energyNo != ''">
+            AND ENERGY_NO = #{energyNo}
+        </if>
+        ORDER BY ENERGY_SEQ  DESC
+
+    </select>
+
+    <select id="selectDetailTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM history_energy_detail
+    </select>
+
+</mapper>

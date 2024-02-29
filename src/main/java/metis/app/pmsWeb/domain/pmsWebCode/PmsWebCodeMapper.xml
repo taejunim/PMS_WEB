@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.pmsWebCode.PmsWebCodeMapper">
+
+    <select id="get" resultType="HashMap" parameterType="HashMap">
+        SELECT
+        ${code} as code,
+        ${codeNm} as codeNm
+        FROM ${tableNm}
+        WHERE 1=1
+        <if test="equals2!=null and !equals2.equals('')">
+            AND ${equals2}
+        </if>
+        <if test="equals!=null and !equals.equals('')">
+            <foreach collection="equals.entrySet()" item="value" index="key">
+                AND ${key} = #{value}
+            </foreach>
+        </if>
+        <if test="groupBy!=null and !groupBy.equals('')">
+            GROUP BY ${groupBy}
+        </if>
+        <if test="orderBy!=null and !orderBy.equals('')">
+            ORDER BY
+            <foreach collection="orderBy.entrySet()" item="value" index="key" separator=" , ">
+                ${key} ${value}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="get2" resultType="HashMap" parameterType="HashMap">
+        SELECT
+        ${code} as code,
+        ${codeNm} as codeNm,
+        ${data} as data
+        FROM ${tableNm}
+        WHERE 1=1
+        <if test="equals!=null and !equals.equals('')">
+            <foreach collection="equals.entrySet()" item="value" index="key">
+                AND ${key} = #{value}
+            </foreach>
+        </if>
+        <if test="orderBy!=null and !orderBy.equals('')">
+            ORDER BY
+            <foreach collection="orderBy.entrySet()" item="value" index="key" separator=" , ">
+                ${key} ${value}
+            </foreach>
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.user.UserMapper">
+
+    <select id="findAll" resultType="user" parameterType="user" statementType="PREPARED">
+        SELECT a.USER_CD                   AS userCd,
+               a.USER_NM                   AS userNm,
+               a.USER_PS                   AS userPs,
+               a.EMAIL                     AS email,
+               a.HP_NO                     AS hpNo,
+               a.REMARK_200                AS remark,
+               a.LAST_LOGIN_DATE           AS lastLoginDate,
+               a.PASSWORD_UPDATE_DATE      AS passwordUpdateDate,
+               a.USER_STATUS               AS userStatus,
+               a.LOGIN_FAIL_CNT            AS loginFailCnt,
+               a.IP                        AS ip,
+               a.LOCALE                    AS locale,
+               a.MENU_GRP_CD               AS menuGrpCd,
+               IF(a.USE_YN="Y","YES","NO") AS useYn,
+               IF(a.DEL_YN="Y","YES","NO") AS delYn,
+               a.CREATED_AT                AS createdAt,
+               a.CREATED_BY                AS createdBy,
+               a.UPDATED_AT                AS updatedAt,
+               a.UPDATED_BY                AS updatedBy
+        FROM   SYSTEM_USER a
+        WHERE  a.MENU_GRP_CD = 'MANAGER'
+        AND    a.DEL_YN = 'N'
+    </select>
+
+    <select id="custUser" resultType="user" parameterType="user" statementType="PREPARED">
+        SELECT b.CUST_USER_SEQ             AS custUserSeq,
+               b.CUST_SEQ                  AS custSeq,
+               b.SMS_YN                    AS smsYn,
+               FN_CUST_NM(b.CUST_SEQ)      AS custNm,
+               a.USER_CD                   AS userCd,
+               a.USER_NM                   AS userNm,
+               a.USER_PS                   AS userPs,
+               a.EMAIL                     AS email,
+               a.HP_NO                     AS hpNo,
+               a.REMARK_200                AS remark,
+               a.LAST_LOGIN_DATE           AS lastLoginDate,
+               a.PASSWORD_UPDATE_DATE      AS passwordUpdateDate,
+               a.USER_STATUS               AS userStatus,
+               a.LOGIN_FAIL_CNT            AS loginFailCnt,
+               a.IP                        AS ip,
+               a.LOCALE                    AS locale,
+               a.MENU_GRP_CD               AS menuGrpCd,
+               IF(a.USE_YN="Y","YES","NO") AS useYn,
+               IF(a.DEL_YN="Y","YES","NO") AS delYn,
+               a.CREATED_AT                AS createdAt,
+               a.CREATED_BY                AS createdBy,
+               a.UPDATED_AT                AS updatedAt,
+               a.UPDATED_BY                AS updatedBy
+        FROM   SYSTEM_USER a
+               LEFT OUTER JOIN cust_user b
+               ON     a.USER_CD = b.USER_CD
+        WHERE  1                =1
+        AND    a.DEL_YN         = 'N'
+        AND    a.MENU_GRP_CD    = 'USER'
+        AND    b.CUST_SEQ IN
+               (SELECT CUST_SEQ
+               FROM    cust_master
+               WHERE   DEL_YN = 'N'
+               )
+        <if test="custSeq != '' and custSeq != null"> AND b.CUST_SEQ = #{custSeq} </if>
+        <if test="smsYn != '' and smsYn != null"> AND b.SMS_YN = #{smsYn} </if>
+    </select>
+
+    <select id="getToken" parameterType="java.lang.String" resultType="java.lang.String" statementType="PREPARED">
+
+        SELECT TOKEN_VALUE
+
+            FROM SYSTEM_USER, TOKEN_MANAGE
+
+        WHERE SYSTEM_USER.USER_CD = token_manage.USER_ID
+        AND USER_CD = #{useCd}
+
+    </select>
+
+    <select id="getUsers" resultType="hashmap" statementType="PREPARED">
+
+        SELECT
+                IF(MIN(B.LOGIN_STATUS) = '1', '로그인', '로그아웃') AS loginStatus
+                , A.USER_CD      AS userCd
+                , A.USER_NM      AS userNm
+                , A.USER_STATUS  AS userStatus
+                , A.LOCALE       AS locale
+                , A.USE_YN       AS useYn
+                , A.DEL_YN       AS delYn
+                , A.EMAIL        AS email
+                , A.HP_NO       AS hpNo
+                , A.IP          AS ip
+                , A.LAST_LOGIN_DATE AS lastLoginDate
+                , A.MENU_GRP_CD AS menuGrpCd
+                , A.PASSWORD_UPDATE_DATE    AS passwordUpdateDate
+                , A.REMARK_200  AS remark
+
+        FROM SYSTEM_USER A
+
+        LEFT JOIN SYSTEM_LOGIN_USER B
+        ON A.USER_CD = B.USER_CD
+
+        GROUP BY B.USER_CD
+
+    </select>
+
+</mapper>

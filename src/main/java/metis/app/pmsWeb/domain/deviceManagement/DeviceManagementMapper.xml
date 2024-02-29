@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.deviceManagement.DeviceManagementMapper">
+
+    <select id="selectDeviceManagementList" resultType="hashmap" parameterType="hashmap" statementType="PREPARED">
+        SELECT
+            device.DEVICE_CODE              AS  deviceCode
+            , device.ESS_CODE               AS  essCode
+            , device.DEVICE_NO              AS  deviceNo
+            , device.DEVICE_NAME            AS  deviceName
+            , device.DEVICE_CATEGORY        AS  deviceCategory
+            , device.DEVICE_CATEGORY_SUB    AS  deviceCategorySub
+            , device.DEVICE_ROOM            AS  deviceRoom
+            , device.MANUFACTURER_NAME      AS  manufacturerName
+            , device.MODEL_NO               AS  modelNo
+            , device.MODEL_NAME             AS  modelName
+            , device.SERIAL_NO              AS  serialNo
+            , device.DEVICE_SPEC            AS  deviceSpec
+            , device.REMARKS                AS  remarks
+            , device.CONTROL_FLAG           AS  controlFlag
+            , GET_CODE_NM('USE_YN', device.USE_FLAG)                         AS useFlag
+            , GET_CODE_NM('DEVICE_CATEGORY', device.DEVICE_CATEGORY)            AS deviceCategoryName
+            , GET_CODE_NM('DEVICE_CATEGORY_SUB', device.DEVICE_CATEGORY_SUB)    AS deviceCategorySubName
+            , GET_CODE_NM('ROOM_CODE', device.DEVICE_ROOM)                      AS deviceRoomName
+        FROM BASE_DEVICE device
+        LEFT JOIN BASE_ESS ess on ess.ESS_CODE = device.ESS_CODE
+        WHERE device.ESS_CODE = #{essCode}
+        <if test="deviceName != null and deviceName != ''">
+            AND device.DEVICE_NAME LIKE CONCAT('%', #{deviceName}, '%')
+        </if>
+        <if test="deviceCategory != null and deviceCategory != ''">
+            AND device.DEVICE_CATEGORY = #{deviceCategory}
+        </if>
+        <if test="deviceCategorySub != null and deviceCategorySub != ''">
+            AND device.DEVICE_CATEGORY_SUB = #{deviceCategorySub}
+        </if>
+        <if test="useFlag != null and useFlag != ''">
+            AND device.USE_FLAG = #{useFlag}
+        </if>
+
+        ORDER BY device.DEVICE_CODE
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectDeviceManagementTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM BASE_DEVICE device
+        LEFT JOIN BASE_ESS ess ON ess.ESS_CODE = device.ESS_CODE
+        WHERE device.ESS_CODE = #{essCode}
+        <if test="deviceName != null and deviceName != ''">
+            AND device.DEVICE_NAME LIKE CONCAT('%', #{deviceName}, '%')
+        </if>
+        <if test="deviceCategory != null and deviceCategory != ''">
+            AND device.DEVICE_CATEGORY = #{deviceCategory}
+        </if>
+        <if test="deviceCategorySub != null and deviceCategorySub != ''">
+            AND device.DEVICE_CATEGORY_SUB = #{deviceCategorySub}
+        </if>
+        <if test="useFlag != null and useFlag != ''">
+            AND device.USE_FLAG = #{useFlag}
+        </if>
+    </select>
+
+    <delete id="delete" parameterType="hashmap" statementType="PREPARED">
+        DELETE
+        FROM BASE_DEVICE
+        WHERE DEVICE_CODE = #{deviceCode}
+          AND ESS_CODE = #{essCode}
+    </delete>
+
+    <update id="update" parameterType="hashmap" statementType="PREPARED">
+        UPDATE BASE_DEVICE
+        SET DEVICE_NAME             = #{deviceName}
+            , MANUFACTURER_NAME     = #{manufacturerName}
+            , MODEL_NO              = #{modelNo}
+            , MODEL_NAME            = #{modelName}
+            , SERIAL_NO             = #{serialNo}
+            , DEVICE_SPEC           = #{deviceSpec}
+            , REMARKS               = #{remarks}
+            , CONTROL_FLAG          = #{controlFlag}
+            , USE_FLAG              = #{useFlag}
+            , UPDATED_AT            = now()
+            , UPDATED_BY            = #{updatedBy}
+        WHERE DEVICE_CODE = #{deviceCode}
+          AND ESS_CODE = #{essCode}
+    </update>
+
+    <insert id="insert" parameterType="hashmap" statementType="PREPARED">
+        INSERT INTO  BASE_DEVICE (
+                                     DEVICE_CODE
+                                     , ESS_CODE
+                                     , DEVICE_NO
+                                     , DEVICE_NAME
+                                     , DEVICE_CATEGORY
+                                     , DEVICE_CATEGORY_SUB
+                                     , DEVICE_ROOM
+                                     , MANUFACTURER_NAME
+                                     , MODEL_NO
+                                     , MODEL_NAME
+                                     , SERIAL_NO
+                                     , DEVICE_SPEC
+                                     , REMARKS
+                                     , CONTROL_FLAG
+                                     , USE_FLAG
+                                     , CREATED_AT
+                                     , CREATED_BY
+                                     , UPDATED_AT
+                                     , UPDATED_BY
+                                 )
+        VALUES (#{deviceCode}
+                , #{essCode}
+                , GENERATE_DEVICE_NO(#{essCode}, #{deviceCategorySub})
+                , #{deviceName}
+                , #{deviceCategory}
+                , #{deviceCategorySub}
+                , #{deviceRoom}
+                , #{manufacturerName}
+                , #{modelNo}
+                , #{modelName}
+                , #{serialNo}
+                , #{deviceSpec}
+                , #{remarks}
+                , #{controlFlag}
+                , #{useFlag}
+                , now()
+                , #{createdBy}
+                , now()
+                , #{updatedBy}
+                )
+    </insert>
+
+    <update id="insertComponent" parameterType="hashmap" statementType="PREPARED">
+        INSERT INTO BASE_DEVICE_COMPONENT ( DEVICE_CODE
+                                                , COMPONENT_NO
+                                                , COMPONENT_NAME
+                                                , CREATED_AT
+                                                , CREATED_BY
+                                                , UPDATED_AT
+                                                , UPDATED_BY
+                                                )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            #{deviceCode}
+            , #{item.componentNo}
+            , #{item.componentName}
+            , now()
+            , #{createdBy}
+            , now()
+            , #{updatedBy}
+            )
+        </foreach>
+
+    </update>
+
+    <delete id="deleteComponent" parameterType="hashmap" statementType="PREPARED">
+        <foreach collection="list" index="index" item="item" separator=";">
+            DELETE
+            FROM BASE_DEVICE_COMPONENT
+            WHERE DEVICE_CODE   = #{item.deviceCode}
+            AND COMPONENT_NO  = #{item.componentNo}
+        </foreach>
+    </delete>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM BASE_DEVICE
+    </select>
+
+    <select id="selectDeviceCode" resultType="String" parameterType="deviceManagementVO"  statementType="PREPARED">
+        SELECT GENERATE_DEVICE_CODE(#{essCode}, #{deviceCategorySub})
+    </select>
+</mapper>

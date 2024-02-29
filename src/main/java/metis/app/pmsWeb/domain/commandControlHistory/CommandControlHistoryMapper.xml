@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.commandControlHistory.CommandControlHistoryMapper">
+
+    <select id="selectCommandControlHistoryList" resultType="Hashmap" parameterType="Hashmap" statementType="PREPARED">
+        SELECT *
+        FROM (
+              SELECT DATE_FORMAT(FROM_UNIXTIME(commandControlHistory.CONTROL_DATE), '%Y-%m-%d %H:%i:%s')            AS commandControlDt
+                   , essControlCommandManagement.DEVICE_CODE                                                        AS deviceCode
+                   , deviceManagement.DEVICE_NAME                                                                   AS deviceName
+                   , essControlCommandManagement.CONTROL_TYPE                                                       AS controlType
+                   , GET_CODE_NM('CONTROL_TYPE', essControlCommandManagement.CONTROL_TYPE)                          AS controlTypeName
+                   , commandControlHistory.CONTROL_REQUEST_TYPE                                                     AS controlRequestType
+                   , GET_CODE_NM('CONTROL_REQUEST_TYPE',commandControlHistory.CONTROL_REQUEST_TYPE)                 AS controlRequestTypeName
+                   , commandControlHistory.CONTROL_REQUEST_DETAIL_TYPE                                              AS controlRequestDetailType
+                   , GET_CODE_NM('CONTROL_REQUEST_DETAIL_TYPE',commandControlHistory.CONTROL_REQUEST_DETAIL_TYPE)   AS controlRequestDetailTypeName
+                   , commandControlHistory.CONTROL_REQUEST_VALUE                                                    AS controlRequestValue
+                   , CONCAT(IFNULL((SELECT CONFIG_NAME
+                                    FROM operation_config
+                                    WHERE CONFIG_CODE = commandControlHistory.REFERENCE_CODE), '-')
+                                  , '(',commandControlHistory.REFERENCE_CODE, ')')                                  AS referenceCode
+                   , GET_CODE_NM('COMPLETE_FLAG', commandControlHistory.CONTROL_COMPLETE_FLAG)                      AS controlCompleteFlag
+                   , DATE_FORMAT(FROM_UNIXTIME(commandControlHistory.DEVICE_RESPONSE_DATE),'%Y-%m-%d %H:%i:%s')     AS deviceResponseDate
+                   , commandControlHistory.CONTROL_REQUEST_ID                                                       AS controlRequestId
+              FROM history_control commandControlHistory
+                 , base_device_control essControlCommandManagement
+                 , base_device deviceManagement
+              WHERE essControlCommandManagement.DEVICE_CODE = deviceManagement.DEVICE_CODE
+              AND commandControlHistory.CONTROL_CODE = essControlCommandManagement.CONTROL_CODE
+                <if test="startDate != null and startDate != ''">
+                    AND commandControlHistory.CONTROL_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(CONCAT(#{startDate},' 00:00:00'))
+                </if>
+                <if test="endDate != null and endDate != ''">
+                    AND commandControlHistory.CONTROL_DATE <![CDATA[<=]]> UNIX_TIMESTAMP(CONCAT(#{endDate},' 23:59:59'))
+                </if>
+                <if test="deviceCode != null and deviceCode != ''">
+                    AND deviceManagement.DEVICE_CODE = #{deviceCode}
+                </if>
+              ORDER BY commandControlHistory.CONTROL_DATE DESC
+              ) A
+        LIMIT  #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectCommandControlHistoryTotalList" resultType="int" parameterType="Hashmap" statementType="PREPARED">
+        SELECT Count(*)
+
+        FROM history_control commandControlHistory
+           , base_device_control essControlCommandManagement
+           , base_device deviceManagement
+        WHERE essControlCommandManagement.DEVICE_CODE = deviceManagement.DEVICE_CODE
+        AND commandControlHistory.CONTROL_CODE = essControlCommandManagement.CONTROL_CODE
+        <if test="startDate != null and startDate != ''">
+            AND commandControlHistory.CONTROL_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(CONCAT(#{startDate},' 00:00:00'))
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND commandControlHistory.CONTROL_DATE <![CDATA[<=]]> UNIX_TIMESTAMP(CONCAT(#{endDate},' 23:59:59'))
+        </if>
+        <if test="deviceCode != null and deviceCode != ''">
+            AND deviceManagement.DEVICE_CODE = #{deviceCode}
+        </if>
+    </select>
+
+    <update id="insert" parameterType="commandControlHistoryVO" statementType="PREPARED">
+        INSERT
+        INTO history_control (
+                              CONTROL_CODE
+                             , CONTROL_DATE
+                             , CONTROL_REQUEST_TYPE
+                             , CONTROL_REQUEST_DETAIL_TYPE
+                             , REFERENCE_CODE
+                             , CONTROL_COMPLETE_FLAG
+                             , DEVICE_RESPONSE_DATE
+                             , CONTROL_REQUEST_ID
+                             )
+        VALUES (
+                #{controlCode}
+                , UNIX_TIMESTAMP(#{controlDate})
+                , #{controlRequestType}
+                , #{controlRequestDetailType}
+                , #{referenceCode}
+                , #{controlCompleteFlag}
+                , #{deviceResponseDate}
+                , #{controlRequestId}
+               )
+    </update>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM history_control
+    </select>
+</mapper>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.chargePlanPeriodMgnt.ChargePlanPeriodMgntMapper">
+
+    <select id="selectChargePlanPeriodMgnt" resultType="chargePlanPeriodMgntVO" parameterType="hashMap" statementType="PREPARED">
+
+        SELECT
+               DATE_FORMAT(A.PLAN_CHARGE_DATE, '%Y-%m-%d') AS planChargeDischargeDate
+               , A.chargeDetailCnt
+               , B.dischargeDetailCnt
+        FROM (
+            SELECT A.PLAN_CHARGE_DATE, IF(CNT > 0, '생성', '미생성') AS chargeDetailCnt
+            FROM (
+                SELECT PLAN_CHARGE_DATE, ESS_CODE
+                FROM PMS_PLAN_CHARGE_MASTER
+                WHERE 1=1
+                <if test="pmsCode != null and pmsCode != ''">
+                    AND ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+                </if>
+                AND PLAN_CHARGE_DATE LIKE CONCAT(#{month}, '%')
+                ) AS A
+            LEFT JOIN (
+                SELECT COUNT(*) AS CNT, ESS_CODE, PLAN_CHARGE_DATE
+                FROM PMS_PLAN_CHARGE_DETAIL
+                WHERE 1=1
+                <if test="pmsCode != null and pmsCode != ''">
+                    AND ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+                </if>
+                AND PLAN_CHARGE_DATE LIKE CONCAT(#{month}, '%')
+                GROUP BY PLAN_CHARGE_DATE
+            ) AS B
+            ON A.ESS_CODE = B.ESS_CODE
+            AND A.PLAN_CHARGE_DATE = B.PLAN_CHARGE_DATE
+            ) A
+
+        LEFT JOIN
+
+            (
+            SELECT A.PLAN_DISCHARGE_DATE, IF(CNT > 0, '생성', '미생성') AS dischargeDetailCnt
+            FROM (
+                SELECT PLAN_DISCHARGE_DATE, ESS_CODE
+                FROM PMS_PLAN_DISCHARGE_MASTER
+                WHERE 1=1
+                <if test="pmsCode != null and pmsCode != ''">
+                    AND ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+                </if>
+                AND PLAN_DISCHARGE_DATE LIKE CONCAT(#{month}, '%')
+            ) AS A
+            LEFT JOIN (
+                SELECT COUNT(*) AS CNT, ESS_CODE, PLAN_DISCHARGE_DATE
+                FROM PMS_PLAN_DISCHARGE_DETAIL
+                WHERE 1=1
+                <if test="pmsCode != null and pmsCode != ''">
+                    AND ESS_CODE = GET_ESS_CODE_AT_PMS_CODE(#{pmsCode})
+                </if>
+                AND PLAN_DISCHARGE_DATE LIKE CONCAT(#{month}, '%')
+                GROUP BY PLAN_DISCHARGE_DATE
+            ) AS B
+            ON A.ESS_CODE = B.ESS_CODE
+            AND A.PLAN_DISCHARGE_DATE = B.PLAN_DISCHARGE_DATE
+            ) B
+        ON A.PLAN_CHARGE_DATE = B.PLAN_DISCHARGE_DATE
+
+    </select>
+
+    <select id="selectChargeDischargePlanDetail" resultType="chargePlanPeriodMgntVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT * FROM(
+            SELECT DATE_FORMAT(PLAN_CHARGE_DATE, '%Y-%m-%d') AS planChargeDischargeDate,
+                   '충전' AS chargeDisChargeGbn,
+                   TIME_FORMAT(PLAN_CHARGE_START_TIME, '%H:%i:%S') AS planStartTime,
+                   CHARGE_AMOUNT AS chargeDischargeAmount,
+                   BATCH_APPLY_YN,
+                   USE_YN,
+                   ESS_CODE,
+                   PLAN_CHARGE_SEQ AS planSeq
+            FROM PMS_PLAN_CHARGE_DETAIL
+            WHERE DATE_FORMAT(PLAN_CHARGE_DATE, '%Y-%m-%d') = #{planChargeDischargeDate}
+
+            UNION ALL
+
+            SELECT DATE_FORMAT(PLAN_DISCHARGE_DATE, '%Y-%m-%d') AS planChargeDischargeDate,
+                   '방전' AS chargeDisChargeGbn,
+                   TIME_FORMAT(PLAN_DISCHARGE_START_TIME, '%H:%i:%S') AS planStartTime,
+                   DISCHARGE_AMOUNT AS chargeDischargeAmount,
+                   BATCH_APPLY_YN,
+                   USE_YN,
+                   ESS_CODE,
+                   PLAN_DISCHARGE_SEQ    AS planSeq
+            FROM PMS_PLAN_DISCHARGE_DETAIL
+            WHERE DATE_FORMAT(PLAN_DISCHARGE_DATE, '%Y-%m-%d') = #{planChargeDischargeDate}
+        )AS A
+        ORDER BY planStartTime
+
+    </select>
+
+    <select id="isExistSameDataYn" parameterType="hashmap" resultType="int" statementType="PREPARED">
+
+        select count(*)
+
+        from(
+                select
+                    *
+                from PMS_PLAN_CHARGE_DETAIL
+                where DATE_FORMAT(PLAN_CHARGE_DATE, '%Y-%m-%d') = #{planChargeDischargeDate}
+                  and TIME_FORMAT(PLAN_CHARGE_START_TIME, '%H:%i:%S') = #{planStartTime}
+                  and ESS_CODE = #{essCode}
+
+                union all
+
+                select
+                    *
+                from PMS_PLAN_DISCHARGE_DETAIL
+                where DATE_FORMAT(PLAN_DISCHARGE_DATE, '%Y-%m-%d') = #{planChargeDischargeDate}
+                  and TIME_FORMAT(PLAN_DISCHARGE_START_TIME, '%H:%i:%S') = #{planStartTime}
+                  and ESS_CODE = #{essCode}
+            ) AS A
+
+
+    </select>
+
+    <update id="insertChargePlanDetail" parameterType="Hashmap" statementType="PREPARED">
+
+        INSERT INTO PMS_PLAN_CHARGE_DETAIL (
+            PLAN_CHARGE_DATE,
+            PLAN_CHARGE_SEQ,
+            ESS_CODE,
+            BATCH_APPLY_YN,
+            PLAN_CHARGE_START_TIME,
+            CHARGE_AMOUNT,
+            USE_YN
+        )
+        VALUES
+        <foreach collection="dataList" item="item" separator=",">
+            (
+                DATE_FORMAT(#{item.planChargeDischargeDate}, '%Y%m%d'),
+                <choose>
+                    <when test="item.planSeq != null and item.planSeq != ''">
+                        #{item.planSeq},
+                    </when>
+                    <otherwise>
+                        GET_CHARGE_PLAN_SEQ(#{item.essCode}, DATE_FORMAT(#{item.planChargeDischargeDate}, '%Y%m%d')),
+                    </otherwise>
+                </choose>
+                #{item.essCode},
+                'N',
+                TIME_FORMAT(#{item.planStartTime}, '%H%i%S'),
+                #{item.chargeDischargeAmount},
+                #{item.useYn}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+
+         USE_YN = values(USE_YN)
+    </update>
+
+    <update id="insertDischargePlanDetail" parameterType="Hashmap" statementType="PREPARED">
+
+        INSERT INTO PMS_PLAN_DISCHARGE_DETAIL (
+            PLAN_DISCHARGE_DATE,
+            PLAN_DISCHARGE_SEQ,
+            ESS_CODE,
+            BATCH_APPLY_YN,
+            PLAN_DISCHARGE_START_TIME,
+            DISCHARGE_AMOUNT,
+            USE_YN
+        )
+        VALUES
+        <foreach collection="dataList" item="item" separator=",">
+            (
+                DATE_FORMAT(#{item.planChargeDischargeDate}, '%Y%m%d'),
+                <choose>
+                    <when test="item.planSeq != null and item.planSeq != ''">
+                        #{item.planSeq},
+                    </when>
+                    <otherwise>
+                        GET_DISCHARGE_PLAN_SEQ(#{item.essCode}, DATE_FORMAT(#{item.planChargeDischargeDate}, '%Y%m%d')),
+                    </otherwise>
+                </choose>
+                #{item.essCode},
+                'N',
+                TIME_FORMAT(#{item.planStartTime}, '%H%i%S'),
+                #{item.chargeDischargeAmount},
+                #{item.useYn}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+
+        USE_YN = values(USE_YN)
+    </update>
+
+    <delete id="deleteChargePlanDetail" parameterType="hashmap" statementType="PREPARED">
+        DELETE FROM PMS_PLAN_CHARGE_DETAIL
+
+        WHERE 1=1
+          AND DATE_FORMAT(PLAN_CHARGE_DATE, '%Y-%m-%d') =#{planChargeDischargeDate}
+          AND ESS_CODE = #{essCode}
+          AND PLAN_CHARGE_SEQ = #{planSeq}
+
+    </delete>
+
+
+    <delete id="deleteDischargePlanDetail" parameterType="hashmap" statementType="PREPARED">
+        DELETE FROM PMS_PLAN_DISCHARGE_DETAIL
+
+        WHERE 1=1
+          AND DATE_FORMAT(PLAN_DISCHARGE_DATE, '%Y-%m-%d') =#{planChargeDischargeDate}
+          AND ESS_CODE = #{essCode}
+          AND PLAN_DISCHARGE_SEQ = #{planSeq}
+    </delete>
+
+    <select id="selectTotalCountMgnt" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM PMS_PLAN_CHARGE_MASTER, PMS_PLAN_DISCHARGE_MASTER
+    </select>
+
+    <select id="selectTotalCountDetail" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM PMS_PLAN_CHARGE_DETAIL , PMS_PLAN_DISCHARGE_DETAIL
+    </select>
+</mapper>

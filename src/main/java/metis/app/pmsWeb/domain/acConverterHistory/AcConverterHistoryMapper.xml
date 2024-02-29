@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.acConverterHistory.AcConverterHistoryMapper">
+
+    <select id="select" resultType="acConverterHistoryVO" parameterType="Hashmap" statementType="PREPARED">
+        SELECT
+            CONVERTER_CODE                                              AS converterCode
+            ,DATE_FORMAT(FROM_UNIXTIME(REG_DATE),'%Y-%m-%d %H:%i:%s')   AS regDate
+            ,OPERATION_STATUS                                           AS operationStatus
+            ,GET_CODE_NM('DEVICE_STATUS',OPERATION_STATUS)              AS operationStatusName
+            ,OPERATION_MODE_STATUS                                      AS operationModeStatus
+            ,GET_CODE_NM('OPERATION_MODE',OPERATION_MODE_STATUS)        AS operationModeStatusName
+            ,TOTAL_ACTIVE_CURRENT                                       AS totalActiveCurrent
+            ,TOTAL_VOLTAGE                                              AS totalVoltage
+            ,TOTAL_POWER                                                AS totalPower
+            ,INTERNAL_TEMP                                              AS internalTemp
+            ,TRANSFORMER_TEMP                                           AS transformerTemp
+            ,WARNING_FLAG                                               AS warningFlag
+            ,FAULT_FLAG                                                 AS faultFlag
+        FROM RAW_CONVERTER_AC
+        WHERE 1=1
+            <if test="operationStatus != null and operationStatus != '' ">
+                AND OPERATION_STATUS = #{operationStatus}
+            </if>
+            <if test="operationModeStatus != null and operationModeStatus != '' ">
+                AND OPERATION_MODE_STATUS = #{operationModeStatus}
+            </if>
+            <if test="searchDate != null and searchDate != ''">
+                AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+                AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+            </if>
+        ORDER BY REG_DATE DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM RAW_CONVERTER_AC
+        WHERE 1=1
+        <if test="operationStatus != null and operationStatus != '' ">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="operationModeStatus != null and operationModeStatus != '' ">
+            AND OPERATION_MODE_STATUS = #{operationModeStatus}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="selectConverterDetail" resultType="Hashmap" statementType="PREPARED">
+        SELECT
+            CONVERTER_CODE                                  AS converterCode
+            ,REG_DATE                                       AS regDate
+            ,INVERTER_NO                                    AS inverterNo
+            ,MODE_STATUS                                    AS modeStatus
+            ,GET_CODE_NM('DEVICE_STATUS',MODE_STATUS)       AS modeStatusName
+            ,INVERTER_STATUS                                AS inverterStatus
+            ,GET_CODE_NM('DEVICE_STATUS',INVERTER_STATUS)   AS inverterStatusName
+            ,POWER                                          AS power
+            ,TOTAL_CURRENT                                  AS totalCurrent
+            ,OUTPUT_VOLTAGE                                 AS outputVoltage
+            ,OUTPUT_FREQUENCY                               AS outputFrequency
+            ,GRID_VOLTAGE                                   AS gridVoltage
+            ,GRID_FREQUENCY                                 AS gridFrequency
+            ,GRID_PHASE_DIFFERENCE                          AS gridPhaseDifference
+            ,POWER_FACTOR                                   AS powerFactor
+            ,AC_CURRENT                                     AS acCurrent
+            ,DC_VOLTAGE                                     AS dcVoltage
+            ,DC_OFFSET                                      AS dcOffset
+            ,ACTIVE_CURRENT                                 AS activeCurrent
+            ,ACTIVE_CURRENT_CONTRAST                        AS activeCurrentContrast
+            ,REACTIVE_CURRENT_CONTRAST                      AS reactiveCurrentContrast
+            ,STACK_TEMP                                     AS stackTemp
+            ,INDUCTOR1_TEMP                                 AS inductor1Temp
+            ,INDUCTOR2_TEMP                                 AS inductor2Temp
+            ,CAPACITOR_TEMP                                 AS capacitorTemp
+            ,WARNING_ID                                     AS warningId
+            ,FAULT_ID                                       AS faultId
+            ,WARNING_FLAG                                   AS warningFlag
+            ,FAULT_FLAG                                     AS faultFlag
+        FROM    RAW_CONVERTER_AC_DETAIL
+        WHERE   CONVERTER_CODE = #{converterCode}
+           AND REG_DATE <![CDATA[=]]> UNIX_TIMESTAMP(#{regDate})
+    </select>
+
+</mapper>

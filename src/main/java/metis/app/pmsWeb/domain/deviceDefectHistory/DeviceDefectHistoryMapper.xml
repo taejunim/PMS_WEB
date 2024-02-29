@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.deviceDefectHistory.DeviceDefectHistoryMapper">
+
+    <select id="selectDeviceDefectHistoryList" resultType="deviceDefectHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT
+        IF(b.SALE_COMPANY_MANAGER_NAME IS NOT NULL, SALE_COMPANY_MANAGER_NAME, '-')      AS saleCompanyManagerName,
+        IF(b.SALE_COMPANY_TEL IS NOT NULL,
+            CASE CHAR_LENGTH(SALE_COMPANY_TEL)
+            WHEN 11 THEN CONCAT(LEFT(SALE_COMPANY_TEL,3),'-',MID(SALE_COMPANY_TEL,4,4),'-',RIGHT(SALE_COMPANY_TEL,4))
+            WHEN 10 THEN CONCAT(LEFT(SALE_COMPANY_TEL, 3), '-', MID(SALE_COMPANY_TEL, 4, 3), '-', RIGHT(SALE_COMPANY_TEL, 4))
+            WHEN 9 THEN CONCAT(LEFT(SALE_COMPANY_TEL, 2), '-', MID(SALE_COMPANY_TEL, 3, 3), '-', RIGHT(SALE_COMPANY_TEL, 4))
+            ELSE SALE_COMPANY_TEL
+            END,
+            '-') AS saleCompanyTel,
+        IF(b.SALE_COMPANY_NAME IS NOT NULL, SALE_COMPANY_NAME, '-')                      AS saleCompanyName,
+        A.*
+        FROM
+        (SELECT GET_PMS_CODE_AT_ESS_CODE(TB13.ESS_CODE) PMS_CODE
+        , GET_PMS_NAME_AT_ESS_CODE(TB13.ESS_CODE) PMS_NAME
+        , TB17.DEVICE_CODE
+        , TB17.ESS_CODE
+        , TB13.DEVICE_NAME
+        , FROM_UNIXTIME(TB17.DEVICE_DEFECT_DATE, '%Y-%m-%d %H:%i:%s') DEVICE_DEFECT_DATE
+        , GET_CODE_NM('REPAIR_COMPLETE_YN', TB17.REPAIR_COMPLETE_YN) REPAIR_COMPLETE_YN
+        , TB17.DEFECT_REASON
+        , TB17.REPAIR_CONTENT
+        ,TB13.SALE_COMPANY_CODE
+        FROM PMS_BASE_DEVICE TB13, PMS_HISTORY_REPAIR_DEVICE TB17
+        WHERE TB13.DEVICE_CODE = TB17.DEVICE_CODE
+        AND TB13.ESS_CODE = TB17.ESS_CODE
+        <if test="deviceGbnCode != null and deviceGbnCode != ''">
+            AND TB13.DEVICE_GBN_CODE = #{deviceGbnCode}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND TB17.DEVICE_DEFECT_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{startDate})
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND TB17.DEVICE_DEFECT_DATE <![CDATA[<=]]> UNIX_TIMESTAMP((CONCAT(#{endDate},'235959')))
+        </if>) AS A
+        LEFT JOIN
+
+        pms_base_sale_company b
+        ON  A.SALE_COMPANY_CODE  = b.SALE_COMPANY_CODE
+
+        ORDER BY DEVICE_DEFECT_DATE DESC
+         LIMIT  #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectDeviceDefectHistoryListTotalCount" resultType="int" parameterType="hashMap" statementType="PREPARED">
+        SELECT COUNT(*)
+          FROM PMS_BASE_DEVICE TB13, PMS_HISTORY_REPAIR_DEVICE TB17
+         WHERE TB13.DEVICE_CODE = TB17.DEVICE_CODE
+           AND TB13.ESS_CODE = TB17.ESS_CODE
+        <if test="deviceGbnCode != null and deviceGbnCode != ''">
+           AND TB13.DEVICE_GBN_CODE = #{deviceGbnCode}
+        </if>
+        <if test="startDate != null and startDate != ''">
+           AND TB17.DEVICE_DEFECT_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{startDate})
+        </if>
+        <if test="endDate != null and endDate != ''">
+           AND TB17.DEVICE_DEFECT_DATE <![CDATA[<=]]> UNIX_TIMESTAMP((CONCAT(#{endDate},'235959')))
+        </if>
+    </select>
+
+    <update id="update" parameterType="deviceDefectHistoryVO" statementType="PREPARED">
+        UPDATE  PMS_HISTORY_REPAIR_DEVICE
+        SET     DEVICE_CODE = #{deviceCode},
+                DEFECT_REASON = #{defectReason},
+                UPDATED_BY = #{updatedBy}
+        WHERE   DEVICE_DEFECT_DATE = UNIX_TIMESTAMP(#{deviceDefectDate})
+        AND     ESS_CODE = #{essCode}
+    </update>
+
+    <update id="repairCompleteProcess" parameterType="deviceDefectHistoryVO" statementType="PREPARED">
+        UPDATE  PMS_HISTORY_REPAIR_DEVICE
+        SET     REPAIR_CONTENT = #{repairContent},
+                REPAIR_COMPLETE_YN = 'Y',
+                REPAIR_COMPLETE_DT = UNIX_TIMESTAMP(),
+                UPDATED_BY = #{updatedBy}
+        WHERE   DEVICE_CODE = #{deviceCode}
+          AND   DEVICE_DEFECT_DATE = UNIX_TIMESTAMP(#{deviceDefectDate})
+          AND   ESS_CODE = #{essCode}
+    </update>
+
+    <update id="insert" parameterType="deviceDefectHistoryVO" statementType="PREPARED">
+        INSERT
+        INTO PMS_HISTORY_REPAIR_DEVICE (
+            DEVICE_DEFECT_DATE,
+            DEVICE_CODE,
+            ESS_CODE,
+            DEFECT_REASON,
+            REPAIR_COMPLETE_YN,
+            CREATED_BY
+        )
+        VALUES (
+            UNIX_TIMESTAMP(),
+            #{deviceCode},
+            GET_ESS_CODE_AT_PMS_CODE(#{pmsCode}),
+            #{defectReason},
+            'N',
+            #{createdBy}
+        )
+    </update>
+
+    <select id="getDeviceInfo" resultType="deviceDefectHistoryVO" parameterType="string" statementType="PREPARED">
+        SELECT TB13.DEVICE_CODE
+             , TB13.DEVICE_NAME
+          FROM PMS_BASE_ESS TB12, PMS_BASE_DEVICE TB13
+         WHERE TB12.ESS_CODE = TB13.ESS_CODE
+           AND TB12.PMS_CODE = #{pmsCode}
+    </select>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM PMS_HISTORY_REPAIR_DEVICE
+    </select>
+
+</mapper>

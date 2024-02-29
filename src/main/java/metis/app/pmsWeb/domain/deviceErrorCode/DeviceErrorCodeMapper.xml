@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.deviceErrorCode.DeviceErrorCodeMapper">
+
+    <select id="selectDeviceErrorCodeList" resultType="hashmap" parameterType="hashmap" statementType="PREPARED">
+
+        SELECT ERROR_CODE                   AS errorCode
+                ,ERROR_CODE_NAME            AS errorCodeName
+                ,DEVICE_CATEGORY            AS deviceCategory
+                ,DEVICE_CATEGORY_SUB        AS deviceCategorySub
+                ,ERROR_TYPE                 AS errorType
+                ,MANUFACTURER_CODE          AS manufacturerCode
+                ,REFERENCE_CODE             AS referenceCode
+                ,REMARKS                    AS remarks
+                ,USE_FLAG                   AS useFlag
+                ,GET_CODE_NM('ERROR_TYPE', ERROR_TYPE)                                  AS errorTypeName
+                ,IFNULL(GET_CODE_NM('DEVICE_CATEGORY', DEVICE_CATEGORY),'공통')          AS deviceCategoryName
+                ,IFNULL(GET_CODE_NM('DEVICE_CATEGORY_SUB', DEVICE_CATEGORY_SUB),'공통')  AS deviceCategorySubName
+        FROM BASE_DEVICE_ERROR_CODE
+        WHERE 1=1
+        AND DEVICE_CATEGORY NOT IN (
+                                    SELECT CODE
+                                    FROM SYSTEM_COMMON_CODE
+                                    WHERE GROUP_CD = 'DEVICE_CATEGORY'
+                                        AND DATA1 = #{data1}
+                                    )
+        <if test="deviceCategory != null and deviceCategory != ''">
+            AND DEVICE_CATEGORY = #{deviceCategory}
+        </if>
+        <if test="deviceCategorySub != null and deviceCategorySub != ''">
+            AND DEVICE_CATEGORY_SUB = #{deviceCategorySub}
+        </if>
+        <if test="errorType != null and errorType != ''">
+            AND ERROR_TYPE = #{errorType}
+        </if>
+        ORDER BY ERROR_CODE
+    </select>
+
+    <select id="selectDeviceErrorCodeTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM BASE_DEVICE_ERROR_CODE
+        WHERE 1=1
+        AND DEVICE_CATEGORY NOT IN (
+                                    SELECT CODE
+                                    FROM SYSTEM_COMMON_CODE
+                                    WHERE GROUP_CD = 'DEVICE_CATEGORY'
+                                        AND DATA1 = #{data1}
+                                    )
+        <if test="deviceCategory != null and deviceCategory != ''">
+            AND DEVICE_CATEGORY = #{deviceCategory}
+        </if>
+        <if test="deviceCategorySub != null and deviceCategorySub != ''">
+            AND DEVICE_CATEGORY_SUB = #{deviceCategorySub}
+        </if>
+        <if test="errorType != null and errorType != ''">
+            AND ERROR_TYPE = #{errorType}
+        </if>
+    </select>
+
+    <update id="update" parameterType="hashmap" statementType="PREPARED">
+        UPDATE BASE_DEVICE_ERROR_CODE
+        SET ERROR_CODE_NAME         =   #{errorCodeName}
+            ,MANUFACTURER_CODE      =   #{manufacturerCode}
+            ,REFERENCE_CODE         =   #{referenceCode}
+            ,REMARKS                =   #{remarks}
+            ,USE_FLAG               =   #{useFlag}
+            ,UPDATED_AT             =   now()
+            ,UPDATED_BY             =   #{updatedBy}
+        WHERE ERROR_CODE            =   #{errorCode}
+    </update>
+
+    <update id="insert" parameterType="hashmap" statementType="PREPARED">
+        INSERT
+        INTO BASE_DEVICE_ERROR_CODE ( ERROR_CODE
+                            , ERROR_CODE_NAME
+                            , DEVICE_CATEGORY
+                            , DEVICE_CATEGORY_SUB
+                            , ERROR_TYPE
+                            , MANUFACTURER_CODE
+                            , REFERENCE_CODE
+                            , REMARKS
+                            , USE_FLAG
+                            , CREATED_AT
+                            , CREATED_BY
+                            , UPDATED_AT
+                            , UPDATED_BY)
+        VALUES (
+                (CONCAT(#{deviceCategorySub},#{errorType},IFNULL((LPAD(SUBSTRING(
+                    (SELECT MAX(a.ERROR_CODE) FROM BASE_DEVICE_ERROR_CODE a WHERE DEVICE_CATEGORY_SUB = #{deviceCategorySub} AND ERROR_TYPE = #{errorType}),-3)+1,3,0)),'001')))
+                    , #{errorCodeName}
+                    , #{deviceCategory}
+                    , #{deviceCategorySub}
+                    , #{errorType}
+                    , #{manufacturerCode}
+                    , #{referenceCode}
+                    , #{remarks}
+                    , #{useFlag}
+                    , now()
+                    , #{createdBy}
+                    , now()
+                    , #{updatedBy}
+               )
+    </update>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM BASE_DEVICE_ERROR_CODE
+    </select>
+</mapper>

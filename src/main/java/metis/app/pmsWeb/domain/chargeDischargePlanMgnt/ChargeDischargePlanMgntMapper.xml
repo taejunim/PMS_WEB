@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.chargeDischargePlanMgnt.ChargeDischargePlanMgntMapper">
+
+    <select id="list" resultType="Hashmap" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        SELECT SCHEDULE_NO                                                                                              scheduleNo
+             , SCHEDULE_TYPE                                                                                            scheduleType
+             , GET_CODE_NM('SCHEDULE_TYPE',SCHEDULE_TYPE)                                                               scheduleTypeName
+             , OPERATION_MODE_TYPE                                                                                      operationMode
+             , GET_CODE_NM('OPERATION_MODE',OPERATION_MODE_TYPE)                                                        operationModeTypeName
+             , SCHEDULE_START_DATE                                                                                      scheduleStartDate
+             , SCHEDULE_END_DATE                                                                                        scheduleEndDate
+             , CONCAT(LEFT(SCHEDULE_START_TIME,2),':',MID(SCHEDULE_START_TIME,3,2))                                     scheduleStartTime
+             , CONCAT(LEFT(SCHEDULE_END_TIME,2),':',MID(SCHEDULE_END_TIME,3,2))                                         scheduleEndTime
+             , SCHEDULE_STATUS                                                                                          scheduleStatus
+             , GET_CODE_NM('SCHEDULE_STATUS',SCHEDULE_STATUS)                                                           scheduleStatusName
+             , TARGET_UNIT                                                                                              targetUnit
+             , TARGET_AMOUNT                                                                                            targetAmount
+             , IFNULL(RUN_START_DATE_TIME,'-')                                                                          runStartDateTime
+             , IFNULL(RUN_END_DATE_TIME,'-')                                                                            runEndDateTime
+             , REMARKS                                                                                                  remarks
+             , operation_schedule_detail.UPDATED_AT                                                                     updatedAt
+             , operation_schedule_detail.UPDATED_BY                                                                     updatedBy
+             , DATE_FORMAT(operation_schedule.UPDATED_AT, '%Y-%m-%d %H:%i:%s')                                          masterUpdatedAt
+             , operation_schedule.UPDATED_BY                                                                            masterUpdatedBy
+        FROM operation_schedule_detail, operation_schedule
+        WHERE operation_schedule_detail.SCHEDULE_START_DATE = operation_schedule.SCHEDULE_DATE
+
+        <if test="searchStart != null and searchStart != ''">
+            AND SCHEDULE_START_DATE <![CDATA[>=]]> #{searchStart}
+        </if>
+        <if test="searchEnd != null and searchEnd != ''">
+            AND SCHEDULE_START_DATE <![CDATA[<=]]> #{searchEnd}
+        </if>
+    </select>
+
+    <insert id="insertChargeDischargePlan" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        INSERT INTO operation_schedule(
+            SCHEDULE_DATE
+          , CHARGE_COUNT
+          , DISCHARGE_COUNT
+          , CREATED_AT
+          , CREATED_BY
+          , UPDATED_AT
+          , UPDATED_BY
+        )
+        VALUES (
+            #{scheduleStartDate}
+        <choose>
+            <when test="operationMode eq 1">
+                , 1 , 0
+            </when>
+            <when test="operationMode eq 2">
+                , 0 , 1
+            </when>
+            <otherwise>
+                , 0 , 0
+            </otherwise>
+        </choose>
+          , sysdate()
+          , #{createdBy}
+          , sysdate()
+          , #{createdBy})
+        ON DUPLICATE KEY UPDATE
+        UPDATED_AT = sysdate(),
+        UPDATED_BY = #{createdBy}
+        <choose>
+            <when test="operationMode eq 1">
+                , CHARGE_COUNT = CHARGE_COUNT + 1
+            </when>
+            <when test="operationMode eq 2">
+                , DISCHARGE_COUNT = DISCHARGE_COUNT + 1
+            </when>
+        </choose>
+
+    </insert>
+    <insert id="insertChargeDischargePlanDetail" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        <selectKey keyProperty="scheduleNo" order="BEFORE" resultType="java.lang.String">
+            SELECT SCHEDULE_NO
+            FROM (
+            SELECT COUNT(*) + 1 AS SCHEDULE_NO FROM operation_schedule_detail WHERE SCHEDULE_START_DATE = #{scheduleStartDate}) A
+        </selectKey>
+        INSERT INTO operation_schedule_detail(
+            SCHEDULE_NO
+          , SCHEDULE_TYPE
+          , SCHEDULE_START_DATE
+          , SCHEDULE_END_DATE
+          , SCHEDULE_START_TIME
+          , SCHEDULE_END_TIME
+          , SCHEDULE_STATUS
+          , OPERATION_MODE_TYPE
+          , TARGET_UNIT
+          , TARGET_AMOUNT
+          , REMARKS
+          , CREATED_AT
+          , CREATED_BY
+          , UPDATED_AT
+          , UPDATED_BY)
+        VALUES (#{scheduleNo}
+              , #{scheduleType}
+              , #{scheduleStartDate}
+              , #{scheduleEndDate}
+              , #{scheduleStartTime}
+              , #{scheduleEndTime}
+              , '01'
+              , #{operationMode}
+              , #{targetUnit}
+              , #{targetAmount}
+              , #{remarks}
+              , sysdate()
+              , #{createdBy}
+              , sysdate()
+              , #{createdBy}
+              )
+    </insert>
+
+    <update id="updatePlan" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        UPDATE operation_schedule
+        SET CHARGE_COUNT = (SELECT COUNT(*) FROM operation_schedule_detail WHERE SCHEDULE_START_DATE = #{scheduleStartDate} AND OPERATION_MODE_TYPE = '1' AND SCHEDULE_STATUS != '02')
+          , DISCHARGE_COUNT = (SELECT COUNT(*) FROM operation_schedule_detail WHERE SCHEDULE_START_DATE = #{scheduleStartDate} AND OPERATION_MODE_TYPE = '2' AND SCHEDULE_STATUS != '02')
+          , UPDATED_BY = #{updatedBy}
+          , UPDATED_AT = sysdate()
+        WHERE SCHEDULE_DATE = #{scheduleStartDate}
+    </update>
+
+    <update id="updatePlanDetail" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        UPDATE operation_schedule_detail
+        SET SCHEDULE_END_DATE     = #{scheduleEndDate}
+          , SCHEDULE_START_TIME   = #{scheduleStartTime}
+          , SCHEDULE_END_TIME     = #{scheduleEndTime}
+          , SCHEDULE_TYPE         = #{scheduleType}
+          , OPERATION_MODE_TYPE   = #{operationMode}
+          , TARGET_UNIT           = #{targetUnit}
+          , TARGET_AMOUNT         = #{targetAmount}
+          , REMARKS               = #{remarks}
+          , UPDATED_AT            = sysdate()
+          , UPDATED_BY            = #{updatedBy}
+        WHERE SCHEDULE_NO         = #{scheduleNo}
+        AND   SCHEDULE_START_DATE = #{scheduleStartDate}
+    </update>
+
+    <select id="checkExistSamePlan" parameterType="chargePlanPeriodMgntVO" resultType="hashmap" statementType="PREPARED">
+        SELECT SCHEDULE_START_DATE AS scheduleStartDate
+             , SCHEDULE_NO         AS scheduleNo
+        FROM (
+            SELECT CONCAT(SCHEDULE_START_DATE, SCHEDULE_START_TIME) AS scheduleStartDateTime
+                 , CONCAT(SCHEDULE_END_DATE, SCHEDULE_END_TIME)     AS scheduleEndDateTime
+                 , SCHEDULE_START_DATE
+                 , SCHEDULE_NO
+            FROM   operation_schedule_detail
+            WHERE (SCHEDULE_START_DATE = #{scheduleStartDate}
+            OR    SCHEDULE_START_DATE = DATE_FORMAT(DATE_ADD(#{scheduleStartDate}, INTERVAL -1 DAY),'%Y%m%d')
+            OR    SCHEDULE_START_DATE = DATE_FORMAT(DATE_ADD(#{scheduleStartDate}, INTERVAL 1 DAY),'%Y%m%d'))
+            AND   SCHEDULE_STATUS    != '02') a
+        WHERE (a.scheduleStartDateTime <![CDATA[>=]]> CONCAT(#{scheduleStartDate}, #{scheduleStartTime})
+            AND   a.scheduleStartDateTime  <![CDATA[<]]> CONCAT(#{scheduleEndDate}, #{scheduleEndTime})
+        <if test="scheduleNo != null and scheduleNo != '' ">
+            AND (SCHEDULE_START_DATE, SCHEDULE_NO) NOT IN ((#{scheduleStartDate},#{scheduleNo}))
+        </if>
+            )
+        OR (a.scheduleEndDateTime   <![CDATA[>]]> CONCAT(#{scheduleStartDate}, #{scheduleStartTime})
+            AND   a.scheduleEndDateTime <![CDATA[<=]]> CONCAT(#{scheduleEndDate}, #{scheduleEndTime})
+        <if test="scheduleNo != null and scheduleNo != '' ">
+            AND (SCHEDULE_START_DATE, SCHEDULE_NO) NOT IN ((#{scheduleStartDate},#{scheduleNo}))
+        </if>
+            )
+        OR (a.scheduleStartDateTime = CONCAT(#{scheduleStartDate}, #{scheduleStartTime})
+            AND a.scheduleEndDateTime = CONCAT(#{scheduleEndDate}, #{scheduleEndTime})
+        <if test="scheduleNo != null and scheduleNo != '' ">
+            AND (SCHEDULE_START_DATE, SCHEDULE_NO) NOT IN ((#{scheduleStartDate},#{scheduleNo}))
+        </if>
+            )
+    </select>
+
+    <select id="selectScheduleCount" parameterType="chargePlanPeriodMgntVO" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM operation_schedule_detail
+        WHERE SCHEDULE_START_DATE = #{scheduleStartDate}
+    </select>
+
+    <update id="cancelPlan" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        UPDATE operation_schedule_detail
+        SET    SCHEDULE_STATUS = '02'
+             , UPDATED_BY = #{updatedBy}
+             , UPDATED_AT = sysdate()
+        WHERE  SCHEDULE_NO = #{scheduleNo}
+        AND    SCHEDULE_START_DATE = #{scheduleStartDate}
+    </update>
+
+    <update id="cancelPlans" parameterType="hashmap" statementType="PREPARED">
+        UPDATE operation_schedule_detail
+        SET    SCHEDULE_STATUS = '02'
+             , UPDATED_BY = #{updatedBy}
+             , UPDATED_AT = sysdate()
+        WHERE  (SCHEDULE_NO, SCHEDULE_START_DATE) IN(
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.scheduleNo}, #{item.scheduleStartDate})
+        </foreach>
+        )
+    </update>
+
+    <update id="rollBackCancelPlan" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        UPDATE operation_schedule_detail
+        SET    SCHEDULE_STATUS = #{scheduleStatus}
+             , UPDATED_BY = #{updatedBy}
+             , UPDATED_AT = #{updatedAt}
+        WHERE  SCHEDULE_NO = #{scheduleNo}
+        AND    SCHEDULE_START_DATE = #{scheduleStartDate}
+    </update>
+
+    <delete id="rollBackInsertChargeDischargePlan" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        DELETE FROM operation_schedule
+        WHERE  SCHEDULE_DATE = #{scheduleStartDate}
+    </delete>
+
+    <delete id="rollBackInsertChargeDischargePlanDetail" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        DELETE FROM operation_schedule_detail
+        WHERE SCHEDULE_NO = #{scheduleNo}
+        AND   SCHEDULE_START_DATE = #{scheduleStartDate}
+    </delete>
+
+    <update id="rollBackUpdatePlanDetail" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        UPDATE operation_schedule_detail
+        SET SCHEDULE_END_DATE     = #{scheduleEndDate}
+          , SCHEDULE_START_TIME   = #{scheduleStartTime}
+          , SCHEDULE_END_TIME     = #{scheduleEndTime}
+          , SCHEDULE_TYPE         = #{scheduleType}
+          , OPERATION_MODE_TYPE   = #{operationMode}
+          , TARGET_UNIT           = #{targetUnit}
+          , TARGET_AMOUNT         = #{targetAmount}
+          , REMARKS               = #{remarks}
+          , UPDATED_AT            = #{updatedAt}
+          , UPDATED_BY            = #{updatedBy}
+        WHERE SCHEDULE_NO         = #{scheduleNo}
+        AND   SCHEDULE_START_DATE = #{scheduleStartDate}
+    </update>
+
+    <update id="rollBackUpdatePlan" parameterType="chargePlanPeriodMgntVO" statementType="PREPARED">
+        UPDATE operation_schedule
+        SET CHARGE_COUNT = (SELECT COUNT(*) FROM operation_schedule_detail WHERE SCHEDULE_START_DATE = #{scheduleStartDate} AND OPERATION_MODE_TYPE = '1' AND SCHEDULE_STATUS != '02')
+          , DISCHARGE_COUNT = (SELECT COUNT(*) FROM operation_schedule_detail WHERE SCHEDULE_START_DATE = #{scheduleStartDate} AND OPERATION_MODE_TYPE = '2' AND SCHEDULE_STATUS != '02')
+          , UPDATED_BY = #{masterUpdatedBy}
+          , UPDATED_AT = #{masterUpdatedAt}
+        WHERE SCHEDULE_DATE = #{scheduleStartDate}
+    </update>
+
+    <select id="checkExistSamePlanDr" parameterType="chargePlanPeriodMgntVO" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM   operation_schedule_detail
+        WHERE  SCHEDULE_START_DATE = #{scheduleStartDate}
+          AND  SCHEDULE_START_TIME = #{scheduleStartTime}
+          AND  SCHEDULE_END_DATE   = #{scheduleEndDate}
+          AND  SCHEDULE_END_TIME   = #{scheduleEndTime}
+          AND  TARGET_UNIT         = #{targetUnit}
+          AND  SCHEDULE_TYPE       = #{scheduleType}
+          AND  OPERATION_MODE_TYPE = #{operationMode}
+          AND  SCHEDULE_STATUS    != '02'
+    </select>
+
+
+</mapper>

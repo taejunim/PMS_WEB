@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="callSettersOnNulls" value="false"/> <!--true: 쿼리 결과 필드가 null인 경우, 누락이 되서 나오는데 누락이 안되게 하는 설정-->
+        <setting name="jdbcTypeForNull" value="NULL"/> <!-- 쿼리에 보내는 파라메터가 null인 경우, 오류 발생하는 것 방지  예) #{search.user} -->
+    </settings>
+
+    <typeAliases>
+        <typeAlias alias="deviceDefectHistoryVO"   type="metis.app.pmsWeb.domain.deviceDefectHistory.DeviceDefectHistoryVO"/>
+        <typeAlias alias="commandControlHistoryVO"   type="metis.app.pmsWeb.domain.commandControlHistory.CommandControlHistoryVO"/>
+        <typeAlias alias="chargeDischargeHistoryVO"   type="metis.app.pmsWeb.domain.chargeDischargeHistory.ChargeDischargeHistoryVO"/>
+        <typeAlias alias="deviceConfigVO"   type="metis.app.pmsWeb.domain.deviceConfig.DeviceConfigVO"/>
+        <typeAlias alias="batteryRackStatusHistoryVO"   type="metis.app.pmsWeb.domain.batteryRackStatusHistory.BatteryRackStatusHistoryVO"/>
+        <typeAlias alias="mainVO"   type="metis.app.pmsWeb.domain.main.MainVO"/>
+        <typeAlias alias="pcsStatusHistoryVO"   type="metis.app.pmsWeb.domain.pcsStatusHistory.PcsStatusHistoryVO"/>
+        <typeAlias alias="cpcmStatusHistoryVO"   type="metis.app.pmsWeb.domain.pcsStatusHistory.CpcmStatusHistoryVO"/>
+        <typeAlias alias="airConditionerHistoryVO"   type="metis.app.pmsWeb.domain.airConditionerHistory.AirConditionerHistoryVO"/>
+        <typeAlias alias="chargePlanPeriodMgntVO"   type="metis.app.pmsWeb.domain.chargePlanPeriodMgnt.ChargePlanPeriodMgntVO"/>
+        <typeAlias alias="chargeDischargePlanMgntVO"   type="metis.app.pmsWeb.domain.chargeDischargePlanMgnt.ChargeDischargePlanMgntVO"/>
+        <typeAlias alias="ChargeDischargeContractMgntVO"   type="metis.app.pmsWeb.domain.chargeDischargeContractMgnt.ChargeDischargeContractMgntVO"/>
+        <typeAlias alias="sensorStatusHistoryVO"   type="metis.app.pmsWeb.domain.sensorStatusHistory.SensorStatusHistoryVO"/>
+        <typeAlias alias="chargeDischargeSummaryVO"   type="metis.app.pmsWeb.domain.pmsApiInterface.chargeDischargeSummary.ChargeDischargeSummaryVO"/>
+        <typeAlias alias="deviceErrorCodeVO"   type="metis.app.pmsWeb.domain.deviceErrorCode.DeviceErrorCodeVO"/>
+        <typeAlias alias="deviceErrorHistoryVO"   type="metis.app.pmsWeb.domain.deviceErrorHistory.DeviceErrorHistoryVO"/>
+        <typeAlias alias="deviceComponentVO"   type="metis.app.pmsWeb.domain.deviceComponent.DeviceComponentVO"/>
+        <typeAlias alias="deviceManagementVO"   type="metis.app.pmsWeb.domain.deviceManagement.DeviceManagementVO"/>
+        <typeAlias alias="device"   type="metis.app.pmsWeb.domain.code.Device"/>
+        <typeAlias alias="interfaceWeatherVO"   type="metis.app.pmsWeb.domain.InterfaceWeather.InterfaceWeatherVO"/>
+        <typeAlias alias="acConverterHistoryVO"   type="metis.app.pmsWeb.domain.acConverterHistory.AcConverterHistoryVO"/>
+        <typeAlias alias="dcConverterHistoryVO"   type="metis.app.pmsWeb.domain.dcConverterHistory.DcConverterHistoryVO"/>
+
+
+
+        <typeAlias alias="essManagementVO"   type="metis.app.pmsWeb.domain.essManagement.EssManagementVO"/>
+    </typeAliases>
+</configuration>

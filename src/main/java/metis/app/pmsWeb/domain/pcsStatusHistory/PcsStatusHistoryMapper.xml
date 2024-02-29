@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.pcsStatusHistory.PcsStatusHistoryMapper">
+
+    <select id="selectPcsStatusHistory" resultType="pcsStatusHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT FROM_UNIXTIME(REG_DATE)                              regDate
+            , PCS_CODE
+            , GET_CODE_NM('DEVICE_STATUS', OPERATION_STATUS)       operationStatus
+            , GET_CODE_NM('OPERATION_MODE', OPERATION_MODE_STATUS) operationModeStatus
+            , OUTPUT_POWER
+            , RS_LINE_VOLTAGE
+            , ST_LINE_VOLTAGE
+            , TR_LINE_VOLTAGE
+            , R_PHASE_CURRENT
+            , S_PHASE_CURRENT
+            , T_PHASE_CURRENT
+            , FREQUENCY
+            , DC_LINK_VOLTAGE
+            , BATTERY_VOLTAGE
+            , BATTERY_CURRENT
+            , IGBT_TEMPERATURE1
+            , IGBT_TEMPERATURE2
+            , IGBT_TEMPERATURE3
+            , GET_CODE_NM('DEVICE_STATUS', AC_MAIN_MC_STATUS)      acMainMcStatus
+            , GET_CODE_NM('DEVICE_STATUS', DC_MAIN_MC_STATUS)      dcMainMcStatus
+            , ACCUMULATED_CHARGE_ENERGY
+            , ACCUMULATED_DISCHARGE_ENERGY
+            , REFERENCE_POWER
+            , GET_CODE_NM('OCCUR_FLAG', EMERGENCY_STOP_FLAG)       emergencyStopFlag
+            , WARNING_FLAG
+            , FAULT_FLAG
+            , CASE
+                    WHEN WARNING_FLAG = 'N' AND FAULT_FLAG = 'N' THEN '미발생'
+                    WHEN WARNING_FLAG = 'Y' AND FAULT_FLAG = 'N' THEN '경고'
+                    WHEN WARNING_FLAG = 'N' AND FAULT_FLAG = 'Y' THEN '결함'
+                    WHEN WARNING_FLAG = 'Y' AND FAULT_FLAG = 'Y' THEN '경고/결함'
+              END AS errorFlag
+        FROM raw_pcs
+        WHERE 1 = 1
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+        <if test="operationStatus != null and operationStatus != ''">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="operationModeStatus != null and operationModeStatus != ''">
+            AND OPERATION_MODE_STATUS = #{operationModeStatus}
+        </if>
+        ORDER BY REG_DATE DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectPcsStatusTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM raw_pcs
+        WHERE 1 = 1
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+        <if test="operationStatus != null and operationStatus != ''">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="operationModeStatus != null and operationModeStatus != ''">
+            AND OPERATION_MODE_STATUS = #{operationModeStatus}
+        </if>
+    </select>
+
+    <select id="selectCpcmStatusHistory" resultType="cpcmStatusHistoryVO" parameterType="hashMap" statementType="PREPARED">
+        SELECT
+            DATE_FORMAT(FROM_UNIXTIME(cpcmSummary.REG_DATE),'%Y-%m-%d %H:%i:%s') AS regDate,
+            GET_CODE_NM('STATUS_GBN',cpcmSummary.SYSTEM_LINK_STATUS)             AS systemLinkStatus,
+            cpcmSummary.AVG_INVERTER_OUT_U_CURR                                  AS avgInverterOutUCurr,
+            cpcmSummary.AVG_INVERTER_OUT_V_CURR                                  AS avgInverterOutVCurr,
+            cpcmSummary.AVG_INVERTER_OUT_W_CURR                                  AS avgInverterOutWCurr,
+            cpcmSummary.MAX_INVERTER_STACK_TEMP                                  AS maxInverterStackTemp,
+            cpcmSummary.MIN_INVERTER_STACK_TEMP                                  AS minInverterStackTemp,
+            cpcmSummary.MAX_FILTER_I_TEMP                                        AS maxFilterITemp,
+            cpcmSummary.MIN_FILTER_I_TEMP                                        AS minFilterITemp,
+            cpcmSummary.MAX_FILTER_C_TEMP                                        AS maxFilterCTemp,
+            cpcmSummary.MIN_FILTER_C_TEMP                                        AS minFilterCTemp,
+            cpcmSummary.MAX_PCS_INSIDE_TEMP                                      AS maxPcsInsideTemp,
+            cpcmSummary.MIN_PCS_INSIDE_TEMP                                      AS minPcsInsideTemp,
+            cpcmSummary.AVG_R_S_VOLT                                             AS avgRSVolt,
+            cpcmSummary.AVG_S_T_VOLT                                             AS avgSTVolt,
+            cpcmSummary.AVG_T_R_VOLT                                             AS avgTRVolt
+        FROM
+            PMS_BASE_MASTER pmsManagement,
+            PMS_BASE_ESS essManagement,
+            PMS_SUMMARY_STATUS_CPCM cpcmSummary
+        WHERE 1=1
+        AND pmsManagement.PMS_CODE = essManagement.PMS_CODE
+        AND essManagement.ESS_CODE = cpcmSummary.ESS_CODE
+        AND pmsManagement.USE_YN = 'Y'
+        AND pmsManagement.DEL_YN = 'N'
+        <if test="startDate != null and startDate != ''">
+            AND cpcmSummary.REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{startDate})
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND cpcmSummary.REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{endDate}, ' 23:59:59'))
+        </if>
+        ORDER BY cpcmSummary.REG_DATE DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectCpcmStatusTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+
+        FROM PMS_BASE_MASTER pmsManagement, PMS_BASE_ESS essManagement, PMS_SUMMARY_STATUS_CPCM cpcmSummary
+        WHERE 1=1
+        AND pmsManagement.PMS_CODE = essManagement.PMS_CODE
+        AND essManagement.ESS_CODE = cpcmSummary.ESS_CODE
+        AND pmsManagement.USE_YN = 'Y'
+        AND pmsManagement.DEL_YN = 'N'
+        <if test="startDate != null and startDate != ''">
+            AND cpcmSummary.REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{startDate})
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND cpcmSummary.REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{endDate}, ' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM raw_pcs
+    </select>
+</mapper>

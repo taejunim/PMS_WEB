@@ -1,0 +1,326 @@
+/*-- Chart --*/
+.c3 svg {
+    font: 10px sans-serif;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.c3 path, .c3 line {
+    fill: none;
+    stroke: #000;
+}
+
+.c3 text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.c3-legend-item-tile,
+.c3-xgrid-focus,
+.c3-ygrid,
+.c3-event-rect,
+.c3-bars path {
+    shape-rendering: crispEdges;
+}
+
+.c3-chart-arc path {
+    stroke: #fff;
+}
+
+.c3-chart-arc rect {
+    stroke: white;
+    stroke-width: 1;
+}
+
+.c3-chart-arc text {
+    fill: #fff;
+    font-size: 13px;
+}
+
+/*-- Axis --*/
+/*-- Grid --*/
+.c3-grid line {
+    stroke: #aaa;
+}
+
+.c3-grid text {
+    fill: #aaa;
+}
+
+.c3-xgrid, .c3-ygrid {
+    stroke-dasharray: 3 3;
+}
+
+/*-- Text on Chart --*/
+.c3-text.c3-empty {
+    fill: #808080;
+    font-size: 2em;
+}
+
+/*-- Line --*/
+.c3-line {
+    stroke-width: 1px;
+}
+
+/*-- Point --*/
+.c3-circle._expanded_ {
+    stroke-width: 1px;
+    stroke: white;
+}
+
+.c3-selected-circle {
+    fill: white;
+    stroke-width: 2px;
+}
+
+/*-- Bar --*/
+.c3-bar {
+    stroke-width: 0;
+}
+
+.c3-bar._expanded_ {
+    fill-opacity: 1;
+    fill-opacity: 0.75;
+}
+
+/*-- Focus --*/
+.c3-target.c3-focused {
+    opacity: 1;
+}
+
+.c3-target.c3-focused path.c3-line, .c3-target.c3-focused path.c3-step {
+    stroke-width: 2px;
+}
+
+.c3-target.c3-defocused {
+    opacity: 0.3 !important;
+}
+
+/*-- Region --*/
+.c3-region {
+    fill: steelblue;
+    fill-opacity: 0.1;
+}
+
+/*-- Brush --*/
+.c3-brush .extent {
+    fill-opacity: 0.1;
+}
+
+/*-- Select - Drag --*/
+/*-- Legend --*/
+.c3-legend-item {
+    font-size: 12px;
+}
+
+.c3-legend-item-hidden {
+    opacity: 0.15;
+}
+
+.c3-legend-background {
+    opacity: 0.75;
+    fill: white;
+    stroke: lightgray;
+    stroke-width: 1;
+}
+
+/*-- Title --*/
+.c3-title {
+    font: 14px sans-serif;
+}
+
+/*-- Tooltip --*/
+.c3-tooltip-container {
+    z-index: 10;
+}
+
+.c3-tooltip {
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #fff;
+    empty-cells: show;
+    -webkit-box-shadow: 7px 7px 12px -9px #777777;
+    -moz-box-shadow: 7px 7px 12px -9px #777777;
+    box-shadow: 7px 7px 12px -9px #777777;
+    opacity: 0.9;
+}
+
+.c3-tooltip tr {
+    border: 1px solid #CCC;
+}
+
+.c3-tooltip th {
+    background-color: #aaa;
+    font-size: 14px;
+    padding: 2px 5px;
+    text-align: left;
+    color: #FFF;
+}
+
+.c3-tooltip td {
+    font-size: 13px;
+    padding: 3px 6px;
+    background-color: #fff;
+    border-left: 1px dotted #999;
+}
+
+.c3-tooltip td > span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+}
+
+.c3-tooltip td.value {
+    text-align: right;
+}
+
+/*-- Area --*/
+.c3-area {
+    stroke-width: 0;
+    opacity: 0.2;
+}
+
+/*-- Arc --*/
+.c3-chart-arcs-title {
+    dominant-baseline: middle;
+    font-size: 1.3em;
+}
+
+.c3-chart-arcs .c3-chart-arcs-background {
+    fill: #e0e0e0;
+    stroke: #FFF;
+}
+
+.c3-chart-arcs .c3-chart-arcs-gauge-unit {
+    fill: #000;
+    font-size: 16px;
+}
+
+.c3-chart-arcs .c3-chart-arcs-gauge-max {
+    fill: #777;
+}
+
+.c3-chart-arcs .c3-chart-arcs-gauge-min {
+    fill: #777;
+}
+
+.c3-chart-arc .c3-gauge-value {
+    fill: #000;
+    /*  font-size: 28px !important;*/
+}
+
+.c3-chart-arc.c3-target g path {
+    opacity: 1;
+}
+
+.c3-chart-arc.c3-target.c3-focused g path {
+    opacity: 1;
+}
+
+/*-- Zoom --*/
+.c3-drag-zoom.enabled {
+    pointer-events: all !important;
+    visibility: visible;
+}
+
+.c3-drag-zoom.disabled {
+    pointer-events: none !important;
+    visibility: hidden;
+}
+
+.c3-drag-zoom .extent {
+    fill-opacity: 0.1;
+}
+
+
+/* Flexink Custom Css */
+.c3-xgrid-line.grid-anno line {
+    stroke: #0000ff;
+}
+.c3-xgrid-line.grid-anno text {
+    fill: #0000ff;
+}
+/*.c3-region-0 {
+  fill: red;
+}*/
+.c3-region.label-p {
+    fill: red;
+}
+.c3-region.label-q {
+    fill: yellow;
+}
+.c3-region.label-r {
+    fill: green;
+}
+.c3-region.label-s {
+    fill: blue;
+}
+.c3-region.label-t {
+    fill: purple;
+}
+
+.c3-region.label-P {
+    fill: red;
+}
+.c3-region.label-Q {
+    fill: yellow;
+}
+.c3-region.label-R {
+    fill: green;
+}
+.c3-region.label-S {
+    fill: blue;
+}
+.c3-region.label-T {
+    fill: purple;
+}
+
+.c3-region.label-1ABC9C {
+    fill: #1ABC9C;
+}
+.c3-region.label-9B59B6 {
+    fill: #9B59B6;
+}
+.c3-region.label-F1C40F {
+    fill: #F1C40F;
+}
+.c3-region.label-E67E22 {
+    fill: #E67E22;
+}
+.c3-region.label-E74C3C {
+    fill: #E74C3C;
+}
+.c3-region.label-1FD7E7 {
+    fill: #1FD7E7;
+}
+.c3-region.label-5DC00E {
+    fill: #5DC00E;
+}
+.c3-region.label-703DD6 {
+    fill: #703DD6;
+}
+.c3-region.label-7A584D {
+    fill: #7A584D;
+}
+.c3-region.label-DD18E4 {
+    fill: #DD18E4;
+}
+.c3-region.label-DCA4A4 {
+    fill: #DCA4A4;
+}
+.c3-region.label-AE5C85 {
+    fill: #AE5C85;
+}
+.c3-region.label-7D218E {
+    fill: #7D218E;
+}
+.c3-region.label-5E2FD8 {
+    fill: #5E2FD8;
+}
+.c3-region.label-22E907 {
+    fill: #22E907;
+}
+.c3-region.label-EBDF1F {
+    fill: #EBDF1F;
+}

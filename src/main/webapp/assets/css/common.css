@@ -1,0 +1,4170 @@
+.common-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.common-footer-button {
+    background-color: #ECF0F5;
+    border: 0;
+    outline: 0;
+    display: inline-block;
+    width: 49%;
+}
+
+.insertButton {
+    background-color: #ECF0F5;
+    border: 0;
+    outline: 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.color-green {
+    color: rgb(26, 188, 156);
+}
+.color-red {
+    color: rgb(231, 76, 60);
+}
+.ax-base-title .title{
+    font-weight: 500;
+}
+
+
+
+.weatherTable , .monitoringModalTable {
+    width: 100%;
+    padding: 20px;
+}
+.weatherTable > tbody > tr > th , .weatherTable > thead > tr > th {
+    padding-left : 10px;
+}
+.weatherTable > tbody > tr > td , .weatherTable > thead > tr > td , .monitoringModalTable > tbody > tr > td {
+    text-align: center;
+}
+.weatherTable > tbody > tr {
+    height: 40px;
+}
+.configTable {
+    width: 100%;
+    padding: 20px;
+}
+.configTable > tbody > tr > th , .configTable > thead > tr > th {
+    padding-left : 10px;
+}
+.configTable > tbody > tr > td , .configTable > thead > tr > td , .configTable > tbody > tr > td {
+    padding-left : 27px;
+    text-align: left;
+    font-size: 13px;
+}
+.configTable > tbody > tr {
+    height: 40px;
+}
+.configTable > tbody > tr > td > select {
+    text-align: center;
+}
+
+.configTable > tbody > tr > td > input {
+    text-align: center;
+}
+
+.searchingConditionTable {
+    width: 100%;
+    padding: 20px;
+}
+.searchingConditionTable > tbody > tr > th , .searchingConditionTable > thead > tr > th {
+    padding-left : 10px;
+}
+.searchingConditionTable > tbody > tr > td , .searchingConditionTable > thead > tr > td , .searchingConditionTable > tbody > tr > td {
+    padding-left : 27px;
+    text-align: left;
+    font-size: 13px;
+}
+.searchingConditionTable > tbody > tr {
+    height: 40px;
+}
+.searchingConditionTable > tbody > tr > td > select {
+    text-align: center;
+    margin-left: 40px;
+}
+
+.monitoringModalTable {
+    table-layout: fixed;
+}
+.monitoringModalTable > tbody > tr > td {
+    padding: 10px;
+}
+.monitoringModalButton {
+    width : 100%;
+}
+
+.pcsImage img{
+    content: url("/assets/images/mornitoring/pcs.png");
+}
+.powerSocketImage img{
+    content: url("/assets/images/mornitoring/powerSocket.png");
+}
+.chargerImage img{
+    content: url("/assets/images/mornitoring/charger.png");
+}
+.batteryImage img{
+    content: url("/assets/images/mornitoring/charge_step_1.png");
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(2700deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+.batteryImage_charge_step_1 img{
+    content: url("/assets/images/mornitoring/charge_step_1.png");
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(2700deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+.batteryImage_charge_step_2 img{
+    content: url("/assets/images/mornitoring/charge_step_2.png");
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(2700deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+.batteryImage_charge_step_3 img{
+    content: url("/assets/images/mornitoring/charge_step_3.png");
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(2700deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+.batteryImage_charge_step_4 img{
+    content: url("/assets/images/mornitoring/charge_step_4.png");
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(2700deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+.blueText{
+    color:#396873!important;
+}
+.navyText{
+    color:#010B40!important;
+}
+.cyanText{
+    color:#396873!important;
+}
+.redText{
+    color: #e74c3c!important;
+}
+.greenText{
+    color: #00B83F;!important;
+}
+.whiteText{
+    color: #fff;!important;
+}
+.lightGreenText{
+    color:#D1FD00;
+}
+
+
+
+.deviceStatus {
+    display: inline-block;
+    width: 105px;
+    line-height: 25px;
+    border-radius: 10px;
+    background-color: #848484;
+    color: #fff;
+    font-size: 14px;
+}
+.deviceStatus > .normal , .deviceStatus > .failure {
+    display: inline;
+    width: 50%;
+    position: relative;
+    float: left;
+    text-align: center;
+    color: #fff;
+    border-radius: 9px;
+}
+.normal > .normal , .bgBlue{
+    background-color: #66ADD9;
+}
+.failure > .failure{
+    background-color: #e74c3c;
+}
+
+
+.bgRed {
+    background-color: #e74c3c;
+}
+.bgGreen {
+    background-color: #08A33E;
+}
+.bgOrange {
+    background-color: #f38b35;
+}
+.bgPurple {
+    background-color: #531B8C;
+}
+.bgGray {
+    background-color: #5D5D5D;
+}
+
+
+.controlTableLabelTd {
+    text-align: left!important;
+    padding: 0px 10px!important;
+}
+
+.newDivideLine {
+    height: 100%;
+    width: 1px;
+    background: #aaa;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.buttonWidth20{
+    width: 20%;
+}
+.buttonWidth80{
+    width: 80%;
+}
+.buttonWidth90{
+    width: 90%;
+}
+.buttonWidth95{
+    width: 95%;
+}
+.visible {
+    visibility: visible!important;
+}
+.animationReverse {
+    animation-direction: reverse!important;
+}
+.colorBlack {
+    color: black;
+}
+
+
+
+input {
+    box-sizing: border-box;
+    border: 1px solid #cfcfcf;
+    font-size: 13px;
+    font-weight: 400;
+    color: #212121;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+}
+input.hide:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+input.hide:focus::-moz-placeholder {
+    color: transparent;
+}
+input.hide:focus:-ms-input-placeholder {
+    color: transparent;
+}
+input.hide:focus::-ms-input-placeholder {
+    color: transparent;
+}
+
+.noDataMessage {
+    border: 1px #444 solid;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    width: 300px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 10px;
+    display: none;
+}
+
+/*-------------------------------- 고정형 main 화면--------------------------------*/
+
+
+
+.genealogy .line {
+    background-color:#474747;
+    position : absolute;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.genealogy .line div{
+    z-index: 2;
+    height:14px;
+    position : absolute;
+}
+
+.chargeActive {
+    z-index: 2;
+    animation: chargeBack 2s linear 2s infinite alternate;
+}
+
+.dischargeActive {
+    z-index: 2;
+    animation: disChargeBack 2s linear 2s infinite alternate;
+}
+
+@keyframes chargeBack {
+    0% {
+        background-color: #41B3D3;
+    }
+    50% {
+        background-color: #10f3fc;
+    }
+    100% {
+        background-color: #6ca9c5;
+    }
+}
+
+@keyframes disChargeBack {
+    0% {
+        background-color: #F96501;
+    }
+    50% {
+        background-color: #fa8804;
+    }
+    100% {
+        background-color: #f9a201;
+    }
+}
+
+.genealogy > tbody  > tr > td {
+    width: 20%;
+    text-align: center;
+}
+
+.genealogy > tbody  > tr > td > div > img{
+    height:100px;
+}
+
+.genealogy > div{
+    position: absolute;
+    height: 91px;
+}
+
+
+.batteryStatus > tbody > tr > td {
+    color: #fff;
+    padding-top: 5px;
+    font-weight: bold;
+    height: 26px;
+}
+
+.pcsStatus > tbody > tr > td {
+    color: #fff;
+    padding-top: 5px;
+    font-weight: bold;
+    height:46px;
+    vertical-align: middle;
+}
+
+.pcsStatus > tbody > tr > th {
+    color: #fff;
+    padding-top: 5px;
+    font-weight: bold;
+    height:21px;
+    text-align: center;
+}
+#deviceError > tbody > tr > td {
+    height:27px;
+    font-weight: bold;
+}
+
+
+
+.card {
+    background-color: #282828;
+    margin-bottom: 10px;
+}
+
+.card .header {
+    height:25px;
+    margin: 0;
+    background-color: #474747;
+    color: #BFBFBF;
+    padding: 3px 10px;
+    font-weight: bold;
+}
+
+.card .content {
+    padding:5px;
+}
+
+.chargeFont {
+    color:#41B3D3;
+}
+
+.chargeBackground {
+    background-color:#41B3D3;
+}
+
+.disChargeFont {
+    color:#F05F03;
+}
+
+.disChargeBackground {
+    background-color:#F96501;
+}
+
+.waitingFont {
+    color:#CCCCCC;
+}
+
+.singFont{
+    color: #A9D3D1;
+    font-size:14px;
+    font-weight: bold;
+}
+
+.chargeFont > td ,.disChargeFont > td {
+    height: 50px; !important;
+}
+
+/*----------padding Start----------*/
+.pd5 {padding:0 5px;} .pd10 {padding:10px 0 10px 0;} .pdr5 {padding-right:5px;}
+/*----------padding End----------*/
+
+
+/*----------margin Start----------*/
+.mg3 {margin:0 3px;}
+.mg10 {margin: 10px 0;} .mg5 {margin: 5px 0;}
+                        .mg5t {margin: 0 5px;}
+/*----------margin End----------*/
+
+
+/*----------width Start---------*/
+.wd15 {width: 15%;} .wd60 {width: 60%;}
+.wd100 {width: 100%;}
+.wd50p {width: 50px} .wd65p {width: 65px;} .wd70p {width: 70px;} .wd95p {width: 95px;}
+.wd100p {width: 100px;} .wd120p {width: 120px;} .wd140p {width: 140px;}
+/*----------width End----------*/
+
+
+/*----------height Start---------*/
+/*----------height End----------*/
+
+
+/*----------font Start---------*/
+.f10{font-size: 10px;}  .f11{font-size: 11px;}
+.f12{font-size: 12px;}  .f13{font-size: 13px;}
+.f14{font-size: 14px;}  .f15{font-size: 15px;}
+.f16{font-size: 16px;}  .f17{font-size: 17px;}
+.f18{font-size: 18px;}  .f20{font-size: 20px;}
+
+.warningText {color: #B02418;!important;}
+.flawText {color: #AD8E35;!important;}
+.weatherText {color: #A9D3D1;!important;}
+
+.tac{text-align:center;}
+.tar{text-align:right;}
+.tal{text-align:left;}
+
+/*----------font End----------*/
+
+/*----------custom button Start----------*/
+
+
+.w-btn-outline {
+    width: 110px;
+    height: 26px;
+    font-size: 14px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+    text-align: left;
+    line-height: 1;
+}
+
+.controlTxt {
+    display: inline-block;
+    width: 80%;
+    text-align: center;
+}
+
+.w-btn-outline:hover {
+    transform: scale(0.95);
+    cursor: pointer;
+}
+
+.w-btn-outline:active {
+    transform: scale(0.90);
+}
+
+.w-btn-default-skin-outline {
+    border: 3px solid #474747;
+    background-color: #474747;
+    color: #bfbfbf;
+}
+
+.w-btn-default-skin-outline:hover {
+    border: 3px solid #4747477A;
+    background-color: #4747477A;
+    color: #fff;
+}
+
+.w-btn-gray-skin-outline {
+    border: 3px solid #878787;
+    background-color: #878787;
+    color: #fff;
+}
+
+.w-btn-gray-skin-outline:hover {
+    border: 3px solid #878787;
+    background-color: rgba(135, 135, 135, 0.5);
+    color: #fff;
+}
+
+.w-btn-yellow-skin-outline {
+    border: 3px solid rgb(255, 176, 32);
+    background-color: rgb(255, 176, 32);
+    color: #ffffff;
+}
+
+.w-btn-yellow-skin-outline:hover {
+    border: 3px solid rgba(255, 176, 32, 0.65);
+    background-color: rgba(255, 176, 32, 0.65);
+    color: #ffffff;
+}
+
+.purple-btn-skin-outline {
+    border: 3px solid #5E53A6;
+    background-color: #5E53A6;
+    color: #fff;
+}
+
+.purple-btn-skin-outline:hover {
+    border: 3px solid #C3B3FF75;
+    background-color: #C3B3FF75;
+    color: #bfbfbf;
+}
+
+.blue-btn-skin-outline {
+    border: 3px solid #41B3D3;
+    background-color: #41B3D3;
+    color: #fff;
+}
+
+.blue-btn-skin-outline:hover {
+    border: 3px solid #BDF0FF6B;
+    background-color: #BDF0FF6B;
+}
+
+.orange-btn-skin-outline {
+    border: 3px solid #F96501;
+    background-color: #F96501;
+    color: #fff;
+}
+
+.orange-btn-skin-outline:hover {
+    border: 3px solid #FFBB6489;
+    background-color: #FFBB6489;
+    color: #bfbfbf;
+}
+
+.yellow-btn-skin-outline {
+    border: 3px solid #FFB020;
+    background-color: #FFB020;
+    color: #fff;
+}
+
+.yellow-btn-skin-outline:hover {
+    border: 3px solid #FFB0208E;
+    background-color: #FFB0208E;
+    color: #bfbfbf;
+}
+
+.red-btn-skin-outline {
+    border: 3px solid #B02418;
+    background-color: #B02418;
+    color: #fff;
+}
+
+.red-btn-skin-outline:hover {
+    border: 3px solid #FF726377;
+    background-color: #FF726377;
+    color: #bfbfbf;
+}
+
+
+/*----------custom button End----------*/
+
+
+/*----------custom progress Start----------*/
+
+.igbtProgress {
+    width:150px;
+    height: 15px;
+    padding-right:10px;
+    padding-left:10px;
+    appearance: none;
+    display: block;
+}
+
+.igbtProgress::-webkit-progress-bar {
+    background:#474747;
+    border-radius:10px;
+    box-shadow: inset 3px 3px 10px #474747;
+}
+
+.igbtProgress::-webkit-progress-value {
+    transition: width 1.0s;
+    border-radius:10px;
+    background: #474747;
+    background: -webkit-linear-gradient(to right, #474747, red);
+    background: linear-gradient(to right, #474747, red);
+}
+
+.total-progress {
+    width:240px;
+    padding-right:10px;
+    padding-left:10px;
+    appearance: none;
+    display: block;
+}
+
+.total-progress::-webkit-progress-bar {
+    background:#474747;
+    border-radius:10px;
+    box-shadow: inset 3px 3px 10px #474747;
+}
+
+.totalAccumulatedCharge-progress::-webkit-progress-value {
+    transition: width 1.0s;
+    border-radius:10px;
+    background: #474747;
+    background: -webkit-linear-gradient(to right, #474747, rgb(65, 179, 211));
+    background: linear-gradient(to right, #474747, rgb(65, 179, 211));
+}
+
+
+.totalAccumulatedDischarge-progress::-webkit-progress-value {
+    transition: width 1.0s;
+    border-radius:10px;
+    background: #474747;
+    background: -webkit-linear-gradient(to right, #474747, #F96501);
+    background: linear-gradient(to right, #474747, #F96501);
+}
+
+.totalAccumulated-progress::-webkit-progress-value {
+    transition: width 1.0s;
+    border-radius:10px;
+    background: #474747;
+    background: -webkit-linear-gradient(to right, #474747, #575757);
+    background: linear-gradient(to right, #474747, #575757);
+}
+
+/*----------custom progress End----------*/
+
+
+
+.click-btn:hover {
+    transition: 0.25s;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+
+
+/** 메인 계통도 이미지 **/
+
+.rack-img{
+    content: url("/assets/images/main/rack.png");
+}
+
+.pcs-img{
+    content: url("/assets/images/main/pcs.png");
+}
+
+.board-img img{
+    content: url("/assets/images/main/smartSwitchboard.png");
+}
+
+.electricity-img img{
+    content: url("/assets/images/main/electricity.png");
+}
+
+.hub-img img{
+    content: url("/assets/images/main/smartHub.png");
+}
+
+
+
+/*----------c3 chart Start----------*/
+
+canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+
+
+.donutChart .c3-chart-arcs-title ,.batteryStatus .c3-chart-arcs-title {
+    font-weight: bold;
+    fill: white;
+    font-size:20px;
+}
+
+.c3-chart-arc path {
+    stroke-width: 0;
+}
+
+/*----------c3 chart End----------*/
+
+
+
+/*!*--------- C3.js Graph Tooltip ------------*!*/
+
+.graph__tooltip--wrapper {
+    border: 1px solid rgb(71, 71, 71);
+    border-radius: 5px;
+    backdrop-filter: blur(20px);    padding: 8px;
+    font-size: 12px;
+}
+.c3-axis .tick line {
+    display: none;
+}
+
+.c3-xgrid-focus line {
+    display: none;
+}
+
+.graph__tooltip--wrapper div {
+    margin: 5px 0;
+}
+.graph__tooltip--wrapper  .strong {
+    font-size: 14px;
+}
+
+#barChart .c3-line-data1 {
+    stroke-width: 3px;
+}
+
+.c3-axis-y, .c3-axis-x, .c3-axis-y text , c3-axis-x text{
+    font-size:12px;
+    fill: #BFBFBF;
+}
+
+.c3 .domain {
+    stroke:#BFBFBF;
+    display: none;
+}
+
+.c3-legend-item-tile, .c3-xgrid-focus, .c3-ygrid, .c3-event-rect, .c3-bars path {
+    shape-rendering: auto;
+}
+
+.c3-legend-item {
+    font-weight: 900;
+    fill: #BFBFBF;
+}
+
+.c3-axis-y text{
+    fill: #FFFFFF;
+    font-weight: 900;
+}
+.c3-shapes {
+    margin : 10px 0;
+}
+
+/*---------- layer popup Start----------*/
+
+.layer{
+    position: absolute;
+    width: 410px;
+    border: 1px solid rgb(71, 71, 71);
+    border-radius: 5px;
+    backdrop-filter: blur(40px);
+    z-index: 5;
+    padding:10px 10px;
+}
+
+.layer .title {
+    width: 390px;
+    height: 30px;
+    color: #FFFFFF;
+    font-size: 14px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.layer .info {
+    width: 390px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.layer .info .line-area {
+    width:20px;
+    display: flex;
+    justify-content: center;
+}
+
+.layer .info .line {
+    width: 2px;
+    height: 210px;
+    border-radius: 5px;
+    background-color: #BFBFBF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top:45px;
+}
+
+.layer .info .txt {
+    width: 185px;
+    height: 210px;
+}
+
+.layer .info .txt > div{
+    display: flex;
+    width: 185px;
+    height: 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.layer .info .txt .left-txt {
+    width: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: #BFBFBF;
+}
+
+.layer .info .txt .right-txt {
+    width: 55px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    color: #BFBFBF;
+}
+
+
+.layer .info .txt .unit {
+    width: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    color: #BFBFBF;
+}
+
+
+.hover:hover {
+    transform: scale(0.85);
+}
+
+
+/*---------- layer popup End----------*/
+
+/*-------------------------------- 이동형 메인 화면--------------------------------*/
+
+/* Noto Sans KR (korean) http://www.google.com/fonts/earlyaccess */
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 900;
+    src: url('/assets/css/fonts/NotoSansKr/NotoSansKR-Bold.woff') format('woff'),
+    url('/assets/css/fonts/NotoSansKr/NotoSansKR-Bold.woff2') format('woff2'),
+    url('/assets/css/fonts/NotoSansKr/NotoSansKR-Bold.otf') format('opentype');
+}
+
+.cpcm-area {
+    position: fixed;
+    width: 101%;
+    height: 100%;
+    overflow: auto;
+}
+
+.cpcm-area-sub {
+    width:1920px;
+    height:836px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 900;
+}
+
+.cpcm-area-sub .card {
+    background: #282828;
+    border-radius:5px;
+}
+
+.cpcm-area-sub .header {
+    position: absolute;
+    height: 25px;
+    background: #474747;
+    border-radius:5px 5px 0 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px 0 10px;
+}
+
+.cpcm-area-sub .header .title {
+    position: static;
+    color: rgb(191, 191, 191);
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+.power-value > span::after, .rack-status > div > span::after, .value > div > span::after,
+.status-09 .layout-03 .content-area span::after, .data > div > div > span::after , .temperature .temp-3 > span::after,
+.status-02 .content span::after {
+    content: "\000A0";
+}
+
+.text-color {
+    color: rgb(255, 255, 255);
+}
+
+.charge-color {
+    color: rgb(65, 179, 211);
+}
+
+.discharge-color {
+    color: rgb(240, 95, 3);
+}
+
+.gray-color {
+    color: rgb(191, 191, 191);
+}
+
+.border-charge-color {
+    z-index: 2;
+    animation: charge 2s linear 2s infinite alternate;
+}
+
+.border-discharge-color {
+    z-index: 2;
+    animation: disCharge 2s linear 2s infinite alternate;
+}
+
+@keyframes charge {
+    0% {
+        border-color: #41B3D3;
+    }
+    50% {
+        border-color: #10f3fc;
+    }
+    100% {
+        border-color: #6ca9c5;
+    }
+}
+
+@keyframes disCharge {
+    0% {
+        border-color: #F96501;
+    }
+    50% {
+        border-color: #fa8804;
+    }
+    100% {
+        border-color: #f9a201;
+    }
+}
+
+.connect-status {
+    filter: drop-shadow(1px 1px 0 red) drop-shadow(-1px -1px 0 red)
+}
+
+
+.od-0 { flex: none;order: 0;}
+.od-1 { flex: none;order: 1;}
+.od-2 { flex: none;order: 2;}
+.od-3 { flex: none;order: 3;}
+.od-4 { flex: none;order: 4;}
+.od-5 { flex: none;order: 5;}
+.od-6 { flex: none;order: 6;}
+.od-7 { flex: none;order: 7;}
+.od-8 { flex: none;order: 8;}
+.od-9 { flex: none;order: 9;}
+.od-10 { flex: none;order: 10;}
+
+
+.row-center{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+}
+
+
+/*ESS 운영 현황*/
+.status-00 {
+    position: absolute;
+    width: 370px;
+    height: 140px;
+    left: 15px;
+    right: 1535px;
+    top: 10px;
+    bottom:826px;
+}
+
+.status-00 .content {
+    padding: 0;
+    position: absolute;
+    width: 370px;
+    height: 115px;
+    top: 25px;
+}
+
+
+.status-00 .content .layout-00{
+    position: relative;
+    width: 370px;
+    height: 38px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.essName {
+    justify-content: center!important;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 22px;
+    letter-spacing: 0px;
+    text-align: center;
+}
+
+.status-00 .content .layout-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.status-00 .content .btn-frame{
+    position: static;
+    width: 110px;
+    height: 26px;
+    flex-grow: 0;
+    margin: 0 15px;
+}
+
+
+.status-00 .content .plan-frame{
+    position: static;
+    width: 126px;
+    height: 30px;
+    flex: none;
+    flex-grow: 0;
+    margin: 0 10px;
+}
+
+.status-00 .content .plan-frame .txt-00 {
+    position: absolute;
+    width: 106px;
+    height: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.status-00 .content .plan-frame .txt-01 {
+    position: absolute;
+    width: 106px;
+    height: 30px;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.status-00 .content .statistics {
+    /* 프레임 52 */
+    position: relative;
+    width: 370px;
+    height: 75px;
+    /* 자동 레이아웃 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 10px;
+    gap: 5px;
+}
+
+.status-00 .content .statistics .title {
+    /* 금일 통계 */
+    position: static;
+    width: 350px;
+    height: 17px;
+    /* 자동 레이아웃 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 10px 5px 10px;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0px;
+}
+
+
+.status-00 .content .statistics .frame {
+    /* 프레임 49 */
+    position: static;
+    width: 350px;
+    height: 50px;
+    /* 자동 레이아웃 */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0px;
+
+
+    /* Inside Auto Layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-00 .content .statistics .frame .text{
+    position: static;
+    width: 170px;
+    height: 45px;
+    /* 자동 레이아웃 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0px;
+}
+
+
+.status-00 .content .statistics .frame .text .frame{
+    /* 최저 온도 */
+    position: static;
+    width: 170px;
+    /* 자동 레이아웃 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+.status-00 .content .statistics .frame .text .frame .flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 15px;
+}
+
+
+.status-00 .content .statistics .frame .line{
+    position: static;
+    width: 1px;
+    height: 45px;
+    align-self: center;
+    flex-grow: 0;
+    /* transform: rotate(90.00deg); */
+    border: 1px solid rgb(71, 71, 71);
+    margin: 0 10px;
+}
+
+
+/*ESS 총 누적 전력량*/
+.status-01 {
+    position: absolute;
+    width: 370px;
+    height: 140px;
+    left: 394px;
+    right: 1156px;
+    top: 10px;
+    bottom:826px;
+}
+
+.status-1 .content {
+    padding: 0;
+}
+
+/*실시간 누적 전력량*/
+.status-02 {
+    position: absolute;
+    width: 370px;
+    height: 140px;
+    left: 774px;
+    right: 776px;
+    top: 10px;
+    bottom:826px;
+}
+
+.status-02 .content {
+    position: absolute;
+    width: 370px;
+    height: 140px;
+    left: 0;
+    top: 0;
+    padding: 0;
+}
+
+.status-02 .content .layout-00 {
+    position: relative;
+    width: 340px;
+    height: 36px;
+    top: 45px;
+    margin: 0 15px 0 15px;
+}
+
+.status-02 .content .layout-header {
+    position: static;
+    width: 67px;
+    height: 29px;
+    font-size: 20px;
+    line-height: 29px;
+    letter-spacing: 0;
+    text-align: left;
+    flex-grow: 1;
+    margin: 0 0 0 10px;
+}
+
+.status-02 .content .layout-content {
+    position: static;
+    width: 243px;
+    height: 35px;
+    flex-grow: 0;
+    padding: 0 10px;
+    justify-content: flex-end;
+}
+
+.status-02 .charge-content > span {
+    margin: 0 5px;
+}
+
+.status-02 .content .layout-01 {
+    position: relative;
+    width: 340px;
+    height: 34px;
+    top:50px;
+    margin: 0 15px 0 15px;
+    padding:0;
+}
+
+.status-02 .content .progress-range {
+    position: absolute;
+    top:70%;
+    width: 330px;
+    height: 14px;
+    left: 8px;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+/*오류 알림*/
+.status-03 {
+    position: absolute;
+    width: 460px;
+    height: 140px;
+    left: 1154px;
+    right: 306px;
+    top: 10px;
+    bottom:826px;
+}
+
+.status-03 .content {
+    position: absolute;
+    top:32px;
+    padding: 0;
+}
+
+/*날씨*/
+.status-04 {
+    position: absolute;
+    width: 280px;
+    height: 140px;
+    left: 1624px;
+    right: 16px;
+    top: 10px;
+    bottom:826px;
+}
+
+.status-04 .content {
+    padding: 0;
+}
+
+.status-04 #weatherIcon {
+    position: absolute;
+    width: 120px;
+    height: 100px;
+    top: 48px;
+    bottom: -228.3px;
+    display: flex;
+    justify-content: center;
+}
+
+.status-04 #timer {
+    position: static;
+    width: 63px;
+    height: 19px;
+    line-height: 19px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-04 .layout-00 {
+    position: relative;
+    width: 135px;
+    height: 39px;
+    top:42px;
+    left:130px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+}
+
+.status-04 .content .layout-01,
+.status-04 .content .layout-02 {
+    position: relative;
+    width: 120px;
+    height: 25px;
+    top:42px;
+    left:135px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 5px 0 0;
+}
+
+
+.status-04 .content .layout-01 div, .status-04 .content .layout-02 div,
+.status-04 .content .layout-01 div, .status-04 .content .layout-02 div {
+    position: static;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 0 0 5px;
+    flex: none;
+    align-self: stretch;
+    margin: 0 0;
+}
+
+.status-04 .content .layout-01 div:nth-child(1),
+.status-04 .content .layout-02 div:nth-child(1) {
+    width: 45px;
+    line-height: 29px;
+    letter-spacing: 0;
+    text-align: left;
+    order: 0;
+    flex-grow: 0;
+}
+
+.status-04 .content .layout-01 div:nth-child(2), .status-04 .content .layout-02 div:nth-child(2),
+.status-04 .content .layout-01 div:nth-child(3), .status-04 .content .layout-02 div:nth-child(3) {
+    width: 50px;
+    order: 1;
+}
+
+.status-04 .content .layout-00 .layout-header {
+    position: static;
+    width: 105px;
+    height: 39px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+    margin: 0 5px;
+}
+
+.status-04 .content .layout-00 .layout-content {
+    position: static;
+    width: 25px;
+    height: 25px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0 5px;
+}
+
+.status-04 .content #weather-area {
+    position: static;
+    width: 105px;
+    height: 20px;
+    line-height: 22px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-05 {
+    position: absolute;
+    width: 1100px;
+    height: 426px;
+    left: 15px;
+    right: 805px;
+    top: 160px;
+    bottom:390px;
+}
+
+.status-05 .content {
+    padding:0;
+}
+
+.status-05 .content > div:not(:first-child) {
+    position: absolute;
+    width: 278px;
+    height: 159px;
+    left: 799px;
+    right: 5px;
+    box-sizing: border-box;
+    border: 2px solid rgb(71, 71, 71);
+    background: rgb(40, 40, 40);
+    border-radius:5px;
+}
+
+.status-05 .content > div > .title {
+    position: relative;
+    width: 278px;
+    height: 24px;
+    background: rgb(71, 71, 71);
+    color: rgb(191, 191, 191);
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    top: -1px;
+    left: -2px;
+}
+
+.status-05 .content .frame {
+    position: static;
+    width: 278px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-05 .content .frame > div {
+    position: static;
+    width: 89px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.status-05 .content .frame > div > div{
+    position: static;
+    width: 89px;
+    height: 21px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+
+/* The switch - the box around the slider */
+.cpcm-switch {
+    position: relative;
+    display: inline-block;
+    width: 53px;
+    height: 34px;
+    vertical-align:middle;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(87, 87, 87);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    top: 1px;
+    bottom: 1px;
+    /*border: 1px solid rgb(87, 87, 87);*/
+    background-color: rgb(255, 255, 255);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: rgb(174, 252, 0);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px rgb(174, 252, 0);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 20px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.status-06 {
+    position: absolute;
+    width: 780px;
+    height: 426px;
+    left: 1124px;
+    right: 16px;
+    top: 160px;
+    bottom: 390px;
+}
+
+.status-06 .content {
+    position:absolute;top:25px;
+    padding:0;
+}
+
+.status-06 .content .layout-00 {
+    position: relative;
+    width: 780px;
+    height: 220px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.status-06 .content .layout-00 .grid-area {
+    position: static;
+    width: 290px;
+    height: 220px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 3px 0 3px 0;
+}
+
+.status-06 .content .layout-00 .grid-area .content-area {
+    position: static;
+    width: 290px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .grid-area .content-area .chart-range {
+    position: static;
+    width: 260px;
+    height: 171px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+    margin: 3px 0;
+}
+
+.status-06 .content .layout-00 .grid-area .content-area .chart-range .chart {
+    position: static;
+    width: 190px;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .grid-area .range {
+    position: absolute;
+    width: 190px;
+    height: 14px;
+    left: 296px;
+    top: 103px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.status-06 .content .layout-00 .grid-area .range-0 {
+    position: static;
+    width: 70px;
+    height: 14px;
+    line-height: 14px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-06 .content .layout-00 .grid-area .range-1 {
+    position: static;
+    width: 90px;
+    height: 14px;
+    line-height: 14px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+    margin: 0 5px;
+}
+
+.status-06 .content .layout-00 .grid-area .power-value {
+    position: absolute;
+    width: 200px;
+    height: 22px;
+    top:110px;
+    padding: 0;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    align-items: flex-end;
+}
+
+.status-06 .content .layout-00 .grid-area .value {
+    position: absolute;
+    width: 290px;
+    height: 22px;
+    top:135px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .grid-area .value > div {
+    position: static;
+    width: 125px;
+    height: 22px;
+    padding: 0;
+    flex: none;
+    flex-grow: 1;
+}
+
+.status-06 .content .layout-00 .grid-area .state {
+    position: absolute;
+    width: 260px;
+    height: 46px;
+    top:162px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 2px 0;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-00 .grid-area .state > div{
+    position: static;
+    width: 86px;
+    height: 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area,
+.status-06 .content .layout-00 .r-grid-area {
+    position: static;
+    width: 245px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 3px 0 3px 0;
+    flex: none;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area .area-title,
+.status-06 .content .layout-00 .r-grid-area .area-title {
+    position: static;
+    width: 245px;
+    height: 0;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin-bottom: 10px;
+}
+
+.status-06 .content .layout-00 .l-grid-area .l-grid-frame,
+.status-06 .content .layout-00 .l-grid-area .r-grid-frame {
+    position: static;
+    width: 245px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area .content-area,
+.status-06 .content .layout-00 .r-grid-area .content-area {
+    position: static;
+    width: 245px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area .chart-range,
+.status-06 .content .layout-00 .r-grid-area .chart-range {
+    position: static;
+    width: 245px;
+    height: 125px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area .chart,
+.status-06 .content .layout-00 .r-grid-area .chart {
+    position: static;
+    width: 150px;
+    height: 150px;
+    flex: none;
+    order: 0;
+    align-self: center;
+    flex-grow: 1;
+}
+
+.status-06 .content .layout-00 .l-grid-area .range,
+.status-06 .content .layout-00 .r-grid-area .range {
+    position: absolute;
+    width: 150px;
+    height: 12px;
+    top: 103px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area .range-0,
+.status-06 .content .layout-00 .r-grid-area .range-0 {
+    position: static;
+    width: 50px;
+    height: 12px;
+    line-height: 12px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-06 .content .layout-00 .l-grid-area .range-1,
+.status-06 .content .layout-00 .r-grid-area .range-1 {
+    position: static;
+    width: 74px;
+    height: 12px;
+    line-height: 12px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+    margin: 0 5px;
+}
+
+.status-06 .content .layout-00 .l-grid-area .power-value,
+.status-06 .content .layout-00 .r-grid-area .power-value {
+    position: absolute;
+    width: 245px;
+    height: 19px;
+    top:110px;
+    padding: 0;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    align-items: flex-end;
+}
+
+.status-06 .content .layout-00 .l-grid-area .value,
+.status-06 .content .layout-00 .r-grid-area .value {
+    position: static;
+    width: 245px;
+    height: 19px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-00 .l-grid-area .value div,
+.status-06 .content .layout-00 .r-grid-area .value div {
+    position: static;
+    width: 60px;
+    height: 19px;
+    padding: 0;
+    flex: none;
+    flex-grow: 1;
+    margin: 0 10px;
+    align-items: flex-end;
+}
+
+.status-06 .content .layout-00 .l-grid-area .state,
+.status-06 .content .layout-00 .r-grid-area .state {
+    position: static;
+    width: 200px;
+    height: 41px;
+    display: flex;
+    padding: 0;
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+
+.status-06 .content .layout-00 .l-grid-area .state div,
+.status-06 .content .layout-00 .r-grid-area .state div {
+    position: static;
+    width: 50px;
+    height: 41px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex: none;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-06 .content .layout-01 {
+    position: relative;
+    width: 780px;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.status-06 .content .layout-01 .data {
+    position: relative;
+    width: 245px;
+    height: 68px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.status-06 .content .layout-01 .data > div {
+    position: static;
+    width: 225px;
+    height: 24px;
+    display: flex;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 10px;
+}
+
+.status-06 .content .layout-01 .data > div > div:nth-child(even) {
+    position: static;
+    width: 62px;
+    height: 19px;
+    display: flex;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.status-06 .content .layout-01 .data > div > div:nth-child(odd) {
+    position: static;
+    width: 50px;
+    height: 21px;
+    color: rgb(191, 191, 191);
+    line-height: 19px;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.status-06 .content .layout-01 .temperature {
+    position: relative;
+    width: 290px;
+    height: 59px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.status-06 .content .layout-01 .temperature .frame {
+    position: static;
+    width: 290px;
+    height: 27px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 3px 0;
+}
+
+
+.status-06 .content .layout-01 .temperature .temp-1 {
+    position: static;
+    width: 65px;
+    height: 20px;
+    line-height: 17px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    padding: 0;
+    flex-grow: 0;
+    margin: 0 5px;
+}
+
+.status-06 .content .layout-01 .temperature .temp-2 {
+    position: static;
+    width: 170px;
+    height: 27px;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-01 .temperature .temp-3 {
+    position: static;
+    width: 45px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 0;
+    margin: 0 10px;
+}
+
+.status-06 .content .layout-01 .temperature .range {
+    position: absolute;
+    width: 160px;
+    height: 14px;
+    left: 73px;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.status-06 .content .layout-02 {
+    position: relative;
+    width: 780px;
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.status-06 .content .layout-02 .convert-btn {
+    position: static;
+    width: 290px;
+    height: 100px;
+    padding: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-02 .convert-btn > div {
+    position: static;
+    width: 290px;
+    height: 26px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    justify-content: space-evenly;
+}
+
+.status-06 .content .layout-02 .convert-btn > div > div {
+    position: static;
+    width: 90px;
+    height: 26px;
+    flex: none;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-02 .convert-btn .voltage-layout {
+    position: relative;
+    width: 90px;
+    height: 26px;
+    box-sizing: border-box;
+    border: 1px solid rgb(87, 87, 87);
+    border-radius:5px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0 3px 0 3px;
+    background: inherit;
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.status-06 .content .layout-02 .convert-btn .voltage-layout > input {
+    width: 70px;
+    height: 23px;
+    display: flex;
+    background: inherit;
+    text-align: right;
+    justify-content: flex-end;
+    border: none;
+}
+
+.status-06 .content .layout-02 .convert-btn .voltage-layout > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 10px;
+    height: 23px;
+}
+
+.status-06 .content .layout-02 .inverter-btn {
+    position: static;
+    width: 245px;
+    height: 100px;
+    padding: 0;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-02 .inverter-btn .button {
+    position: relative;
+    width: 245px;
+    height: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+
+.status-06 .content .layout-02 .inverter-btn .btn-layout {
+    position: static;
+    width: 245px;
+    height: 26px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-06 .content .layout-02 .inverter-btn .btn-layout > div {
+    position: static;
+    width: 90px;
+    height: 26px;
+    flex-grow: 0;
+    margin: 0 5px;
+}
+
+.status-07 {
+    position: absolute;
+    width: 400px;
+    height: 230px;
+    left: 15px;
+    right: 1549px;
+    top: 596px;
+    bottom: 150px;
+}
+
+.status-08 {
+    position: absolute;
+    width: 689px;
+    height: 230px;
+    left: 425px;
+    right: 806px;
+    top: 596px;
+    bottom: 150px;
+}
+
+.status-08 .content {
+    position: relative;
+    width: 689px;
+    height: 205px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    top:25px;
+}
+
+.status-08 .content > div {
+    position: static;
+    width: 156px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-08 .content > div:nth-child(3),
+.status-08 .content > div:nth-child(5) {
+    position: static;
+    width: 110px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 20px 0 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-08 .content > div:nth-child(3) > div,
+.status-08 .content > div:nth-child(5) > div {
+    position: static;
+    width: 100px;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 30px 0;
+}
+
+.status-08 .content > div:nth-child(3) > div > button,
+.status-08 .content > div:nth-child(5) > div > button {
+    width: 100px;
+    height: 26px;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+.status-08 .content .od-0 > .od-0 {
+    position: static;
+    width: 156px;
+    height: 25px;
+    line-height: 26px;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+.status-08 .content .od-0 > .donutChart {
+    position: static;
+    width: 130px;
+    height: 130px;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+.status-08 .content .rack-header {
+    position: static;
+    width: 156px;
+    height: 10px;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+.status-08 .content .od-1 > .donutChart,
+.status-08 .content .od-3 > .donutChart {
+    position: static;
+    width: 110px;
+    height: 110px;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-08 .content .rack-label {
+    position: static;
+    width: 156px;
+    height: 15px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-08 .content .rack-status {
+    position: static;
+    width: 156px;
+    height: 23px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 10px 0 10px;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-08 .content .rack-status > div {
+    position: static;
+    width: 67px;
+    height: 23px;
+    display: flex;
+    padding: 0 10px 0 10px;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-09 {
+    position: absolute;
+    width: 780px;
+    height: 230px;
+    left: 1124px;
+    right: 16px;
+    top: 596px;
+    bottom: 150px;
+}
+
+.status-09 .content {
+    position: relative;
+    width: 780px;
+    height: 205px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    top:25px;
+}
+
+.status-09 .content .layout-00 {
+    position: static;
+    width: 210px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 3px 4px 3px 4px;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-01 {
+    position: static;
+    width: 210px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 0 3px 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-02 {
+    position: static;
+    width: 210px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 3px 0 3px 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-03 {
+    position: static;
+    width: 150px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 0 0 20px;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-01 .convert-area {
+    position: static;
+    width: 170px;
+    height: 147px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-01 .convert-area .content-area {
+    position: static;
+    width: 170px;
+    height: 147px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-01 .convert-area .content-area .chart-range {
+    position: static;
+    width: 180px;
+    height: 150px;
+    align-self: stretch;
+    flex-grow: 1;
+    /*margin: -45px 0;*/
+}
+
+.status-09 .content .layout-01 .convert-area .content-area .chart-range .range {
+    position: absolute;
+    width: 180px;
+    height: 14px;
+    left: 230px;
+    right: 0;
+    top: 103px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.status-09 .content .layout-01 .convert-area .range .range-0 {
+    position: static;
+    width: 70px;
+    height: 14px;
+    line-height: 14px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-09 .content .layout-01 .convert-area .range .range-1 {
+    position: static;
+    width: 65px;
+    height: 14px;
+    line-height: 14px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 5px;
+}
+
+.status-09 .content .layout-01 .convert-area .power-value {
+    position: absolute;
+    width: 170px;
+    height: 22px;
+    display: flex;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    top: 114px;
+    align-items: flex-end;
+}
+
+.status-09 .content .layout-01 .state {
+    position: static;
+    width: 219px;
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 3px 0;
+    padding:7px 0;
+}
+
+.status-09 .content .layout-01 .state > div {
+    position: static;
+    width: 70px;
+    height: 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-03 .content-area {
+    position: static;
+    width: 150px;
+    height: 94px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 0;
+    margin: 20px 0;
+}
+
+.status-09 .content .layout-03 .content-area > div {
+    position: static;
+    width: 150px;
+    height: 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+.status-09 .content .layout-03 .content-area .od-0 > div:nth-child(1),
+.status-09 .content .layout-03 .content-area .od-1 > div:nth-child(1) {
+    position: static;
+    width: 150px;
+    height: 19px;
+    line-height: 19px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-03 .content-area .od-0 > div:nth-child(2),
+.status-09 .content .layout-03 .content-area .od-1 > div:nth-child(2) {
+    position: static;
+    width: 150px;
+    height: 23px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-03 .content-area span {
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-03 .button {
+    position: static;
+    width: 150px;
+    height: 26px;
+    flex-grow: 0;
+    margin: 20px 0 0 20px;
+}
+
+.status-09 .content .layout-00,
+.status-09 .content .layout-02 {
+    position: static;
+    width: 205px;
+    height: 199px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.status-09 .content .layout-00 .area-title,
+.status-09 .content .layout-02 .area-title {
+    position: static;
+    width: 205px;
+    height: 20px;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 4px 0 4px;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-09 .content .layout-00 .content-area, .status-09 .content .layout-02 .content-area,
+.status-09 .content .layout-00 .chart-range, .status-09 .content .layout-02 .chart-range {
+    position: static;
+    width: 205px;
+    height: 128px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-00 .chart-range .chart,
+.status-09 .content .layout-02 .chart-range .chart {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top:13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-00 .chart .range,
+.status-09 .content .layout-02 .chart .range {
+    position: absolute;
+    width: 140px;
+    height: 12px;
+    left: 6px;
+    right: 0;
+    top: 90px;
+    display: flex;
+    padding: 0;
+}
+
+.status-09 .content .layout-00 .chart-range .range .range-0,
+.status-09 .content .layout-02 .chart-range .range .range-0 {
+    position: static;
+    width: 54px;
+    height: 12px;
+    font-size: 10px;
+    line-height: 12px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin:0 10px;
+}
+
+.status-09 .content .layout-00 .chart-range .range .range-1,
+.status-09 .content .layout-02 .chart-range .range .range-1 {
+    position: static;
+    width: 70px;
+    height: 12px;
+    font-size: 10px;
+    line-height: 12px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin:0 5px;
+}
+
+.status-09 .content .layout-00 .chart-range .power-value,
+.status-09 .content .layout-02 .chart-range .power-value {
+    position: absolute;
+    width: 150px;
+    height: 19px;
+    display: flex;
+    padding: 0;
+    flex-grow: 0;
+    top:110px;
+    align-items: flex-end;
+}
+
+.status-09 .content .layout-00 .value,
+.status-09 .content .layout-02 .value {
+    position: absolute;
+    width: 205px;
+    height: 24px;
+    top:123px;
+    display: flex;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-09 .content .layout-00 .value > div,
+.status-09 .content .layout-02 .value > div {
+    position: static;
+    width: 93px;
+    height: 19px;
+    display: flex;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 10px;
+    align-items: flex-end;
+}
+
+.status-09 .content .layout-00 .state,
+.status-09 .content .layout-02 .state {
+    position: static;
+    width: 205px;
+    height: 41px;
+    display: flex;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 2;
+}
+
+
+.status-09 .content .layout-00 .state > div,
+.status-09 .content .layout-02 .state > div {
+    position: static;
+    width: 50px;
+    height: 41px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+
+/* ESS 운영 통계 */
+.status-10 {
+    position: absolute;
+    width: 370px;
+    height: 280px;
+    left: 15px;
+    right: 1535px;
+    top: 160px;
+}
+
+.status-10 .refresh {
+    position: static;
+    width: 250px;
+    height: 17px;
+    line-height: 10px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 5px 0 10px;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-10 .content {
+    position: relative;
+    width: 370px;
+    height: 255px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 5px 10px 5px 10px;
+    top: 25px;
+}
+
+.status-10 .content .layout-00 {
+    position: static;
+    width: 350px;
+    height: 137px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-10 .content > div .header-txt {
+    position: static;
+    width: 350px;
+    height: 17px;
+    line-height: 10px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0;
+}
+
+.status-10 .content > div > div {
+    position: static;
+    width: 350px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 3px 0 3px;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-10 .content > div .left-txt {
+    position: static;
+    width: 172px;
+    height: 20px;
+    line-height: 10px;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 3px 0 3px;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-10 .content > div .right-txt {
+    position: static;
+    width: 172px;
+    height: 20px;
+    line-height: 1px;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 3px 0 3px;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-10 .content .layout-01 {
+    position: static;
+    width: 350px;
+    height: 0;
+    border: 1px solid rgb(71, 71, 71);
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-10 .content .layout-02 {
+    position: static;
+    width: 350px;
+    height: 97px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+/* 누적 전력량 그래프 */
+.status-11 {
+    position: absolute;
+    width: 370px;
+    height: 240px;
+    left: 15px;
+    right: 1535px;
+    top: 450px;
+}
+
+.status-11 .content {
+    position: absolute;
+    width: 370px;
+    height: 215px;
+    top: 25px;
+}
+
+/* ESS 계통 현황 */
+.status-12 {
+    position: absolute;
+    width: 1220px;
+    height: 530px;
+    left: 395px;
+    right: 305px;
+    top: 160px;
+}
+
+.status-12 .content {
+    position: absolute;
+    width: 1220px;
+    height: 505px;
+    top: 60px;
+    right: 30px;
+}
+
+/* BMS 실 */
+.status-13 {
+    position: absolute;
+    width: 280px;
+    height: 220px;
+    left: 1625px;
+    right: 15px;
+    top: 160px;
+}
+
+
+/* PCS 실 */
+.status-14 {
+    position: absolute;
+    width: 280px;
+    height: 220px;
+    left: 1625px;
+    right: 15px;
+    top: 390px;
+}
+
+
+.device-room .content{
+    position: absolute;
+    width: 280px;
+    height: 195px;
+    top: 25px;
+}
+
+.device-room .content .air-conditioner {
+    position: static;
+    width: 270px;
+    height: 122px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.device-room .content .air-conditioner .head-txt {
+    position: static;
+    width: 270px;
+    height: 17px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.device-room .content .air-conditioner .control {
+    position: static;
+    width: 270px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 0;
+}
+
+.device-room .content .air-conditioner .control .frame-00 {
+    position: static;
+    width: 270px;
+    height: 39px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.device-room .content .air-conditioner .control .frame-00 .switch {
+    position: static;
+    width: 135px;
+    height: 39px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.device-room .content .air-conditioner .control .frame-00 .switch > div:nth-child(1){
+    position: static;
+    width: 135px;
+    height: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+
+.device-room .content .air-conditioner .control .frame-00 .switch > div:nth-child(2){
+    position: static;
+    width: 50px;
+    height: 20px;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.device-room .content .air-conditioner .control .frame-00 .temp {
+    position: static;
+    width: 135px;
+    height: 39px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.device-room .content .air-conditioner .control .frame-00 .temp > div:nth-child(1) {
+    position: static;
+    width: 135px;
+    height: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.device-room .content .air-conditioner .control .frame-00 .temp > div:nth-child(2){
+    position: static;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+
+.device-room .content .air-conditioner .control .frame-01 {
+    position: static;
+    width: 270px;
+    height: 51px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.device-room .content .air-conditioner .control .frame-01 .head-txt{
+    position: static;
+    width: 270px;
+    height: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.device-room .content .air-conditioner .control .frame-01 .mode{
+    position: static;
+    width: 270px;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.device-room .content .air-conditioner .control .frame-01 .mode .line{
+    position: static;
+    width: 0;
+    height: 32px;
+    border: 1px solid rgb(71, 71, 71);
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 3px;
+}
+
+
+.device-room .content .air-conditioner .control .frame-01 .mode .mode-btn{
+    position: static;
+    width: 50px;
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 0;
+    margin: 0 3px;
+}
+
+.device-room .content .line {
+    position: static;
+    width: 260px;
+    height: 0;
+    border: 1px solid rgb(71, 71, 71);
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.device-room .content .sensor-status {
+    position: static;
+    width: 270px;
+    height: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.device-room .content .sensor-status > div{
+    position: static;
+    width: 270px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 3px 0;
+}
+
+.device-room .content .sensor-status > div > div{
+    position: static;
+    width: 67px;
+    height: 17px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+/* 서버 실 */
+.status-15 {
+    position: absolute;
+    width: 280px;
+    height: 70px;
+    left: 1625px;
+    right: 15px;
+    top: 620px;
+}
+
+.status-15 .content{
+    position: relative;
+    width: 280px;
+    height: 45px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    top: 25px;
+}
+
+.status-15 .content div{
+    position: static;
+    width: 130px;
+    height: 17px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+/* BMS 운영 상태 */
+.status-16 {
+    position: absolute;
+    width: 1100px;
+    height: 230px;
+    left: 15px;
+    right: 805px;
+    top: 700px;
+}
+
+.status-16 .content {
+    position: relative;
+    width: 1100px;
+    height: 205px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    top:25px;
+}
+
+.status-16 .content .soc{
+    position: static;
+    width: 186px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-16 .content .soc .txt{
+    position: static;
+    width: 186px;
+    height: 26px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+.status-16 .content .soc .socChart{
+    position: static;
+    width: 186px;
+    height: 130px;
+    flex-grow: 0;
+    margin: 10px 0 10px -6px;
+}
+
+.status-16 .content .line-area {
+    position: static;
+    width: 10px;
+    height: 205px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-16 .content .line-area .line {
+    position: static;
+    height: 185px;
+    border: 1px solid rgb(71, 71, 71);
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-16 .content .rack {
+    position: static;
+    width: 186px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-16 .content .rack .txt{
+    position: static;
+    width: 186px;
+    height: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.status-16 .content .rack .info{
+    position: static;
+    width: 186px;
+    height: 169px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.status-16 .content .rack .info .frame-00{
+    position: static;
+    width: 110px;
+    height: 110px;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-16 .content .rack .info .frame-01{
+    position: static;
+    width: 166px;
+    height: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-16 .content .rack .info .frame-02{
+    position: static;
+    width: 186px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 10px 0 10px;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-16 .content .rack .info .frame-02 > div{
+    position: static;
+    width: 78px;
+    height: 20px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-16 .content .rack-txt{
+    position: static;
+    width: 150px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-16 .content .rack-txt .frame-00{
+    position: static;
+    width: 140px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-16 .content .rack-txt .head-txt{
+    position: static;
+    width: 140px;
+    height: 20px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-16 .content .rack-txt > div > div{
+    position: static;
+    width: 140px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 3px;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-16 .content .rack-txt .txt{
+    position: static;
+    height: 20px;
+    line-height: 1;
+    letter-spacing: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 0 0 3px;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+
+.status-16 .content .rack-txt .frame-01{
+    position: static;
+    width: 140px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-16 .content .rack-txt .frame-02{
+    position: static;
+    width: 140px;
+    height: 29px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.status-16 .content .rack-btn {
+    position: static;
+    width: 110px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 0 0 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-16 .content .rack-btn .frame{
+    position: static;
+    width: 90px;
+    height: 98px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 0;
+    margin: 10px 0;
+}
+
+
+/* PCS 운영 상태 */
+.status-17 {
+    position: absolute;
+    width: 780px;
+    height: 230px;
+    left: 1125px;
+    top: 700px;
+}
+
+.status-17 .content {
+    position: relative;
+    width: 780px;
+    height: 205px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    top: 25px;
+}
+
+.status-17 .content .layout-00{
+    position: static;
+    width: 270px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-17 .content .layout-00 .frame-00 {
+    position: static;
+    width: 270px;
+    height: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 5px 0;
+}
+
+.status-17 .content .layout-00 .frame-01 {
+    position: static;
+    width: 270px;
+    height: 169px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+}
+
+.status-17 .content .layout-00 .frame-01 > div {
+    position: static;
+    width: 270px;
+    height: 27px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    flex-grow: 0;
+    margin: 15px 0;
+}
+
+.status-17 .content .layout-00 .frame-01 .txt-00 {
+    position: static;
+    width: 40px;
+    height: 27px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 10px;
+}
+
+
+.status-17 .content .layout-00 .frame-01 .txt-01 {
+    position: static;
+    width: 60px;
+    height: 27px;
+    letter-spacing: 0;
+    line-height: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+}
+
+.status-17 .content .layout-01{
+    position: static;
+    width: 300px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+.status-17 .content .layout-01 .frame-00{
+    position: static;
+    width: 190px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 0;
+    margin: 2px 0;
+}
+
+.status-17 .content .layout-01 .frame-00 .txt{
+    position: static;
+    width: 190px;
+    height: 20px;
+    letter-spacing: 0;
+    line-height: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: -37px 0;
+}
+
+.status-17 .content .layout-01 .frame-00 .range{
+    position: absolute;
+    width: 190px;
+    height: 14px;
+    top:106px;
+    left:322px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.status-17 .content .layout-01 .frame-00 .range > div{
+    position: static;
+    width: 81px;
+    height: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-17 .content .layout-01 .frame-01{
+    position: static;
+    width: 300px;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 2px 0;
+}
+
+.status-17 .content .layout-01 .frame-01 .txt{
+    position: static;
+    width: 80px;
+    height: 20px;
+    letter-spacing: 0;
+    line-height: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-17 .content .layout-01 .frame-02{
+    position: static;
+    width: 300px;
+    height: 41px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 2px 0;
+}
+
+.status-17 .content .layout-01 .frame-02 > div{
+    position: static;
+    width: 75px;
+    height: 41px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    flex-grow: 1;
+    margin: 0 0;
+}
+
+
+.status-17 .content .layout-02{
+    position: static;
+    width: 210px;
+    height: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0;
+}
+
+.status-17 .content .layout-02 .frame{
+    position: static;
+    width: 210px;
+    height: 179px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    margin: 10px 0;
+}
+
+.status-17 .content .layout-02 .frame > div{
+    position: static;
+    width: 90px;
+    height: 179px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 5px;
+}
+
+.control-btn {
+    width: 90px;
+    height: 26px;
+    margin: 10px 0;
+}
+
+
+.point-none {
+    pointer-events: none;
+}
+
+/*----------input toggle button Start----------*/
+.checkbox-wrapper-34 {
+    --blue: #AEFC00;
+    --g08: #575757;
+    --g04: #E1E5EB;
+}
+
+.checkbox-wrapper-34 .tgl {
+    display: none;
+}
+.checkbox-wrapper-34 .tgl,
+.checkbox-wrapper-34 .tgl:after,
+.checkbox-wrapper-34 .tgl:before,
+.checkbox-wrapper-34 .tgl *,
+.checkbox-wrapper-34 .tgl *:after,
+.checkbox-wrapper-34 .tgl *:before,
+.checkbox-wrapper-34 .tgl + .tgl-btn {
+    box-sizing: border-box;
+}
+.checkbox-wrapper-34 .tgl::selection,
+.checkbox-wrapper-34 .tgl:after::selection,
+.checkbox-wrapper-34 .tgl:before::selection,
+.checkbox-wrapper-34 .tgl *::selection,
+.checkbox-wrapper-34 .tgl *:after::selection,
+.checkbox-wrapper-34 .tgl *:before::selection,
+.checkbox-wrapper-34 .tgl + .tgl-btn::selection {
+    background: none;
+}
+.checkbox-wrapper-34 .tgl + .tgl-btn {
+    outline: 0;
+    display: block;
+    width: 50px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    font-size: 12px;
+    font-weight: 400;
+    color: #fff;
+}
+.checkbox-wrapper-34 .tgl + .tgl-btn:after,
+.checkbox-wrapper-34 .tgl + .tgl-btn:before {
+    position: relative;
+    display: block;
+    content: "";
+    width: 44%;
+    height: 100%;
+}
+.checkbox-wrapper-34 .tgl + .tgl-btn:after {
+    left: 0;
+}
+.checkbox-wrapper-34 .tgl + .tgl-btn:before {
+    display: inline;
+    position: absolute;
+    top: 2px;
+}
+.checkbox-wrapper-34 .tgl:checked + .tgl-btn:after {
+    left: 56.5%;
+}
+
+.checkbox-wrapper-34 .tgl-ios + .tgl-btn {
+    background: var(--g08);
+    border-radius: 20rem;
+    padding: 2px;
+    transition: all 0.4s ease;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.checkbox-wrapper-34 .tgl-ios + .tgl-btn:after {
+    border-radius: 2em;
+    background: #fff;
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+.checkbox-wrapper-34 .tgl-ios + .tgl-btn:before {
+    content: "OFF";
+    left: 24px;
+    color: var(--g04);
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.checkbox-wrapper-34 .tgl-ios + .tgl-btn:active {
+    box-shadow: inset 0 0 0 30px rgba(0, 0, 0, 0.1);
+}
+.checkbox-wrapper-34 .tgl-ios + .tgl-btn:active:after {
+    padding-right: 0.4em;
+}
+.checkbox-wrapper-34 .tgl-ios:checked + .tgl-btn {
+    background: var(--blue);
+}
+.checkbox-wrapper-34 .tgl-ios:checked + .tgl-btn:active {
+    box-shadow: inset 0 0 0 30px rgba(0, 0, 0, 0.1);
+}
+.checkbox-wrapper-34 .tgl-ios:checked + .tgl-btn:active:after {
+    margin-left: -0.4em;
+}
+.checkbox-wrapper-34 .tgl-ios:checked + .tgl-btn:before {
+    content: "ON";
+    left: 6px;
+    color: #fff;
+}
+/*----------input toggle button End----------*/
+
+
+/*----------input stepper button Start----------*/
+.stepper-input {
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+}
+
+.btn {
+    cursor: pointer;
+    color: #fff;
+    background-color: #575757;
+    border: 1px solid #575757;
+}
+
+.btn:hover {
+    background-color: rgba(87, 87, 87, 0.48);
+    color: #fff;
+}
+
+.btn-left {
+    padding: 0;
+    width: 25px;
+    opacity: 1;
+    font-weight: 900;
+    border-radius: 5px 0 0 5px;
+}
+
+.btn-right {
+    padding: 0;
+    width: 25px;
+    opacity: 1;
+    font-weight: 900;
+    border-radius: 0 5px 5px 0;
+}
+
+.input-box {
+    width: 50px;
+    height: 20px;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #575757;
+    text-align: center;
+}
+/*----------input stepper button End----------*/
+
+
+
+/*----------input checkbox circle Start----------*/
+
+.checkbox-wrapper-31:hover .check {
+    stroke-dashoffset: 0;
+}
+
+.checkbox-wrapper-31 {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+.checkbox-wrapper-31 .background {
+    fill: #575757;
+    transition: ease all 0.6s;
+    -webkit-transition: ease all 0.6s;
+}
+.checkbox-wrapper-31 .stroke {
+    fill: none;
+    stroke: #282828;
+    stroke-miterlimit: 10;
+    stroke-width: 3px;
+    stroke-dashoffset: 100;
+    stroke-dasharray: 100;
+    transition: ease all 0.6s;
+    -webkit-transition: ease all 0.6s;
+}
+.checkbox-wrapper-31 .check {
+    fill: none;
+    stroke: #282828;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3px;
+    stroke-dashoffset: 22;
+    stroke-dasharray: 22;
+    transition: ease all 0.6s;
+    -webkit-transition: ease all 0.6s;
+}
+.checkbox-wrapper-31 input[type=checkbox] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin: 0;
+    opacity: 0;
+    -appearance: none;
+    -webkit-appearance: none;
+}
+.checkbox-wrapper-31 input[type=checkbox]:hover {
+    cursor: pointer;
+}
+.checkbox-wrapper-31 input[type=checkbox]:checked + svg .background {
+    fill: #AEFC00;
+}
+.checkbox-wrapper-31 input[type=checkbox]:checked + svg .stroke {
+    stroke-dashoffset: 0;
+}
+.checkbox-wrapper-31 input[type=checkbox]:checked + svg .check {
+    stroke-dashoffset: 0;
+}
+/*----------input checkbox circle End----------*/

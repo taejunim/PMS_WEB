@@ -1,0 +1,174 @@
+.statusImage{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 10px;
+    top: 62px;
+    background-size: cover!important;
+}
+.wd100{
+    width: 100% !important;
+}
+.alignC{
+    text-align: center;
+}
+.deviceStatusTable img {
+    width: 36px;
+    height: 36px;
+    display: block;
+    margin: 0 auto;
+}
+.deviceStatusTable .statusLabel {
+    background: #66ADD9;
+    width: 80%;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    color: #fff;
+}
+.chart {
+    width: 90%;
+    height: 100px;
+    margin: auto;
+}
+.pmsImage {
+    content: url("/assets/images/mornitoring/PMS.png");
+}
+.pcsImage {
+    content: url("/assets/images/mornitoring/pcs.png");
+}
+.chargerImage {
+    content: url("/assets/images/mornitoring/charger.png");
+}
+.powerSocketImage {
+    content: url("/assets/images/mornitoring/powerSocket.png");
+}
+.batteryImage {
+    content: url("/assets/images/mornitoring/battery.png");
+}
+.chargeImage {
+    background: url("/assets/images/mornitoring/battery_charge.png");
+}
+.dischargeImage {
+    background: url("/assets/images/mornitoring/battery_discharge.png");
+}
+.waitImage {
+    background: url("/assets/images/mornitoring/loading.png");
+}
+.questionImage {
+    background: url("/assets/images/mornitoring/question.png");
+}
+.airConditionerImage {
+    content: url("/assets/images/mornitoring/airConditioner.png");
+}
+.mt10 {
+    margin-top: 10px;
+}
+.mt20 {
+    margin-top: 20px;
+}
+
+.period {
+    text-align: center;
+}
+
+.chargeContractInfo {
+    float: left;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 500;
+    color: #333333;
+}
+
+.chargeContractDetail {
+    float: left;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 500;
+    color: #333333;
+}
+
+.fixedTop {
+    width: 100%;
+    height: 8%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 10px;
+}
+
+.fixedMiddle {
+    width: 100%;
+    height: 85%;
+    position: fixed;
+    left: 0;
+    top: 8%;
+    padding: 10px;
+}
+
+.fixedBottom {
+    width: 100%;
+    height: 7%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.contractDetailButton {
+    border: 0;
+    outline: 0;
+    width: 50%;
+    height: 100%;
+    float: left;
+    color: #FFF;
+}
+
+.moreButton {
+    background-color: #3498DB;
+    border: 0;
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    color: #FFF;
+}
+
+.noData {
+    margin-top: 30px;
+    text-align: center;
+    border: 0;
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    color: #CCC;
+    display: none;
+}
+
+.centerText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFF;
+}
+
+.addConfig {
+    width: 42px;
+    height: 36px;
+    border: none;
+    cursor: pointer;
+}
+
+.additionButton {
+    width: 42px;
+    height: 42px;
+    border: none;
+    cursor: pointer;
+    background: #e0e0e0;
+}
+
+.closeButton {
+    width: 30px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+}

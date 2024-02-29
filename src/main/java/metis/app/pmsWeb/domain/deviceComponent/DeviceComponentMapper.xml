@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.deviceComponent.DeviceComponentMapper">
+
+    <select id="selectDeviceComponentList" resultType="hashmap" parameterType="hashmap" statementType="PREPARED">
+        SELECT DEVICE_CODE      as deviceCode,
+               COMPONENT_NO     as componentNo,
+               COMPONENT_NAME   as componentName
+        FROM BASE_DEVICE_COMPONENT
+        WHERE DEVICE_CODE = #{deviceCode}
+        ORDER BY COMPONENT_NO
+    </select>
+
+    <select id="selectDeviceComponentTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM BASE_DEVICE_COMPONENT
+        WHERE DEVICE_CODE = #{deviceCode}
+    </select>
+
+    <delete id="delete" parameterType="hashmap" statementType="PREPARED">
+        DELETE
+        FROM BASE_DEVICE_COMPONENT
+        WHERE DEVICE_CODE   = #{deviceCode}
+          AND COMPONENT_NO  = #{componentNo}
+    </delete>
+
+    <update id="update" parameterType="hashmap" statementType="PREPARED">
+        <foreach collection="list" index="index" item="item" separator=";">
+            UPDATE BASE_DEVICE_COMPONENT
+            SET COMPONENT_NAME  = #{item.componentName}
+                , UPDATED_AT = now()
+                , UPDATED_BY = #{item.updatedBy}
+            WHERE DEVICE_CODE   = #{item.deviceCode}
+            AND COMPONENT_NO  = #{item.componentNo}
+        </foreach>
+    </update>
+
+    <update id="insert" parameterType="hashmap" statementType="PREPARED">
+        INSERT
+        INTO BASE_DEVICE_COMPONENT ( DEVICE_CODE
+                                    , COMPONENT_NO
+                                    , COMPONENT_NAME
+                                    , CREATED_AT
+                                    , CREATED_BY
+                                    , UPDATED_AT
+                                    , UPDATED_BY
+                                    )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+            #{item.deviceCode}
+            , #{item.componentNo}
+            , #{item.componentName}
+            , now()
+            , #{item.createdBy}
+            , now()
+            , #{item.updatedBy}
+            )
+        </foreach>
+
+    </update>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM BASE_DEVICE_COMPONENT
+    </select>
+</mapper>

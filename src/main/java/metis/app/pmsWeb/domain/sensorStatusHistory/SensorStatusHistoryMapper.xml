@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.sensorStatusHistory.SensorStatusHistoryMapper">
+
+    <select id="select" resultType="sensorStatusHistoryVO" parameterType="Hashmap" statementType="PREPARED">
+        SELECT FROM_UNIXTIME(REG_DATE) REG_DATE
+             , sensor.SENSOR_CODE
+             , device.DEVICE_NAME
+             , device.DEVICE_CATEGORY_SUB
+             , GET_CODE_NM('DEVICE_CATEGORY_SUB',device.DEVICE_CATEGORY_SUB) as deviceCategorySubName
+             , IF(sensor.FAULT_FLAG = 'Y','결함','정상') as faultExist
+             , IF(sensor.MEASURE1 IS NULL,'-',sensor.MEASURE1) as measure1
+             , IF(sensor.MEASURE2 IS NULL,'-',sensor.MEASURE2) as measure2
+             , IF(sensor.MEASURE3 IS NULL,'-',sensor.MEASURE3) as measure3
+        FROM raw_sensor sensor,
+           ( SELECT DEVICE_CATEGORY
+                  , DEVICE_CATEGORY_SUB
+                  , DEVICE_CODE
+                  , DEVICE_NAME
+             FROM   base_device
+             WHERE  DEVICE_CATEGORY = '04'
+             AND    USE_FLAG        = 'Y'
+         <if test="deviceCategorySub != null and deviceCategorySub != '' ">
+             AND    DEVICE_CATEGORY_SUB  = #{deviceCategorySub}
+         </if>
+             AND    DEVICE_CATEGORY_SUB IN (
+                SELECT CODE FROM system_common_code
+                WHERE  GROUP_CD = 'DEVICE_CATEGORY_SUB'
+                AND    USE_YN   = 'Y'
+                AND    DATA2    = '04'
+                AND    IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '01'), DATA1 in ('00', '01'),
+                       IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '02'), DATA1 in ('00', '02'), DATA1 in ('00', '01', '02'))))
+            ) device
+        WHERE device.DEVICE_CODE = sensor.SENSOR_CODE
+        AND SENSOR_CODE IN (DEVICE_CODE)
+        <if test="deviceCode != null and deviceCode != '' ">
+            AND sensor.SENSOR_CODE = #{deviceCode}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND sensor.REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND sensor.REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+            ORDER BY sensor.REG_DATE DESC
+            LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM raw_sensor sensor,
+        ( SELECT DEVICE_CATEGORY
+        , DEVICE_CATEGORY_SUB
+        , DEVICE_CODE
+        , DEVICE_NAME
+        FROM   base_device
+        WHERE  DEVICE_CATEGORY = '04'
+        AND    USE_FLAG        = 'Y'
+        <if test="deviceCategorySub != null and deviceCategorySub != '' ">
+            AND    DEVICE_CATEGORY_SUB  = #{deviceCategorySub}
+        </if>
+        AND    DEVICE_CATEGORY_SUB IN (
+        SELECT CODE FROM system_common_code
+        WHERE  GROUP_CD = 'DEVICE_CATEGORY_SUB'
+        AND    USE_YN   = 'Y'
+        AND    DATA2    = '04'
+        AND    IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '01'), DATA1 in ('00', '01'),
+        IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '02'), DATA1 in ('00', '02'), DATA1 in ('00', '01', '02'))))
+        ) device
+        WHERE device.DEVICE_CODE = sensor.SENSOR_CODE
+        AND SENSOR_CODE IN (DEVICE_CODE)
+        <if test="deviceCode != null and deviceCode != '' ">
+            AND sensor.SENSOR_CODE = #{deviceCode}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND sensor.REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND sensor.REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="selectDeviceCodes" resultType="Hashmap" parameterType="commandControlHistoryVO" statementType="PREPARED">
+        SELECT
+        DEVICE_CODE             AS deviceCode,
+        DEVICE_NAME             AS deviceName,
+        DEVICE_CATEGORY_SUB     AS deviceCategorySub
+        FROM  BASE_DEVICE
+        WHERE USE_FLAG = 'Y'
+    </select>
+
+    <select id="totalRowCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM raw_sensor
+    </select>
+
+</mapper>

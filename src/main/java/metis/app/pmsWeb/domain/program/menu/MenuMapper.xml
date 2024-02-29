@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.program.menu.MenuMapper">
+    <delete id="deleteAuthGroup" parameterType="java.lang.Long" statementType="PREPARED">
+        DELETE FROM system_auth_group
+        WHERE MENU_ID = #{menuId}
+    </delete>
+
+    <delete id="deleteAuthGroups" parameterType="menu" statementType="PREPARED">
+        DELETE FROM system_auth_group
+        WHERE MENU_ID IN (
+        <foreach collection="list" index="index" item="item" separator=",">
+        #{item.menuId}
+        </foreach>
+        )
+    </delete>
+</mapper>

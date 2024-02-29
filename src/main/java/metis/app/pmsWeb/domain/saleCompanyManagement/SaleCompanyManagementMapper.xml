@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.saleCompanyManagement.SaleCompanyManagementMapper">
+
+    <select id="selectSaleCompanyManagementList" resultType="hashMap" parameterType="hashMap" statementType="PREPARED">
+        SELECT
+        SALE_COMPANY_CODE AS saleCompanyCode,
+        SALE_COMPANY_NAME AS saleCompanyName,
+        IF(SALE_COMPANY_MANAGER_NAME IS NOT NULL, SALE_COMPANY_MANAGER_NAME, '-') AS saleCompanyManagerName,
+        IF(SALE_COMPANY_MANAGER_TEL IS NOT NULL,
+            CASE CHAR_LENGTH(SALE_COMPANY_MANAGER_TEL)
+            WHEN 11 THEN CONCAT(LEFT(SALE_COMPANY_MANAGER_TEL,3),'-',MID(SALE_COMPANY_MANAGER_TEL,4,4),'-',RIGHT(SALE_COMPANY_MANAGER_TEL,4))
+            WHEN 10 THEN CONCAT(LEFT(SALE_COMPANY_MANAGER_TEL, 3), '-', MID(SALE_COMPANY_MANAGER_TEL, 4, 3), '-', RIGHT(SALE_COMPANY_MANAGER_TEL, 4))
+            WHEN 9 THEN CONCAT(LEFT(SALE_COMPANY_MANAGER_TEL, 2), '-', MID(SALE_COMPANY_MANAGER_TEL, 3, 3), '-', RIGHT(SALE_COMPANY_MANAGER_TEL, 4))
+            ELSE SALE_COMPANY_MANAGER_TEL
+            END,
+            '-') AS saleCompanyManagerTel,
+        IF(SALE_COMPANY_TEL IS NOT NULL,
+            CASE CHAR_LENGTH(SALE_COMPANY_TEL)
+            WHEN 11 then CONCAT(LEFT(SALE_COMPANY_TEL,3),'-',MID(SALE_COMPANY_TEL,4,4),'-',RIGHT(SALE_COMPANY_TEL,4))
+            WHEN 10 THEN CONCAT(LEFT(SALE_COMPANY_TEL, 3), '-', MID(SALE_COMPANY_TEL, 4, 3), '-', RIGHT(SALE_COMPANY_TEL, 4))
+            WHEN 9 THEN CONCAT(LEFT(SALE_COMPANY_TEL, 2), '-', MID(SALE_COMPANY_TEL, 3, 3), '-', RIGHT(SALE_COMPANY_TEL, 4))
+            ELSE SALE_COMPANY_TEL
+            END,
+            '-') AS saleCompanyTel,
+        SALE_COMPANY_ADDR AS saleCompanyAddr
+
+        FROM
+        PMS_BASE_SALE_COMPANY
+        WHERE 1=1
+        <if test="saleCompanyName != null and saleCompanyName != ''">
+            AND SALE_COMPANY_NAME LIKE CONCAT('%', #{saleCompanyName}, '%')
+        </if>
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectSaleCompanyManagementTotalCount" resultType="int" parameterType="Hashmap"
+            statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM PMS_BASE_SALE_COMPANY
+        WHERE 1=1
+        <if test="saleCompanyName != null and saleCompanyName != ''">
+            AND SALE_COMPANY_NAME LIKE CONCAT('%', #{saleCompanyName}, '%')
+        </if>
+    </select>
+
+    <delete id="delete" parameterType="Hashmap" statementType="PREPARED">
+        DELETE
+        FROM PMS_BASE_SALE_COMPANY
+        WHERE SALE_COMPANY_CODE = #{saleCompanyCode}
+    </delete>
+
+    <update id="update" parameterType="Hashmap" statementType="PREPARED">
+        UPDATE PMS_BASE_SALE_COMPANY
+        SET SALE_COMPANY_NAME         = #{saleCompanyName},
+            SALE_COMPANY_MANAGER_NAME = #{saleCompanyManagerName},
+            SALE_COMPANY_MANAGER_TEL  = #{saleCompanyManagerTel},
+            SALE_COMPANY_TEL          = #{saleCompanyTel},
+            SALE_COMPANY_ADDR         = #{saleCompanyAddr}
+        WHERE SALE_COMPANY_CODE = #{saleCompanyCode}
+    </update>
+
+    <update id="insert" parameterType="Hashmap" statementType="PREPARED">
+
+        INSERT INTO PMS_BASE_SALE_COMPANY(SALE_COMPANY_CODE,
+                                          SALE_COMPANY_NAME,
+                                          SALE_COMPANY_MANAGER_NAME,
+                                          SALE_COMPANY_MANAGER_TEL,
+                                          SALE_COMPANY_TEL,
+                                          SALE_COMPANY_ADDR)
+        VALUES (GET_SALE_COMPANY_CODE(),
+                #{saleCompanyName},
+                #{saleCompanyManagerName},
+                #{saleCompanyManagerTel},
+                #{saleCompanyTel},
+                #{saleCompanyAddr})
+    </update>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM PMS_BASE_SALE_COMPANY
+    </select>
+
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.airConditionerHistory.AirConditionerHistoryMapper">
+
+    <select id="select" resultType="airConditionerHistoryVO" parameterType="Hashmap" statementType="PREPARED">
+        SELECT FROM_UNIXTIME(airConditioner.REG_DATE)                                              AS regDate
+             , airConditioner.AIR_CONDITIONER_CODE                                                 AS airConditionerCode
+             , device.DEVICE_NAME                                                                  AS deviceName
+             , device.DEVICE_CATEGORY_SUB                                                          AS deviceCategorySub
+             , GET_CODE_NM('DEVICE_CATEGORY_SUB',device.DEVICE_CATEGORY_SUB)                       AS deviceCategorySubName
+             , GET_CODE_NM('DEVICE_STATUS', OPERATION_STATUS)                                      AS operationStatus
+             , GET_CODE_NM('AIR_CONDITIONER_MODE', OPERATION_MODE_STATUS)                          AS operationModeStatus
+             , IF(airConditioner.INDOOR_TEMPERATURE IS NULL,'-',airConditioner.INDOOR_TEMPERATURE) AS indoorTemperature
+             , IF(airConditioner.SET_TEMPERATURE IS NULL,'-',airConditioner.SET_TEMPERATURE)       AS setTemperature
+             , IF(airConditioner.FAULT_FLAG = 'Y','결함','정상')                                      AS faultExist
+        FROM raw_air_conditioner airConditioner,
+             ( SELECT DEVICE_CATEGORY
+                    , DEVICE_CATEGORY_SUB
+                    , DEVICE_CODE
+                    , DEVICE_NAME
+               FROM   base_device
+               WHERE  DEVICE_CATEGORY = '80'
+               AND    USE_FLAG        = 'Y'
+           <if test="deviceCategorySub != null and deviceCategorySub != '' ">
+               AND    DEVICE_CATEGORY_SUB  = #{deviceCategorySub}
+           </if>
+               AND    DEVICE_CATEGORY_SUB IN (
+               SELECT CODE FROM system_common_code
+               WHERE  GROUP_CD = 'DEVICE_CATEGORY_SUB'
+               AND    USE_YN   = 'Y'
+               AND    DATA2    = '80'
+               AND    IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '01'), DATA1 in ('00', '01'),
+                          IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '02'), DATA1 in ('00', '02'), DATA1 in ('00', '01', '02'))))
+             ) device
+        WHERE device.DEVICE_CODE = airConditioner.AIR_CONDITIONER_CODE
+        AND AIR_CONDITIONER_CODE IN (DEVICE_CODE)
+        <if test="deviceCode != null and deviceCode != '' ">
+            AND airConditioner.AIR_CONDITIONER_CODE = #{deviceCode}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND airConditioner.REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND airConditioner.REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+
+        ORDER BY airConditioner.REG_DATE DESC
+        LIMIT #{startRow}, #{pageSize}
+
+    </select>
+
+    <select id="selectTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM raw_air_conditioner airConditioner,
+             ( SELECT DEVICE_CATEGORY
+                    , DEVICE_CATEGORY_SUB
+                    , DEVICE_CODE
+                    , DEVICE_NAME
+                    FROM   base_device
+               WHERE  DEVICE_CATEGORY = '80'
+               AND    USE_FLAG        = 'Y'
+             <if test="deviceCategorySub != null and deviceCategorySub != '' ">
+               AND    DEVICE_CATEGORY_SUB  = #{deviceCategorySub}
+             </if>
+               AND    DEVICE_CATEGORY_SUB IN (
+               SELECT CODE FROM system_common_code
+               WHERE  GROUP_CD = 'DEVICE_CATEGORY_SUB'
+               AND    USE_YN   = 'Y'
+               AND    DATA2    = '80'
+               AND    IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '01'), DATA1 in ('00', '01'),
+                      IF(((SELECT ESS_TYPE FROM BASE_ESS LIMIT 1) = '02'), DATA1 in ('00', '02'), DATA1 in ('00', '01', '02'))))
+            ) device
+        WHERE device.DEVICE_CODE = airConditioner.AIR_CONDITIONER_CODE
+        AND AIR_CONDITIONER_CODE IN (DEVICE_CODE)
+        <if test="deviceCode != null and deviceCode != '' ">
+            AND airConditioner.AIR_CONDITIONER_CODE = #{deviceCode}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND airConditioner.REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND airConditioner.REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="selectDeviceCodes" resultType="Hashmap" statementType="PREPARED">
+        SELECT
+        DEVICE_CODE             AS deviceCode,
+        DEVICE_NAME             AS deviceName,
+        DEVICE_CATEGORY_SUB     AS deviceCategorySub
+        FROM  BASE_DEVICE
+        WHERE USE_FLAG = 'Y'
+    </select>
+
+</mapper>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.deviceErrorHistory.DeviceErrorHistoryMapper">
+
+    <select id="selectDeviceErrorHistoryList" resultType="Hashmap" parameterType="Hashmap" statementType="PREPARED">
+        SELECT total.*
+        , error.ERROR_TYPE AS errorType
+        , error.ERROR_CODE_NAME AS errorCodeName
+        , GET_CODE_NM('ERROR_TYPE', error.ERROR_TYPE) AS errorTypeName
+        , GET_CODE_NM('PROCESS_FLAG', total.processFlag) AS processFlagName
+        , IFNULL(GET_CODE_NM('DEVICE_CATEGORY', device.DEVICE_CATEGORY),'공통') AS deviceCategoryName
+        , IFNULL(GET_CODE_NM('DEVICE_CATEGORY_SUB', IF(total.componentNo IS NULL,device.DEVICE_CATEGORY_SUB,'0102')),'공통') AS deviceCategorySubName
+        , IF(total.componentNo IS NULL, total.name, concat(device.DEVICE_NAME,' / ',total.name)) as deviceName
+        FROM (
+        SELECT
+        DATE_FORMAT(FROM_UNIXTIME(a.ERROR_DATE), '%Y-%m-%d %H:%i:%s') AS errorDate
+        , a.DEVICE_CODE          AS deviceCode
+        , a.PROCESS_FLAG         AS processFlag
+        , a.ERROR_CODE           AS errorCode
+        , NULL                   AS componentNo
+        , (SELECT DEVICE_NAME FROM BASE_DEVICE  WHERE DEVICE_CODE= a.DEVICE_CODE) AS name
+        FROM HISTORY_ERROR_DEVICE a
+
+        union all
+
+        SELECT
+        DATE_FORMAT(FROM_UNIXTIME(b.ERROR_DATE), '%Y-%m-%d %H:%i:%s') AS errorDate
+        , b.DEVICE_CODE          AS deviceCode
+        , b.PROCESS_FLAG         AS processFlag
+        , b.ERROR_CODE           AS errorCode
+        , b.COMPONENT_NO         AS componentNo
+        , (SELECT COMPONENT_NAME FROM BASE_DEVICE_COMPONENT WHERE COMPONENT_NO = b.COMPONENT_NO AND DEVICE_CODE = b.DEVICE_CODE) AS name
+        FROM HISTORY_ERROR_DEVICE_COMPONENT b
+        ) total
+        LEFT JOIN BASE_DEVICE device on device.DEVICE_CODE = total.deviceCode
+        LEFT JOIN BASE_ESS ess on ess.ESS_CODE = device.ESS_CODE
+        LEFT JOIN BASE_DEVICE_ERROR_CODE error on error.ERROR_CODE = total.errorCode
+        WHERE 1 = 1
+        <if test="essType != null and essType != ''">
+            AND ess.ESS_TYPE = #{essType}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND total.errorDate <![CDATA[>=]]> CONCAT(#{startDate},' 00:00:00')
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND total.errorDate <![CDATA[<=]]> CONCAT(#{endDate}, ' 23:59:59')
+        </if>
+        <if test="deviceCode != null and deviceCode != ''">
+            AND total.deviceCode = #{deviceCode}
+        </if>
+        <if test="componentNo != null and componentNo != ''">
+            AND total.componentNo = #{componentNo}
+        </if>
+        <if test="errorType != null and errorType != ''">
+            AND error.ERROR_TYPE = #{errorType}
+        </if>
+        <if test="processFlag != null and processFlag != ''">
+            AND total.processFlag = #{processFlag}
+        </if>
+        ORDER BY total.errorDate DESC , total.deviceCode, total.componentNo ASC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectDeviceErrorHistoryTotalList" resultType="int" parameterType="Hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM (
+            SELECT
+            DATE_FORMAT(FROM_UNIXTIME(a.ERROR_DATE), '%Y-%m-%d %H:%i:%s') AS errorDate
+            , a.DEVICE_CODE          AS deviceCode
+            , a.PROCESS_FLAG         AS processFlag
+            , a.ERROR_CODE           AS errorCode
+            , NULL                   AS componentNo
+            , (SELECT DEVICE_NAME FROM BASE_DEVICE  WHERE DEVICE_CODE= a.DEVICE_CODE) AS name
+            FROM HISTORY_ERROR_DEVICE a
+
+            union all
+
+            SELECT
+            DATE_FORMAT(FROM_UNIXTIME(b.ERROR_DATE), '%Y-%m-%d %H:%i:%s') AS errorDate
+            , b.DEVICE_CODE          AS deviceCode
+            , b.PROCESS_FLAG         AS processFlag
+            , b.ERROR_CODE           AS errorCode
+            , b.COMPONENT_NO         AS componentNo
+            , (SELECT COMPONENT_NAME FROM BASE_DEVICE_COMPONENT WHERE COMPONENT_NO = b.COMPONENT_NO AND DEVICE_CODE = b.DEVICE_CODE) AS name
+            FROM HISTORY_ERROR_DEVICE_COMPONENT b
+            ) total
+        LEFT JOIN BASE_DEVICE device on device.DEVICE_CODE = total.deviceCode
+        LEFT JOIN BASE_ESS ess on ess.ESS_CODE = device.ESS_CODE
+        LEFT JOIN BASE_DEVICE_ERROR_CODE error on error.ERROR_CODE = total.errorCode
+        WHERE 1 = 1
+        <if test="essType != null and essType != ''">
+            AND ess.ESS_TYPE = #{essType}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND total.errorDate <![CDATA[>=]]> CONCAT(#{startDate},' 00:00:00')
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND total.errorDate <![CDATA[<=]]> CONCAT(#{endDate}, ' 23:59:59')
+        </if>
+        <if test="deviceCode != null and deviceCode != ''">
+            AND total.deviceCode = #{deviceCode}
+        </if>
+        <if test="componentNo != null and componentNo != ''">
+            AND total.componentNo = #{componentNo}
+        </if>
+        <if test="errorType != null and errorType != ''">
+            AND error.ERROR_TYPE = #{errorType}
+        </if>
+        <if test="processFlag != null and processFlag != ''">
+            AND total.processFlag = #{processFlag}
+        </if>
+        ORDER BY total.errorDate DESC , total.deviceCode, total.componentNo ASC
+    </select>
+
+    <update id="updateErrorHistory" parameterType="deviceErrorHistoryVO" statementType="PREPARED">
+
+        <choose>
+            <when test='componentNo != null and componentNo != ""'>
+                UPDATE HISTORY_ERROR_DEVICE_COMPONENT
+                SET PROCESS_FLAG = 'Y'
+
+                WHERE ERROR_CODE = #{errorCode}
+                    AND COMPONENT_NO = #{componentNo}
+                    AND DEVICE_CODE = #{deviceCode}
+                    AND ERROR_DATE = UNIX_TIMESTAMP(#{errorDate})
+            </when>
+            <otherwise>
+                UPDATE HISTORY_ERROR_DEVICE
+                SET PROCESS_FLAG = 'Y'
+
+                WHERE ERROR_CODE = #{errorCode}
+                    AND DEVICE_CODE = #{deviceCode}
+                    AND ERROR_DATE = UNIX_TIMESTAMP(#{errorDate})
+            </otherwise>
+        </choose>
+
+    </update>
+
+    <select id="selectDeviceCode" resultType="Hashmap" parameterType="deviceErrorHistoryVO" statementType="PREPARED">
+        SELECT
+            DEVICE_CODE      AS deviceCode,
+            DEVICE_NAME      AS deviceName,
+            DEVICE_CATEGORY  AS deviceCategory
+        FROM BASE_DEVICE
+        WHERE USE_FLAG = 'Y'
+    </select>
+
+    <select id="selectComponent" resultType="Hashmap" parameterType="deviceErrorHistoryVO" statementType="PREPARED">
+        SELECT
+            DEVICE_CODE         AS  deviceCode,
+            COMPONENT_NO        AS  componentNo,
+            COMPONENT_NAME      AS  componentName
+        FROM BASE_DEVICE_COMPONENT
+        WHERE 1=1
+    </select>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM (
+                 SELECT
+                     a.ERROR_DATE               AS errorDate
+                     , a.DEVICE_CODE            AS deviceCode
+                     , a.PROCESS_FLAG           AS processingFlag
+                     , a.ERROR_CODE             AS errorCode
+                     , NULL                     AS componentNo
+                     , (SELECT DEVICE_NAME FROM BASE_DEVICE  WHERE DEVICE_CODE= a.DEVICE_CODE) AS name
+                 FROM HISTORY_ERROR_DEVICE a
+
+                 union all
+
+                 SELECT
+                     b.ERROR_DATE               AS errorDate
+                     , b.DEVICE_CODE            AS deviceCode
+                     , b.PROCESS_FLAG           AS rocessingFlag
+                     , b.ERROR_CODE             AS errorCode
+                     , b.COMPONENT_NO           AS componentNo
+                     , (SELECT COMPONENT_NAME FROM BASE_DEVICE_COMPONENT WHERE COMPONENT_NO = b.COMPONENT_NO AND DEVICE_CODE = b.DEVICE_CODE) AS name
+                 FROM HISTORY_ERROR_DEVICE_COMPONENT b
+             ) total
+    </select>
+
+</mapper>

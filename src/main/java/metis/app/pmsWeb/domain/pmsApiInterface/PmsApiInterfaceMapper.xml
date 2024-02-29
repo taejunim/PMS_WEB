@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.pmsApiInterface.PmsApiInterfaceMapper">
+    <select id="select15ChargeDischargeSummary" resultType="chargeDischargeSummaryVO" statementType="PREPARED">
+         SELECT (SELECT ESS_CODE FROM base_ess ORDER BY REG_DATE LIMIT 1) essCode,
+                REG_DATE regDate,
+                ACCUMULATED_CHARGE batteryChargeAmount,
+                ACCUMULATED_DISCHARGE batteryDischargeAmount,
+               (
+                SELECT ROUND(SUM(ACCUMULATED_CHARGE),5)
+                FROM statics_energy_fifteen_minutes
+               ) batteryChargeAccumulateAmount,
+               (
+                SELECT ROUND(SUM(ACCUMULATED_DISCHARGE),5)
+                FROM statics_energy_fifteen_minutes
+               ) batteryDischargeAccumulateAmount,
+               (
+                SELECT IF(ESS_TYPE = '01', 'Y', 'N') FROM base_ess ORDER BY REG_DATE LIMIT 1
+                ) positionFixYn
+        FROM statics_energy_fifteen_minutes
+        WHERE REG_DATE = (SELECT MAX(REG_DATE) FROM statics_energy_fifteen_minutes)
+    </select>
+    <select id="select60ChargeDischargeSummary" resultType="chargeDischargeSummaryVO" statementType="PREPARED">
+         SELECT REG_DATE regDate,
+               (SELECT ESS_CODE FROM base_ess ORDER BY REG_DATE LIMIT 1) essCode,
+               ACCUMULATED_CHARGE batteryChargeAmount,
+               ACCUMULATED_DISCHARGE batteryDischargeAmount,
+             (
+                SELECT ROUND(SUM(ACCUMULATED_CHARGE),5)
+                FROM statics_energy_daily
+            ) batteryChargeAccumulateAmount,
+            (
+                SELECT ROUND(SUM(ACCUMULATED_DISCHARGE),5)
+                FROM statics_energy_daily
+            ) batteryDischargeAccumulateAmount,
+             (
+                SELECT IF(ESS_TYPE = '01', 'Y', 'N') FROM base_ess ORDER BY REG_DATE LIMIT 1
+             ) positionFixYn
+        FROM statics_energy_daily
+        WHERE REG_DATE = (SELECT MAX(REG_DATE) FROM statics_energy_daily)
+    </select>
+    <select id="selectDayChargeDischargeSummary" resultType="chargeDischargeSummaryVO" statementType="PREPARED">
+       SELECT REG_DATE regDate,
+                (SELECT ESS_CODE FROM base_ess ORDER BY REG_DATE LIMIT 1) essCode,
+               ACCUMULATED_CHARGE    batteryChargeAmount,
+               ACCUMULATED_DISCHARGE batteryDischargeAmount,
+             (
+                SELECT ROUND(SUM(ACCUMULATED_CHARGE),5)
+                FROM statics_energy_monthly
+            ) batteryChargeAccumulateAmount,
+            (
+                SELECT ROUND(SUM(ACCUMULATED_DISCHARGE),5)
+                FROM statics_energy_monthly
+            ) batteryDischargeAccumulateAmount,
+             (
+                SELECT IF(ESS_TYPE = '01', 'Y', 'N') FROM base_ess ORDER BY REG_DATE LIMIT 1
+             ) positionFixYn
+        FROM statics_energy_monthly
+        WHERE REG_DATE = (SELECT MAX(REG_DATE) FROM statics_energy_monthly)
+    </select>
+</mapper>

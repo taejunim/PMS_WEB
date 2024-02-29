@@ -1,0 +1,24 @@
+{
+  "title": "[PMS] ESS 운영 시스템",
+  "copyrights": "AXBOOT 2.0.0 - Web Application Framework © 2010-2016",
+  "logo": {
+    "header": "/assets/images/pms-logo-white.png",
+    "login": "/assets/images/pms-logo.png",
+    "logo": "logo.png"
+  },
+  "background": {
+    "login": "/assets/images/login-bg.jpg"
+  },
+  "layout": {
+    "leftSideMenu": "gone"
+  },
+  "sessionCookie": "127d9fe6-6e6d-4598-9655-44a0b7335b19",
+  "extendedCss": [
+    "/assets/css/axboot.css"
+  ],
+  "extendedCssforIE9": [
+    "/assets/css/axboot-01.css",
+    "/assets/css/axboot-02.css",
+    "/assets/css/axboot-03.css"
+  ]
+}

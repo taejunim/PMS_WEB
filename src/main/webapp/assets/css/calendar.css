@@ -1,0 +1,164 @@
+#calendar {
+    width: 1300px;
+    margin: 0 auto;
+}
+.fc-event-time, .fc-event-title {
+    color: white;
+}
+.fc-view-harness {
+    height: 657px!important;
+}
+.fc-col-header, .fc-daygrid-body, .fc-scrollgrid-sync-table {
+    width: 100%!important;
+}
+.fc-button-primary, .fc-popover {
+    border-color: #BADC2D!important;
+}
+.fc-popover {
+    background-color: #2A2A2A!important;
+    color: #ccc!important;
+}
+.fc-dayGridMonth-button, .fc-timeGridWeek-button, .fc-timeGridDay-button, .fc-list-button {
+    width: 80px!important;
+}
+.fc-non-business {
+    background-color: #2A2A2A!important;
+}
+.normalCharge {
+    border-color: #41B3D3!important;
+    background-color: #41B3D3!important;
+}
+.normalDischarge {
+    border-color: #F96501!important;
+    background-color: #F96501!important;
+}
+.dr {
+    border-color: #B02418!important;
+    background-color: #B02418!important;
+}
+.plusDr {
+    border-color: #5E53A6!important;
+    background-color: #5E53A6!important;
+}
+.insertModal {
+    display: block;
+    width: 660px;
+    z-index: 9999;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: #BADC2D 1px solid;
+}
+.insertModalBack , .updateModalBack{
+    position: absolute;
+    background-color: hsla(0, 0%, 4%, 0.5);
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    z-index: 99999;
+}
+table.ui-datepicker-calendar {
+    width: 100%;
+    height: 212px;
+}
+#ui-datepicker-div.ui-widget-content {
+    width: 280px;
+    height: 345px;
+    background-color: #2A2A2A;
+    border-radius: 5px;
+    border: #ddd solid 1px;
+    padding: 5px;
+}
+.ui-datepicker-title {
+    color: #BADC2D;
+    font-size: 17px;
+    text-align: center;
+    height: 40px;
+    border-radius: 5px;
+    border: #6D6E70 solid 1px;
+    line-height: 40px;
+    margin-bottom: 5px;
+}
+.ui-datepicker-calendar > tbody > tr {
+    height: 34px;
+    line-height: 46px;
+}
+.ui-datepicker-calendar > tbody > tr > td {
+    height: 46px;
+    line-height: 46px;
+    padding: 2px;
+    text-align: center;
+}
+.ui-datepicker-calendar > thead > tr> th {
+    cursor: pointer;
+    text-align: center;
+    font-size: 11px;
+    padding: 0px 2px;
+    border: 0px none;
+    overflow: hidden;
+    background-color: #2A2A2A;
+    background-image: -webkit-linear-gradient(bottom, #2A2A2A,#2A2A2A);
+    background-image: linear-gradient(to top,#2A2A2A,#2A2A2A);
+    color: #6D6E70;
+}
+.ui-datepicker-calendar > tbody > tr > td > a , .ui-datepicker-calendar > tbody > tr > td > span{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    border-radius: 5px;
+    overflow: hidden;
+    line-height: inherit;
+    background-color: #2A2A2A;
+    background-image: -webkit-linear-gradient(bottom, #2A2A2A,#2A2A2A);
+    background-image: linear-gradient(to top,#2A2A2A,#2A2A2A);
+    color: #C3C4C6;
+    font-size: 13px;
+}
+.ui-datepicker-calendar > tbody > tr > td > a {
+    position: relative;
+    display: block;
+    vertical-align: middle;
+    border-radius: 5px;
+    overflow: hidden;
+    line-height: 34px;
+    background: #000;
+    background-image: linear-gradient(to top,#000,#000);
+    background-image: -webkit-linear-gradient(bottom, #000,#000);
+    color: #A1A1A1;
+    font-size: 13px;
+    margin: 0 auto;
+}
+.ui-datepicker-calendar > tbody > tr > td > a ,.ui-datepicker-calendar > tbody > tr > td > span {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+}
+.ui-datepicker-next, .ui-datepicker-prev {
+    position: absolute;
+    top: 10px;
+    font-size: 20px;
+    color: #BADC2D;
+    display: none;
+}
+.ui-datepicker-next {
+    right: 30px;
+}
+.ui-datepicker-prev {
+    left: 30px;
+}
+.ui-state-disabled {
+    cursor: default!important;
+    pointer-events: none;
+}
+.ui-state-active {
+    background-image: -webkit-linear-gradient(bottom, #BADC2D,#BADC2D)!important;
+    color: #000!important;
+}
+.ui-icon-circle-triangle-e, .ui-icon-circle-triangle-w {
+    cursor: pointer;
+}
+.ui-datepicker-calendar > tbody td.ui-datepicker-week-end:first-child a { color:#C78B81; }
+.ui-datepicker-calendar > tbody td.ui-datepicker-week-end:last-child a { color:#32B4DC; }

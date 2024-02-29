@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.dcConverterHistory.DcConverterHistoryMapper">
+
+    <select id="select" resultType="dcConverterHistoryVO" parameterType="Hashmap" statementType="PREPARED">
+        SELECT
+        CONVERTER_CODE                                              AS converterCode
+        ,DATE_FORMAT(FROM_UNIXTIME(REG_DATE),'%Y-%m-%d %H:%i:%s')   AS regDate
+        ,OPERATION_STATUS                                           AS operationStatus
+        ,GET_CODE_NM('DEVICE_STATUS',OPERATION_STATUS)              AS operationStatusName
+        ,TOTAL_DC_POWER                                             AS totalDcPower
+        ,TOTAL_CURRENT                                              AS totalCurrent
+        ,CONVERT_DC_POWER                                           AS convertDcPower
+        ,DC_CURRENT                                                 AS dcCurrent
+        ,INTERNAL_TEMP                                              AS internalTemp
+        ,WARNING_FLAG                                               AS warningFlag
+        ,FAULT_FLAG                                                 AS faultFlag
+        FROM RAW_CONVERTER_DC
+        WHERE 1=1
+        <if test="operationStatus != null and operationStatus != '' ">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+        ORDER BY REG_DATE DESC
+        LIMIT #{startRow}, #{pageSize}
+    </select>
+
+    <select id="selectTotalCount" resultType="int" parameterType="hashmap" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM RAW_CONVERTER_DC
+        WHERE 1=1
+        <if test="operationStatus != null and operationStatus != '' ">
+            AND OPERATION_STATUS = #{operationStatus}
+        </if>
+        <if test="searchDate != null and searchDate != ''">
+            AND REG_DATE <![CDATA[>=]]> UNIX_TIMESTAMP(#{searchDate})
+            AND REG_DATE <![CDATA[<=]]> UNIX_TIMESTAMP( CONCAT(#{searchDate}, ' 23:59:59'))
+        </if>
+    </select>
+
+    <select id="selectConverterDetail" resultType="Hashmap" statementType="PREPARED">
+        SELECT
+            CONVERTER_CODE                                   AS converterCode
+             ,REG_DATE                                       AS regDate
+             ,INVERTER_NO                                    AS inverterNo
+             ,MODE_STATUS                                    AS modeStatus
+             ,GET_CODE_NM('DEVICE_STATUS',MODE_STATUS)       AS modeStatusName
+             ,INVERTER_STATUS                                AS inverterStatus
+             ,GET_CODE_NM('DEVICE_STATUS',INVERTER_STATUS)   AS inverterStatusName
+             ,POWER                                          AS power
+             ,CURRENT                                        AS current
+             ,VOLTAGE                                        AS voltage
+             ,DC_POWER                                       AS dcPower
+             ,DC_CURRENT                                     AS dcCurrent
+             ,ACTIVE_CURRENT_CONTRAST                        AS activeCurrentContrast
+             ,REF_ACTIVE_CURRENT_PERCENTAGE                  AS refActiveCurrentPercentage
+             ,STACK_TEMP                                     AS stackTemp
+             ,INDUCTOR_TEMP                                  AS inductorTemp
+             ,CAPACITOR_TEMP                                 AS capacitorTemp
+             ,WARNING_ID                                     AS warningId
+             ,FAULT_ID                                       AS faultId
+             ,WARNING_FLAG                                   AS warningFlag
+             ,FAULT_FLAG                                     AS faultFlag
+        FROM    RAW_CONVERTER_DC_DETAIL
+        WHERE   CONVERTER_CODE = #{converterCode}
+          AND REG_DATE <![CDATA[=]]> UNIX_TIMESTAMP(#{regDate})
+    </select>
+
+</mapper>

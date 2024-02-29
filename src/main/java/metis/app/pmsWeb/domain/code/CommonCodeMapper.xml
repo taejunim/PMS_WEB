@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="metis.app.pmsWeb.domain.code.CommonCodeMapper">
+
+    <select id="getCodeList" resultType="Hashmap" parameterType="Hashmap" statementType="PREPARED">
+
+        SELECT
+            GROUP_CD as groupCd,
+            GROUP_NM as groupNm,
+            CODE as code,
+            NAME as name,
+            DATA1 as data1
+
+        FROM SYSTEM_COMMON_CODE
+            WHERE 1=1
+
+            <if test='groupCd != null and groupCd != ""'>
+                AND GROUP_CD = #{groupCd}
+            </if>
+            <if test='code != null and code != ""'>
+                AND CODE = #{code}
+            </if>
+        ORDER BY GROUP_CD, SORT
+
+    </select>
+
+    <select id="getTokenUserCodeList" resultType="Hashmap">
+
+        SELECT  CODE as code,
+                NAME as name
+          FROM  SYSTEM_COMMON_CODE
+         WHERE  GROUP_CD = 'USER_TYPE'
+           AND  CODE != 'M'
+           AND  USE_YN = 'Y'
+
+    </select>
+
+    <select id="selectTotalCount" resultType="int" statementType="PREPARED">
+        SELECT COUNT(*) FROM SYSTEM_COMMON_CODE
+    </select>
+
+    <select id="getDevice" resultType="device">
+
+        SELECT DEVICE_CODE
+             , DEVICE_NAME
+          FROM BASE_DEVICE
+         WHERE USE_FLAG = 'Y'
+
+    </select>
+</mapper>

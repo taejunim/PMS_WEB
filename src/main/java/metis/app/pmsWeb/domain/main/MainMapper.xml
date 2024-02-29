@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="metis.app.pmsWeb.domain.main.MainMapper">
+
+    <select id="selectAutoControlFlag" parameterType="string" resultType="Hashmap" statementType="PREPARED">
+        SELECT    ESS_CODE              AS essCode
+                , AUTO_CONTROL_FLAG     AS autoControlFlag
+                , TOTAL_CHARGE          AS totalCharge
+                , TOTAL_DISCHARGE       AS totalDischarge
+        FROM BASE_ESS
+        WHERE 1=1
+        AND ESS_CODE = #{essCode}
+        LIMIT 1
+    </select>
+
+    <select id="selectControlList"  resultType="Hashmap" statementType="PREPARED">
+        /* MainMapper : 제어 명령어 목록 */
+        SELECT code.NAME                    AS name
+                , code.CODE                 AS code
+                , code.DATA1                AS data1
+                , code.DATA2                AS data2
+                , code.DATA5                AS data5
+                , total.DEVICE_CODE         AS deviceCode
+                , total.CONTROL_CODE        AS controlCode
+                , total.CONTROL_TYPE        AS controlType
+                , total.CONTROL_VALUE       AS controlValue
+                , total.DEVICE_NAME         AS deviceName
+                , total.DEVICE_CATEGORY     AS deviceCategory
+                , total.DEVICE_CATEGORY_SUB AS deviceCategorySub
+        FROM SYSTEM_COMMON_CODE code
+        LEFT JOIN (
+                    SELECT control.*
+                            , device.DEVICE_NAME
+                            , device.DEVICE_CATEGORY
+                            , device.DEVICE_CATEGORY_SUB
+                    FROM BASE_DEVICE_CONTROL control
+                    LEFT JOIN BASE_DEVICE device ON device.DEVICE_CODE = control.DEVICE_CODE
+                    LEFT JOIN BASE_ESS ess ON ess.ESS_CODE = device.ESS_CODE
+                    WHERE control.USE_FLAG = 'Y'
+                    <if test="essType != null and essType != ''">
+                      AND ess.ESS_TYPE = #{essType}
+                    </if>
+                    ) total ON total.CONTROL_TYPE = code.CODE
+        WHERE code.GROUP_CD = 'CONTROL_TYPE'
+    </select>
+
+    <select id="selectOperationSchedule" resultType="Hashmap" statementType="PREPARED">
+        SELECT SCHEDULE_DATE                AS scheduleDate
+                , CHARGE_COUNT              AS chargeCount
+                , DISCHARGE_COUNT           AS dischargeCount
+                , COMPLETED_CHARGE_COUNT    AS completedChargeCount
+                , COMPLETED_DISCHARGE_COUNT AS completedDischargeCount
+        FROM OPERATION_SCHEDULE
+        WHERE SCHEDULE_DATE = DATE_FORMAT(now(), '%Y%m%d')
+        LIMIT 1
+    </select>
+
+    <select id="selectCodeList"  resultType="Hashmap" statementType="PREPARED">
+        SELECT GROUP_CD     AS groupCd
+                , CODE      AS code
+                , GROUP_NM  AS groupName
+                , NAME      AS name
+                , DATA1     AS data1
+                , DATA4     AS data4
+                , DATA5     AS data5
+        FROM SYSTEM_COMMON_CODE
+        WHERE GROUP_CD IN ('OPERATION_MODE', 'DEVICE_STATUS', 'CONTROL_TYPE','OCCUR_FLAG')
+    </select>
+
+    <update id="rollBackUpdate" parameterType="mainVO" statementType="PREPARED">
+        UPDATE BASE_ESS
+           SET AUTO_CONTROL_FLAG = #{autoControlFlag}
+         WHERE ESS_CODE = #{essCode}
+    </update>
+
+    <select id="selectDeviceErrorHistoryList" resultType="Hashmap" parameterType="Hashmap" statementType="PREPARED">
+        SELECT total.errorDate as errorDate
+        , error.ERROR_TYPE AS errorType
+        , error.ERROR_CODE_NAME AS errorCodeName
+        , IF(total.componentNo IS NULL, total.name, concat(device.DEVICE_NAME,' / ',total.name)) as deviceName
+        FROM (
+        SELECT
+        DATE_FORMAT(FROM_UNIXTIME(a.ERROR_DATE), '%Y-%m-%d %H:%i:%s') AS errorDate
+        , a.DEVICE_CODE          AS deviceCode
+        , a.PROCESS_FLAG         AS processFlag
+        , a.ERROR_CODE           AS errorCode
+        , NULL                   AS componentNo
+        , (SELECT DEVICE_NAME FROM BASE_DEVICE  WHERE DEVICE_CODE= a.DEVICE_CODE) AS name
+        FROM HISTORY_ERROR_DEVICE a
+
+        union all
+
+        SELECT
+        DATE_FORMAT(FROM_UNIXTIME(b.ERROR_DATE), '%Y-%m-%d %H:%i:%s') AS errorDate
+        , b.DEVICE_CODE          AS deviceCode
+        , b.PROCESS_FLAG         AS processFlag
+        , b.ERROR_CODE           AS errorCode
+        , b.COMPONENT_NO         AS componentNo
+        , (SELECT COMPONENT_NAME FROM BASE_DEVICE_COMPONENT WHERE COMPONENT_NO = b.COMPONENT_NO AND DEVICE_CODE = b.DEVICE_CODE) AS name
+        FROM HISTORY_ERROR_DEVICE_COMPONENT b
+        ) total
+        LEFT JOIN BASE_DEVICE device on device.DEVICE_CODE = total.deviceCode
+        LEFT JOIN BASE_ESS ess on ess.ESS_CODE = device.ESS_CODE
+        LEFT JOIN BASE_DEVICE_ERROR_CODE error on error.ERROR_CODE = total.errorCode
+        WHERE 1 = 1
+        <if test="essType != null and essType != ''">
+            AND ess.ESS_TYPE = #{essType}
+        </if>
+        <if test="processFlag != null and processFlag != ''">
+            AND total.processFlag = #{processFlag}
+        </if>
+        ORDER BY total.errorDate DESC , total.deviceCode, total.componentNo ASC
+        LIMIT 5
+    </select>
+
+    <select id="selectOperatingStats" resultType="Hashmap" parameterType="string" statementType="PREPARED">
+        SELECT
+               COUNT(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE() - INTERVAL 1 DAY,'%Y-%m-%d')
+                       AND OPERATION_MODE = '1' THEN 1 END ) AS bfrtChargeCompletedCnt
+
+            , COUNT(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE() - INTERVAL 1 DAY,'%Y-%m-%d')
+                       AND OPERATION_MODE = '2' THEN 1 END )  AS bfrtDischargeCompletedCnt
+
+            , IFNULL(CAST(SUM(CASE when DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE() - INTERVAL 1 DAY,'%Y-%m-%d')
+                        AND OPERATION_MODE = '1' THEN energy.ACCUMULATED_ENERGY ELSE 0 END) AS DECIMAL(11,1)),0) AS bfrtCumulativeCharge
+
+            , IFNULL(CAST(SUM(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE() - INTERVAL 1 DAY,'%Y-%m-%d')
+                        AND OPERATION_MODE = '2' THEN energy.ACCUMULATED_ENERGY ELSE 0 END) AS DECIMAL(11,1)),0) * -1 AS bfrtCumulativeDischarge
+            , (ess.TOTAL_CHARGE - IFNULL(CAST(SUM(CASE
+                            WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE),
+                                            '%Y-%m-%d') = DATE_FORMAT(CURDATE(), '%Y-%m-%d') AND OPERATION_MODE = '1' THEN energy.ACCUMULATED_ENERGY  ELSE 0 END) AS DECIMAL(11, 1)
+                ),0)) AS bfrtTotaCumulativeCharge
+
+            , (ess.TOTAL_DISCHARGE - IFNULL(CAST(SUM(CASE
+                            WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE),
+                                             '%Y-%m-%d') = DATE_FORMAT(CURDATE(), '%Y-%m-%d') AND OPERATION_MODE = '2' THEN energy.ACCUMULATED_ENERGY ELSE 0 END) AS DECIMAL(11, 1)
+                ), 0)) * -1 as bfrtTotaCumulativeDischarge
+
+            , COUNT(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE(),'%Y-%m-%d')
+                        AND OPERATION_MODE = '1' THEN 1 END )  AS ndChargeCompletedCnt
+
+            , COUNT(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE(),'%Y-%m-%d')
+                        AND OPERATION_MODE = '2' THEN 1 END)  AS ndDischargeCompletedCnt
+
+            , IFNULL(CAST(SUM(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE(),'%Y-%m-%d')
+                        AND OPERATION_MODE = '1' THEN energy.ACCUMULATED_ENERGY ELSE 0 END  ) AS DECIMAL(11,1)),0)  AS ndCumulativeCharge
+
+            , IFNULL(CAST(SUM(CASE WHEN DATE_FORMAT(FROM_UNIXTIME(OPERATION_HISTORY_DATE), '%Y-%m-%d') <![CDATA[=]]> DATE_FORMAT(CURDATE(),'%Y-%m-%d')
+                        AND OPERATION_MODE = '2' THEN energy.ACCUMULATED_ENERGY ELSE 0 END  ) AS DECIMAL(11,1)),0) * -1  AS ndCumulativeDischarge
+        FROM (
+            SELECT ENERGY_NO
+                   ,OPERATION_MODE
+                   ,OPERATION_HISTORY_TYPE
+                   ,OPERATION_HISTORY_DATE
+                   , (SELECT c.ACCUMULATED_ENERGY
+                      FROM history_energy_detail c
+                      WHERE c.ENERGY_NO = history_energy.ENERGY_NO
+                      ORDER BY c.ENERGY_SEQ DESC LIMIT 1)                                    as               ACCUMULATED_ENERGY
+                   ,OPERATION_TYPE
+          FROM history_energy
+        WHERE OPERATION_HISTORY_TYPE != '0'
+        GROUP BY ENERGY_NO) AS energy
+        RIGHT JOIN base_ess ess ON ess.ESS_CODE = #{essCode}
+
+    </select>
+</mapper>
